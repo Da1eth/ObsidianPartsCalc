@@ -13,7 +13,25 @@
     DF: 4
     DG: 4
     DH: 2
-
+  buildPlan:
+    EBS/X40: 2
+    GSD2A: 2
+    CSC60: 2
+    TM31C: 2
+    TM31R: 2
+    ML231: 3
+    S9+M5: 3
+    S100: [2, S100_G, S100]
+    RH21+M3_R: 2
+    R7: 2
+    R33: 2
+    R6: 2
+    RH21+M3_L: 2
+    S100+R6SS: 1
+    ADK30: [2, ADK30C, ADK30F]
+    ADK60: [2, ADK60R, ADK60EC, ADK60S]
+    SGM2: 6
+    M9: 3
 - id: UN-Taurus
   nameKo: UN 타우르스 단품 킷
   nameEn: UN Taurus Box
@@ -29,15 +47,10 @@
     Taurus-Resin-A: 1
     Taurus-Resin-B: 1
   buildPlan:
-    always: [LM231, R7MG, R7, RH21+M3_L, CSC60]
-    choices:
-      - id: core
-        nameKo: 코어 선택
-        nameEn: Core choice
-        pick: 1
-        options: [TM35BT, TM35N]
-      - id: shield
-        nameKo: 실드 선택
-        nameEn: Shield choice
-        pick: 1
-        options: [S100_G, S100]
+    CSC60: 1
+    TM35: [1, TM35BT, TM35N]
+    LM231: 1
+    S100: [1, S100_G, S100]
+    RH21+M3_L: 1
+    R7MG: 1
+    R7: 1
