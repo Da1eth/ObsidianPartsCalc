@@ -16,10 +16,10 @@
   buildPlan:
     EBS/X40: 2
     GSD2A: 2
-    CSC60: 2
+    CSC60: 3
     TM31C: 2
     TM31R: 2
-    ML231: 3
+    LM231: 4
     S9+M5: 3
     S100: [2, S100_G, S100]
     RH21+M3_R: 2
@@ -30,7 +30,8 @@
     S100+R6SS: 1
     ADK30: [2, ADK30C, ADK30F]
     ADK60: [2, ADK60R, ADK60EC, ADK60S]
-    SGM2: 6
+    SGM2_U: 6
+    SGM2_F: 6
     M9: 3
 - id: UN-Doorbreaker
   nameKo: UN 도어브레이커 박스
