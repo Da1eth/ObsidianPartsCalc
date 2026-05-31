@@ -306,7 +306,7 @@ function openBuildPlanDialog(entries) {
       <div class="build-plan-modal-header">
         <span>
           <strong>옵션 조립 부품 선택</strong>
-          <small>선택한 박스의 buildPlan을 현재 조립 계획에 추가합니다.</small>
+          <small>선택한 박스의 부품을 설명서에 명시된 수량대로 조립 계획에 추가합니다.</small>
         </span>
         <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
       </div>

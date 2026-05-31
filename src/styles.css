@@ -167,6 +167,26 @@ h2 {
   overflow: auto;
 }
 
+.build-controls,
+.build-plan-choice-list,
+.build-list,
+.selected-builds,
+.dashboard .part-table,
+.available-list,
+.sidebar-content > .panel:last-child .sprue-groups {
+  scrollbar-width: none;
+}
+
+.build-controls::-webkit-scrollbar,
+.build-plan-choice-list::-webkit-scrollbar,
+.build-list::-webkit-scrollbar,
+.selected-builds::-webkit-scrollbar,
+.dashboard .part-table::-webkit-scrollbar,
+.available-list::-webkit-scrollbar,
+.sidebar-content > .panel:last-child .sprue-groups::-webkit-scrollbar {
+  display: none;
+}
+
 .selected-panel {
   min-height: 160px;
 }
@@ -241,11 +261,12 @@ h2 {
 
 .sidebar-content {
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 16px;
   width: calc(var(--sidebar-width) - 32px);
-  max-height: calc(100vh - 70px);
+  height: calc(100vh - 44px);
   margin-top: 12px;
-  overflow: auto;
+  overflow: hidden;
   opacity: 0;
   transition: opacity 120ms ease;
 }
@@ -748,6 +769,20 @@ b {
   background: var(--panel);
 }
 
+.sidebar-content > .panel:last-child {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar-content > .panel:last-child .sprue-groups {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
+  grid-auto-rows: max-content;
+  overflow: auto;
+}
+
 [hidden] {
   display: none !important;
 }
@@ -793,7 +828,6 @@ b {
   .build-list {
     min-height: 0;
     overflow: auto;
-    padding-right: 4px;
   }
 
   .dashboard {
@@ -828,6 +862,9 @@ b {
   .available-list {
     min-height: 0;
     overflow: auto;
+  }
+
+  .selected-builds {
     padding-right: 4px;
   }
 }
