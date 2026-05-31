@@ -12,7 +12,7 @@ export function iconSvg(name) {
   `;
 }
 
-export function partIconHtml(slot, className = "slot-icon") {
+export function partIconHtml(slot, className = "part-icon-frame slot-icon") {
   const svg = partIconSvgs[slot.id];
 
   if (svg) {

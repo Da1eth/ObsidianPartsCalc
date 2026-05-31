@@ -112,7 +112,7 @@ function renderFactions() {
   catalog.factions.forEach((faction) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = faction.id === state.factionId ? "active" : "";
+    button.className = `tab-button${faction.id === state.factionId ? " active" : ""}`;
     button.textContent = faction.nameKo;
     button.addEventListener("click", () => {
       state.factionId = faction.id;
@@ -128,7 +128,7 @@ function renderBoxes() {
   const selectedPlanCount = selectedBoxPlanEntries().reduce((sum, entry) => sum + entry.count, 0);
   currentFaction().boxes.forEach((box) => {
     const row = document.createElement("div");
-    row.className = "quantity-row";
+    row.className = "surface-row quantity-row";
     row.innerHTML = `
       <span>
         <strong>${box.nameKo}</strong>
@@ -147,7 +147,7 @@ function renderBoxes() {
   const actions = document.createElement("div");
   actions.className = "box-actions";
   actions.innerHTML = `
-    <button class="box-plan-button" type="button" ${selectedPlanCount === 0 ? "disabled" : ""}>
+    <button class="button button-strong button-block" type="button" ${selectedPlanCount === 0 ? "disabled" : ""}>
       선택한 박스 부품 전부 계획에 추가
     </button>
   `;
@@ -161,8 +161,8 @@ function renderSlots() {
   tabs.forEach((slot) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = state.slot === slot.id ? "active" : "";
-    button.innerHTML = `${partIconHtml(slot, "slot-tab-icon")}<span>${slot.nameKo}</span>`;
+    button.className = `tab-button${state.slot === slot.id ? " active" : ""}`;
+    button.innerHTML = `${partIconHtml(slot, "part-icon-frame slot-tab-icon")}<span>${slot.nameKo}</span>`;
     button.addEventListener("click", () => {
       state.slot = slot.id;
       renderSlots();
@@ -185,12 +185,12 @@ function renderBuildList() {
   builds.forEach((build) => {
     const slot = indexes.slots[build.slot];
     const row = document.createElement("button");
-    row.className = "build-row";
+    row.className = "surface-row action-row build-row";
     row.type = "button";
     row.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     row.innerHTML = `
       ${partIconHtml(slot)}
-      <span class="build-meta">
+      <span>
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
       </span>
@@ -231,7 +231,7 @@ function renderResults() {
   available.forEach(({ build, max }) => {
     const slot = indexes.slots[build.slot];
     const item = document.createElement("button");
-    item.className = "available-item";
+    item.className = "surface-row action-row available-item";
     item.type = "button";
     item.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     item.innerHTML = `
@@ -355,9 +355,9 @@ function renderSelectedBuilds() {
     const item = document.createElement("div");
     item.className = "selected-entry";
     item.innerHTML = `
-      <div class="selected-item">
+      <div class="surface-row selected-item">
         <span class="selected-build-name">
-          ${partIconHtml(slot, "selected-slot-icon")}
+          ${partIconHtml(slot, "part-icon-frame selected-slot-icon")}
           <strong>${build.nameKo}</strong>
         </span>
         ${stepperHtml(count, `${build.nameKo} 수량`)}
@@ -570,7 +570,7 @@ function bindStepper(root, initialValue, min, max, onChange) {
 
 function partRowHtml(row) {
   return `
-    <div class="part-row" title="${row.nameEn}">
+    <div class="surface-row part-row" title="${row.nameEn}">
       <code>${row.id}</code>
       <b>× ${row.count}</b>
     </div>

@@ -28,10 +28,10 @@ export function openAvailableBuildsDialog({
         </span>
         <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
       </div>
-      <div class="build-plan-choice-list available-build-choice-list"></div>
+      <div class="build-plan-choice-list"></div>
       <div class="build-plan-modal-actions">
-        <button class="ghost-button" value="cancel" type="submit">취소</button>
-        <button class="primary-button" value="confirm" type="submit">확인</button>
+        <button class="button button-muted" value="cancel" type="submit">취소</button>
+        <button class="button button-primary" value="confirm" type="submit">확인</button>
       </div>
     </form>
   `;
@@ -48,7 +48,7 @@ export function openAvailableBuildsDialog({
     })));
 
     return `
-      <div class="plan-choice-option available-build-choice">
+      <div class="surface-row plan-choice-option available-build-choice">
         ${partIconHtml(slot)}
         <span>
           <strong>${choice.build.nameKo}</strong>
@@ -132,8 +132,8 @@ export function openBuildPlanDialog({ entries, indexes }) {
       </div>
       <div class="build-plan-choice-list"></div>
       <div class="build-plan-modal-actions">
-        <button class="ghost-button" value="cancel" type="submit">취소</button>
-        <button class="primary-button" value="confirm" type="submit">확인</button>
+        <button class="button button-muted" value="cancel" type="submit">취소</button>
+        <button class="button button-primary" value="confirm" type="submit">확인</button>
       </div>
     </form>
   `;
@@ -150,7 +150,7 @@ export function openBuildPlanDialog({ entries, indexes }) {
             const build = indexes.builds[buildId];
             const selectedTotal = selectedPlanChoiceTotal(choice.counts);
             return `
-              <div class="plan-choice-option">
+              <div class="surface-row plan-choice-option">
                 <span>
                   <strong>${build.nameKo}</strong>
                   <small>${build.nameEn}</small>
