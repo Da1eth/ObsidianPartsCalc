@@ -14,6 +14,7 @@
   --sidebar-width: 420px;
   --page-gutter: 24px;
   --control-size: 32px;
+  --sidebar-toggle-top: 36px;
 }
 
 * {
@@ -65,7 +66,7 @@ select {
 
 .sidebar-open {
   position: fixed;
-  top: 92px;
+  top: var(--sidebar-toggle-top);
   left: 0;
   z-index: 15;
   width: 28px;
@@ -216,7 +217,7 @@ h2 {
 
 .sidebar-close {
   position: absolute;
-  top: 92px;
+  top: var(--sidebar-toggle-top);
   right: -28px;
   width: 28px;
   min-height: 56px;
@@ -711,10 +712,6 @@ b {
   justify-self: end;
 }
 
-.warning-panel {
-  background: var(--warn);
-}
-
 .empty {
   margin: 0;
   color: var(--muted);
@@ -833,7 +830,9 @@ b {
     overflow: auto;
     padding-right: 4px;
   }
+}
 
+@media (min-width: 1600px) {
   .sidebar {
     right: auto;
     width: var(--sidebar-width);

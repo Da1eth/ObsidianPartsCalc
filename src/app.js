@@ -41,7 +41,7 @@ const els = {
 
 const catalog = await loadCatalog();
 const indexes = makeIndexes(catalog);
-const mobileSidebarQuery = window.matchMedia("(max-width: 900px)");
+const overlaySidebarQuery = window.matchMedia("(max-width: 1599px)");
 
 state.factionId = catalog.factions[0]?.id ?? "";
 catalog.factions.forEach((faction) => {
@@ -64,7 +64,7 @@ els.sidebarClose.addEventListener("click", () => {
 });
 
 els.sidebarBackdrop.addEventListener("click", () => {
-  if (!mobileSidebarQuery.matches) {
+  if (!overlaySidebarQuery.matches) {
     return;
   }
   state.sidebarOpen = false;
