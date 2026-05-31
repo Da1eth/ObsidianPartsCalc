@@ -1,26 +1,61 @@
-- id: S100+R6SS
+- id: G6+M5
   slot: rightArm
-  nameKo: S100 실드+R6SS SMG
-  nameEn: S100 Shield+R6SS SMG
+  nameKo: G6 샷건+M5 파일 벙커
+  nameEn: G6 Shotgun+M5 Pile Bunker
   requires:
-    DE6: 1
-    DE7: 1
-    DE13: 1
-    DE1: 1
-    DE2: 1
-    DE14: 1
-    DE9: 2
-    DE12: 2
-    DE15: 1
-    DE8: 1
+    FE1: 1
+    FE9: 1
+    FE13: 1
+    FE14: 1
+    FE19: 1
+    SD15: 1
+    SD17: 1
+    SC18: 1
+    SC19: 1
+    SC25: 1
     SD21: 1
-    SD24: 1
-    DE5: 1
+    SD22: 1
+    SD13: 1
     SD11: 1
     SD12: 1
-  optionRequires:
-    - count: 1
-      parts: [DE3, DE11]
+- id: IGX350
+  slot: rightArm
+  nameKo: IGX350 이온 샷건
+  nameEn: IGX350 Ion Shotgun
+  requires:
+    SC3: 1
+    SC22: 1
+    SC4: 1
+    SC7: 1
+    SC16: 1
+    SC12: 1
+    FC2: 1
+    FC4: 1
+    FC6: 1
+    FC12: 2
+    FC18: 2
+    SD15: 1
+    SD17: 1
+    SD21: 1
+    SD22: 1
+- id: M15BO
+  slot: rightArm
+  nameKo: M15BO "카타나"
+  nameEn: M15BO "Katana"
+  requires:
+    SC3: 1
+    SC22: 1
+    SC7: 1
+    FE10: 1
+    FE11: 1
+    SC12: 1
+    SC16: 1
+    FE12: 1
+    FE15: 1
+    FE7: [1, FE7, FE16+FE8]
+    SD11: 1
+    SD12: 1
+    SD13: 1
 - id: R6
   slot: rightArm
   nameKo: R6 SMG
@@ -114,3 +149,24 @@
     DD4: 1
     DD6: 1
     DD12: 1
+- id: S100+R6SS
+  slot: rightArm
+  nameKo: S100 실드+R6SS SMG
+  nameEn: S100 Shield+R6SS SMG
+  requires:
+    DE6: 1
+    DE7: 1
+    DE13: 1
+    DE1: 1
+    DE2: 1
+    DE14: 1
+    DE9: 2
+    DE12: 2
+    DE15: 1
+    DE8: 1
+    SD21: 1
+    SD24: 1
+    DE5: 1
+    SD11: 1
+    SD12: 1
+    DE4: [1, DE3, DE11]

@@ -32,6 +32,34 @@
     ADK60: [2, ADK60R, ADK60EC, ADK60S]
     SGM2: 6
     M9: 3
+- id: UN-Doorbreaker
+  nameKo: UN 도어브레이커 박스
+  nameEn: UN Doorbreaker Box
+  sprues:
+    SB: 2
+    SC: 3
+    SD: 4
+    FA: 2
+    FB: 2
+    FC: 2
+    FD: 2
+    FE: 2
+    FF: 2
+    DE: 1
+  buildPlan:
+    JP1: 2
+    EC50: 2
+    OCSP: 2
+    TM35: [2, TM35N, TM35B]
+    LM213B: 2
+    MX82: 2
+    K7+S10: 1
+    S100: 1
+    G6_G: 2
+    M15BO: 2
+    G6+M5: 2
+    IGX350: 1
+    ADK15: [2, ADK15D, ADK15/MAS]
 - id: UN-Taurus
   nameKo: UN 타우르스 단품 킷
   nameEn: UN Taurus Box

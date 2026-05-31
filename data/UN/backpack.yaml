@@ -8,6 +8,15 @@
     DG13: 1
     DG14: 1
     DG7: 1
+- id: EC50
+  slot: backpack
+  nameKo: EC50 전자전 포드
+  nameEn: EC50 Electronic Warfare Pod
+  requires:
+    FC1: 1
+    FC17: 1
+    FC13: 1
+    FC14: 1
 - id: EBS/X40
   slot: backpack
   nameKo: EBS/X40 장갑 충전기
@@ -27,3 +36,24 @@
     DC14: 1
     DC12: 1
     DC13: 1
+- id: JP1
+  slot: backpack
+  nameKo: JP1 제트 팩
+  nameEn: JP1 Jetpack
+  requires:
+    FD8: 1
+    FD12: 1
+    FD9: 1
+    FD13: 1
+    FD3: 1
+    FD2: 1
+- id: OCSP
+  slot: backpack
+  nameKo: OCSP 과부하 팩
+  nameEn: OCSP Overloading Pack
+  requires:
+    FD1: 1
+    FD4: 1
+    FD6: 1
+    FD7: 1
+    FD5: 1

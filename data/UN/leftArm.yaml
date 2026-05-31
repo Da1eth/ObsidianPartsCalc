@@ -1,3 +1,64 @@
+- id: G6_G
+  slot: leftArm
+  nameKo: G6 샷건+유탄 포드
+  nameEn: G6 Shotgun+Granade Pod
+  requires:
+    FE1: 1
+    FE9: 1
+    FE13: 1
+    FE14: 1
+    FE17: 1
+    SD14: 1
+    SD16: 1
+    SC8: 1
+    SC9: 1
+    SC23: 1
+    SC30: 1
+    SD19: 1
+    SD20: 1
+    SD18: 1
+    SD11: 1
+    SD12: 1
+- id: K7+S10
+  slot: leftArm
+  nameKo: K7 네일 건+S10 실드
+  nameEn: K7 Nail Gun+S10 Shield
+  requires:
+    FC3: 1
+    FC7: 1
+    FC8: 1
+    FC10: 1
+    FC11: 1
+    FC5: 1
+    SC14: 1
+    SC15: 1
+    FC16: 1
+    FC19: 1
+    FC20: 1
+    SD19: 1
+    SD23: 1
+    FC9: 1
+    FC15: 1
+    FC22: 1
+    FC21: 1
+- id: MX82
+  slot: leftArm
+  nameKo: MX82 다기능 채찍
+  nameEn: MX82 Multifunctional Whip
+  requires:
+    SC4: 1
+    SC24: 1
+    SC3: 1
+    SC6: 1
+    SC13: 1
+    SC17: 1
+    FD10: 1
+    FD11: 1
+    FD14: 1
+    FD15: 1
+    SD19: 1
+    SD20: 1
+    SD13: 1
 - id: RH21+M3_L
   slot: leftArm
   nameKo: RH21 피스톨+M3 초진동 블레이드(좌)
@@ -55,9 +116,7 @@
     DE5: 1
     SD11: 1
     SD12: 1
-  optionRequires:
-    - count: 1
-      parts: [DE4, DE10]
+    DE4: [1, DE4, DE10]
 - id: S100_G
   slot: leftArm
   nameKo: S100 실드+유탄 포드
@@ -77,6 +136,4 @@
     DE5: 1
     SD11: 1
     SD12: 1
-  optionRequires:
-    - count: 1
-      parts: [DE4, DE10]
+    DE4: [1, DE4, DE10]

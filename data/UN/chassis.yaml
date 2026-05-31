@@ -1,3 +1,40 @@
+- id: LM213B
+  slot: chassis
+  nameKo: 격투 섀시
+  nameEn: Combat Chassis
+  requires:
+    SB19: 1
+    SB12: 1
+    SB20: 1
+    SB13: 1
+    SB14: 1
+    SB21: 1
+    FA6: 1
+    FA7: 1
+    FA21: 1
+    FA22: 1
+    SB3: 1
+    SB4: 1
+    FA9: 1
+    SB7: 1
+    SB8: 1
+    FA8: 1
+    FA17: 1
+    FA18: 1
+    FA19: 1
+    FA20: 1
+    FA12: 1
+    FA14: 1
+    FA11: 1
+    FA13: 1
+    FA15: 2
+    FA16: 2
+    FA3: 2
+    FA4: 2
+    FA1: 1
+    FA2: 1
+    FA5: 2
+    FA10: 2
 - id: LM231
   slot: chassis
   nameKo: 표준 섀시

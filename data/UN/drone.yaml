@@ -1,3 +1,32 @@
+- id: ADK15D
+  slot: drone
+  nameKo: ADK15D "포큐파인" CIWS 사양
+  nameEn: ADK15D "Porcupine" CIWS Type
+  requires:
+    FF2: 4
+    FF3: 4
+    FF6: 1
+    FF8: 1
+    FF1: 1
+    FF10: 1
+    FF11: 1
+    FF4: 2
+    FF5: 2
+    FF7: 1
+    FF9: 1
+- id: ADK15/MAS
+  slot: drone
+  nameKo: ADK15D "포큐파인" 극초단파 사양
+  nameEn: ADK15D "Porcupine" Microwave Type
+  requires:
+    FF2: 4
+    FF3: 4
+    FF6: 1
+    FF8: 1
+    FE3: 1
+    FE4: 1
+    FE12: 1
+    FE18: 1
 - id: ADK30C
   slot: drone
   nameKo: ADK30F "타란튤라" 수송 사양

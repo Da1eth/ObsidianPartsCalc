@@ -124,6 +124,21 @@
   extraParts:
     DH13: 4
     DH14: 4
+- id: FA
+  nameKo: UN 스프루 FA
+  nameEn: UN Sprue FA
+  material: plastic
+  partRange:
+    prefix: FA
+    from: 1
+    to: 22
+  extraParts:
+    FA3: 2
+    FA4: 2
+    FA5: 2
+    FA10: 2
+    FA15: 2
+    FA16: 2
 - id: FB
   nameKo: UN 스프루 FB
   nameEn: UN Sprue FB
@@ -132,6 +147,53 @@
     prefix: FB
     from: 1
     to: 20
+- id: FC
+  nameKo: UN 스프루 FC
+  nameEn: UN Sprue FC
+  material: plastic
+  partRange:
+    prefix: FC
+    from: 1
+    to: 22
+  extraParts:
+    FC12: 2
+    FC18: 2
+- id: FC
+  nameKo: UN 스프루 FD
+  nameEn: UN Sprue FD
+  material: plastic
+  partRange:
+    prefix: FD
+    from: 1
+    to: 15
+- id: FE
+  nameKo: UN 스프루 FE
+  nameEn: UN Sprue FE
+  material: plastic
+  partRange:
+    prefix: FE
+    from: 1
+    to: 19
+  extraParts:
+    FE1: 2
+    FE9: 2
+    FE12: 2
+    FE13: 2
+    FE14: 2
+    FE15: 2
+- id: FF
+  nameKo: UN 스프루 FF
+  nameEn: UN Sprue FF
+  material: plastic
+  partRange:
+    prefix: FF
+    from: 1
+    to: 11
+  extraParts:
+    FF2: 4
+    FF3: 4
+    FF4: 2
+    FF5: 2
 - id: Taurus-Resin-A
   nameKo: UN 타우르스 레진 스프루 A
   nameEn: UN Taurus Resin Sprue A
