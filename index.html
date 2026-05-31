@@ -7,28 +7,42 @@
     <link rel="stylesheet" href="./src/styles.css">
   </head>
   <body>
-    <main class="app">
-      <header class="app-header">
-        <div>
-          <p class="eyebrow">Obsidian Protocol</p>
-          <h1>파츠 계산기</h1>
-        </div>
-        <div class="header-summary" id="header-summary"></div>
-      </header>
-
-      <section class="workspace">
-        <aside class="panel controls" aria-label="입력">
-          <section>
+    <aside class="sidebar" id="sidebar" aria-label="보유 파츠" aria-hidden="true">
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+      <div class="sidebar-panel">
+        <button class="sidebar-close" id="sidebar-close" type="button" aria-label="보유 파츠 닫기">‹</button>
+        <div class="sidebar-content">
+          <section class="panel">
             <h2>팩션</h2>
-            <select class="faction-select" id="faction-select"></select>
+            <div class="faction-tabs" id="faction-tabs"></div>
           </section>
 
-          <section>
+          <section class="panel">
             <h2>박스</h2>
             <div id="box-list" class="stack"></div>
           </section>
 
-          <section>
+          <section class="panel">
+            <h2>남는 파츠</h2>
+            <div id="leftover-parts" class="sprue-groups"></div>
+          </section>
+        </div>
+      </div>
+    </aside>
+
+    <div class="app-frame">
+      <main class="app">
+        <header class="app-header">
+          <button class="sidebar-open" id="sidebar-open" type="button" aria-label="보유 파츠 열기">›</button>
+          <div>
+            <p class="eyebrow">Obsidian Protocol</p>
+            <h1>파츠 계산기</h1>
+          </div>
+          <div class="header-summary" id="header-summary"></div>
+        </header>
+
+        <section class="workspace" id="workspace">
+          <section class="panel build-controls">
             <div class="section-title-row">
               <h2>조립할 부품</h2>
               <button class="ghost-button" id="reset-builds" type="button">초기화</button>
@@ -40,36 +54,33 @@
             </label>
             <div id="build-list" class="build-list"></div>
           </section>
-        </aside>
 
-        <section class="results" aria-label="결과">
-          <section class="panel">
-            <h2>현재 조립 계획</h2>
-            <div id="selected-builds" class="selected-builds"></div>
-          </section>
+          <section class="dashboard" aria-label="결과">
+            <section class="panel selected-panel">
+              <h2>현재 조립 계획</h2>
+              <div id="selected-builds" class="selected-builds"></div>
+            </section>
 
-          <section class="panel warning-panel" id="shortage-panel">
-            <h2>부족한 파츠</h2>
-            <div id="shortage-parts" class="part-table"></div>
-          </section>
+            <section class="results" aria-label="부족 및 추천">
+              <section class="panel warning-panel" id="shortage-panel">
+                <h2>부족한 파츠</h2>
+                <div id="shortage-parts" class="part-table"></div>
+              </section>
 
-          <section class="panel warning-panel" id="plan-shortage-panel">
-            <h2>박스 조립 계획 부족 파츠</h2>
-            <div id="plan-shortage-parts" class="part-table"></div>
-          </section>
+              <section class="panel warning-panel" id="plan-shortage-panel">
+                <h2>박스 조립 계획 부족 파츠</h2>
+                <div id="plan-shortage-parts" class="part-table"></div>
+              </section>
 
-          <section class="panel">
-            <h2>남는 파츠</h2>
-            <div id="leftover-parts" class="sprue-groups"></div>
-          </section>
-
-          <section class="panel">
-            <h2>추가 조립 가능</h2>
-            <div id="available-builds" class="available-list"></div>
+              <section class="panel">
+                <h2>추가 조립 가능</h2>
+                <div id="available-builds" class="available-list"></div>
+              </section>
+            </section>
           </section>
         </section>
-      </section>
-    </main>
+      </main>
+    </div>
 
     <script type="module" src="./src/app.js"></script>
   </body>

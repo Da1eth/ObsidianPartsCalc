@@ -14,12 +14,18 @@ const state = {
   factionId: "",
   factions: {},
   slot: "all",
-  query: ""
+  query: "",
+  sidebarOpen: false
 };
 
 const els = {
+  workspace: document.querySelector("#workspace"),
   headerSummary: document.querySelector("#header-summary"),
-  factionSelect: document.querySelector("#faction-select"),
+  sidebar: document.querySelector("#sidebar"),
+  sidebarOpen: document.querySelector("#sidebar-open"),
+  sidebarClose: document.querySelector("#sidebar-close"),
+  sidebarBackdrop: document.querySelector("#sidebar-backdrop"),
+  factionTabs: document.querySelector("#faction-tabs"),
   boxList: document.querySelector("#box-list"),
   slotTabs: document.querySelector("#slot-tabs"),
   buildSearch: document.querySelector("#build-search"),
@@ -36,6 +42,7 @@ const els = {
 
 const catalog = await loadCatalog();
 const indexes = makeIndexes(catalog);
+const mobileSidebarQuery = window.matchMedia("(max-width: 900px)");
 
 state.factionId = catalog.factions[0]?.id ?? "";
 catalog.factions.forEach((faction) => {
@@ -47,8 +54,21 @@ catalog.factions.forEach((faction) => {
 
 render();
 
-els.factionSelect.addEventListener("change", (event) => {
-  state.factionId = event.target.value;
+els.sidebarOpen.addEventListener("click", () => {
+  state.sidebarOpen = true;
+  render();
+});
+
+els.sidebarClose.addEventListener("click", () => {
+  state.sidebarOpen = false;
+  render();
+});
+
+els.sidebarBackdrop.addEventListener("click", () => {
+  if (!mobileSidebarQuery.matches) {
+    return;
+  }
+  state.sidebarOpen = false;
   render();
 });
 
@@ -73,11 +93,18 @@ function makeIndexes(data) {
 }
 
 function render() {
+  renderSidebar();
   renderFactions();
   renderBoxes();
   renderSlots();
   renderBuildList();
   renderResults();
+}
+
+function renderSidebar() {
+  els.sidebar.classList.toggle("open", state.sidebarOpen);
+  els.sidebar.setAttribute("aria-hidden", String(!state.sidebarOpen));
+  document.body.classList.toggle("drawer-open", state.sidebarOpen);
 }
 
 function currentFaction() {
@@ -100,13 +127,17 @@ function currentCatalog() {
 }
 
 function renderFactions() {
-  els.factionSelect.innerHTML = "";
+  els.factionTabs.innerHTML = "";
   catalog.factions.forEach((faction) => {
-    const option = document.createElement("option");
-    option.value = faction.id;
-    option.textContent = `${faction.nameKo} / ${faction.nameEn}`;
-    option.selected = faction.id === state.factionId;
-    els.factionSelect.append(option);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = faction.id === state.factionId ? "active" : "";
+    button.textContent = faction.nameKo;
+    button.addEventListener("click", () => {
+      state.factionId = faction.id;
+      render();
+    });
+    els.factionTabs.append(button);
   });
 }
 
@@ -121,10 +152,10 @@ function renderBoxes() {
         <strong>${box.nameKo}</strong>
         <small>${box.nameEn}</small>
       </span>
-      <input min="0" type="number" inputmode="numeric" value="${factionState.boxes[box.id] ?? 0}">
+      ${stepperHtml(factionState.boxes[box.id] ?? 0, "박스 수량")}
     `;
-    row.querySelector("input").addEventListener("input", (event) => {
-      factionState.boxes[box.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
+    bindStepper(row, factionState.boxes[box.id] ?? 0, 0, 10, (value) => {
+      factionState.boxes[box.id] = value;
       renderResults();
     });
     els.boxList.append(row);
@@ -168,10 +199,10 @@ function renderBuildList() {
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
       </span>
-      <input min="0" type="number" inputmode="numeric" value="${factionState.builds[build.id] ?? 0}">
+      ${stepperHtml(factionState.builds[build.id] ?? 0, "부품 수량")}
     `;
-    row.querySelector("input").addEventListener("input", (event) => {
-      factionState.builds[build.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
+    bindStepper(row, factionState.builds[build.id] ?? 0, 0, 10, (value) => {
+      factionState.builds[build.id] = value;
       renderResults();
     });
     els.buildList.append(row);
@@ -270,7 +301,6 @@ function renderGroupedLeftovers(leftovers, scopedCatalog) {
   grouped.forEach((group, index) => {
     const details = document.createElement("details");
     details.className = "sprue-group";
-    details.open = index < 2;
     details.innerHTML = `
       <summary>
         <span>
@@ -321,6 +351,28 @@ function renderPartTable(target, rows, emptyText) {
   }
 
   target.innerHTML = rows.map(partRowHtml).join("");
+}
+
+function stepperHtml(value, label) {
+  return `
+    <span class="stepper" aria-label="${label}">
+      <button type="button" data-step="-1" aria-label="감소">−</button>
+      <strong>${value}</strong>
+      <button type="button" data-step="1" aria-label="증가">+</button>
+    </span>
+  `;
+}
+
+function bindStepper(root, initialValue, min, max, onChange) {
+  let value = initialValue;
+  const display = root.querySelector(".stepper strong");
+  root.querySelectorAll(".stepper button").forEach((button) => {
+    button.addEventListener("click", () => {
+      value = Math.min(max, Math.max(min, value + Number(button.dataset.step)));
+      display.textContent = value;
+      onChange(value);
+    });
+  });
 }
 
 function partRowHtml(row) {
