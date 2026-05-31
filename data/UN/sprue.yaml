@@ -75,7 +75,7 @@
   partRange:
     prefix: DD
     from: 1
-    to: 17
+    to: 18
   extraParts:
     DD3: 2
     DD4: 2
