@@ -91,7 +91,7 @@
     DC5: 1
     DC3: 1
 - id: SGM2_F
-  slot: drone
+  slot: projectiles
   nameKo: SGM2 "폴커스" 자동 지뢰(전개)
   nameEn: SGM2 "Pholcus" Automatic Mine(Unfold)
   requires:
