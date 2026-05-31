@@ -211,6 +211,7 @@ function renderResults() {
   const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory, factionState.choices);
   const { leftovers, shortages } = calculateLeftovers(inventory, required);
   const available = calculateAvailableBuilds(scopedCatalog, leftovers);
+  const partSources = makeBoxPartSources(scopedCatalog);
   const selectedCount = Object.values(factionState.builds).reduce((sum, count) => sum + count, 0);
   const boxCount = Object.values(factionState.boxes).reduce((sum, count) => sum + count, 0);
 
@@ -218,7 +219,11 @@ function renderResults() {
 
   renderSelectedBuilds();
   renderGroupedLeftovers(leftovers, scopedCatalog);
-  renderPartTable(els.shortageParts, formatPartList(shortages, indexes.parts), "부족한 파츠가 없습니다.");
+  renderPartTable(
+    els.shortageParts,
+    withPartSources(formatPartList(shortages, indexes.parts), partSources),
+    "부족한 파츠가 없습니다."
+  );
   els.shortagePanel.hidden = Object.keys(shortages).length === 0;
 
   els.availableBuilds.innerHTML = "";
@@ -537,6 +542,47 @@ function groupPartsBySprue(rows, scopedCatalog) {
   return [...groups, unknown].filter((group) => group.parts.length > 0);
 }
 
+function makeBoxPartSources(scopedCatalog) {
+  const spruesById = Object.fromEntries(scopedCatalog.sprues.map((sprue) => [sprue.id, getSprueParts(sprue)]));
+  const sources = {};
+
+  scopedCatalog.boxes.forEach((box) => {
+    const boxParts = {};
+
+    Object.entries(box.sprues).forEach(([sprueId, sprueCount]) => {
+      const sprueParts = spruesById[sprueId];
+      if (!sprueParts) return;
+
+      Object.entries(sprueParts).forEach(([partId, partCount]) => {
+        boxParts[partId] = (boxParts[partId] ?? 0) + partCount * sprueCount;
+      });
+    });
+
+    Object.entries(boxParts).forEach(([partId, count]) => {
+      sources[partId] ??= [];
+      sources[partId].push({
+        boxId: box.id,
+        nameKo: box.nameKo,
+        nameEn: box.nameEn,
+        count
+      });
+    });
+  });
+
+  Object.values(sources).forEach((entries) => {
+    entries.sort((a, b) => b.count - a.count || a.nameKo.localeCompare(b.nameKo));
+  });
+
+  return sources;
+}
+
+function withPartSources(rows, partSources) {
+  return rows.map((row) => ({
+    ...row,
+    sources: partSources[row.id] ?? []
+  }));
+}
+
 function renderPartTable(target, rows, emptyText) {
   if (rows.length === 0) {
     target.innerHTML = `<p class="empty">${emptyText}</p>`;
@@ -544,6 +590,7 @@ function renderPartTable(target, rows, emptyText) {
   }
 
   target.innerHTML = rows.map(partRowHtml).join("");
+  bindPartSourceTooltips(target);
 }
 
 function stepperHtml(value, label) {
@@ -569,10 +616,81 @@ function bindStepper(root, initialValue, min, max, onChange) {
 }
 
 function partRowHtml(row) {
+  const sources = row.sources ?? [];
+
   return `
-    <div class="surface-row part-row" title="${row.nameEn}">
-      <code>${row.id}</code>
+    <div class="surface-row part-row" title="${sources.length === 0 ? row.nameEn : ""}">
+      ${partLabelHtml(row, sources)}
       <b>× ${row.count}</b>
     </div>
   `;
+}
+
+function partLabelHtml(row, sources) {
+  if (sources.length === 0) return `<code>${row.id}</code>`;
+
+  return `
+    <span class="part-source-anchor" tabindex="0">
+      <code>${row.id}</code>
+      <span class="part-source-tooltip" role="tooltip">
+        <strong>이 부품이 포함된 박스</strong>
+        ${sources.map((source) => `
+          <span>
+            <em>${source.nameKo}</em>
+            <b>${source.count}개</b>
+          </span>
+        `).join("")}
+      </span>
+    </span>
+  `;
+}
+
+function bindPartSourceTooltips(target) {
+  target.querySelectorAll(".part-source-anchor").forEach((anchor) => {
+    const tooltip = anchor.querySelector(".part-source-tooltip");
+    if (!tooltip) return;
+
+    const show = () => {
+      if (tooltip.hideTimer) {
+        window.clearTimeout(tooltip.hideTimer);
+        tooltip.hideTimer = null;
+      }
+      tooltip.classList.add("visible");
+      positionPartSourceTooltip(anchor, tooltip);
+    };
+
+    const hide = () => {
+      tooltip.classList.remove("visible");
+      tooltip.hideTimer = window.setTimeout(() => {
+        if (!tooltip.classList.contains("visible")) tooltip.removeAttribute("style");
+        tooltip.hideTimer = null;
+      }, 140);
+    };
+
+    anchor.addEventListener("mouseenter", show);
+    anchor.addEventListener("mousemove", () => positionPartSourceTooltip(anchor, tooltip));
+    anchor.addEventListener("mouseleave", hide);
+    anchor.addEventListener("focus", show);
+    anchor.addEventListener("blur", hide);
+  });
+}
+
+function positionPartSourceTooltip(anchor, tooltip) {
+  const anchorRect = anchor.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const viewportPadding = 10;
+  const gap = 8;
+
+  let left = anchorRect.left;
+  let top = anchorRect.top - tooltipRect.height - gap;
+
+  if (top < viewportPadding) {
+    top = anchorRect.bottom + gap;
+  }
+
+  left = Math.min(left, window.innerWidth - tooltipRect.width - viewportPadding);
+  left = Math.max(viewportPadding, left);
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
 }
