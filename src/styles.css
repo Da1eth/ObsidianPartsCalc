@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/CSS/pyeojin-font.css");
+
 :root {
   color-scheme: light;
   --bg: #f6f3ed;
@@ -28,7 +30,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "PyeojinGothic", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 button,
@@ -288,6 +290,53 @@ h2 {
   cursor: pointer;
 }
 
+.primary-button {
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  min-height: 38px;
+  padding: 0 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  border-color: var(--line);
+  background: #e3ded6;
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.box-plan-button {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.box-plan-button:hover {
+  border-color: var(--accent);
+  background: var(--soft);
+  color: #083f3c;
+}
+
+.box-plan-button:disabled {
+  background: #fff;
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.box-actions {
+  display: grid;
+  margin-top: 4px;
+}
+
 .faction-tabs {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -490,12 +539,25 @@ input[type="search"] {
   color: var(--accent);
 }
 
+.stepper button:disabled {
+  color: #b4ada3;
+  cursor: not-allowed;
+}
+
+.stepper button:disabled:hover {
+  background: transparent;
+}
+
 .stepper button:first-child:hover {
   border-color: var(--accent) transparent var(--accent) var(--accent);
 }
 
 .stepper button:last-child:hover {
   border-color: var(--accent) var(--accent) var(--accent) transparent;
+}
+
+.stepper button:disabled:hover {
+  border-color: transparent;
 }
 
 .stepper strong {
@@ -524,6 +586,80 @@ input[type="search"] {
   border-color: var(--accent-2);
   background: var(--warn);
   color: var(--accent-2);
+}
+
+.build-plan-dialog {
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(760px, calc(100vh - 32px));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0;
+}
+
+.build-plan-dialog::backdrop {
+  background: rgba(29, 37, 39, 0.28);
+}
+
+.build-plan-modal {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.build-plan-modal-header,
+.build-plan-modal-actions,
+.plan-choice-option {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+}
+
+.build-plan-modal-header {
+  grid-template-columns: 1fr var(--control-size);
+}
+
+.build-plan-modal-header strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.build-plan-choice-list,
+.build-plan-options {
+  display: grid;
+  gap: 8px;
+}
+
+.build-plan-choice-list {
+  max-height: min(520px, calc(100vh - 210px));
+  overflow: auto;
+}
+
+.build-plan-choice {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  padding: 12px;
+}
+
+.build-plan-choice h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.plan-choice-option {
+  grid-template-columns: 1fr auto;
+  border: 1px solid #ece7df;
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 10px;
+}
+
+.build-plan-modal-actions {
+  grid-template-columns: 1fr 1fr;
 }
 
 .control-icon {

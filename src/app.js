@@ -8,6 +8,7 @@ import {
   getBuildRequirementChoices,
   getSprueParts
 } from "./calculator.js";
+import { normalizeBuildPlan } from "./build-plan.js";
 import { loadCatalog } from "./catalog-loader.js";
 
 const state = {
@@ -143,6 +144,7 @@ function renderFactions() {
 function renderBoxes() {
   els.boxList.innerHTML = "";
   const factionState = currentState();
+  const selectedPlanCount = selectedBoxPlanEntries().reduce((sum, entry) => sum + entry.count, 0);
   currentFaction().boxes.forEach((box) => {
     const row = document.createElement("div");
     row.className = "quantity-row";
@@ -155,10 +157,21 @@ function renderBoxes() {
     `;
     bindStepper(row, factionState.boxes[box.id] ?? 0, 0, 10, (value) => {
       factionState.boxes[box.id] = value;
+      renderBoxes();
       renderResults();
     });
     els.boxList.append(row);
   });
+
+  const actions = document.createElement("div");
+  actions.className = "box-actions";
+  actions.innerHTML = `
+    <button class="box-plan-button" type="button" ${selectedPlanCount === 0 ? "disabled" : ""}>
+      선택한 박스 부품 전부 계획에 추가
+    </button>
+  `;
+  actions.querySelector("button").addEventListener("click", addSelectedBoxPlans);
+  els.boxList.append(actions);
 }
 
 function renderSlots() {
@@ -202,13 +215,7 @@ function renderBuildList() {
       </span>
     `;
     row.addEventListener("click", () => {
-      const currentCount = factionState.builds[build.id] ?? 0;
-      factionState.builds[build.id] = Math.min(10, currentCount + 1);
-      factionState.choices[build.id] = normalizedBuildChoiceCounts(
-        build,
-        factionState.builds[build.id],
-        factionState.choices[build.id] ?? {}
-      );
+      addBuildToPlan(build.id, 1);
       renderResults();
     });
     els.buildList.append(row);
@@ -259,17 +266,190 @@ function renderResults() {
       </span>
     `;
     item.addEventListener("click", () => {
-      const currentCount = factionState.builds[build.id] ?? 0;
-      factionState.builds[build.id] = Math.min(10, currentCount + 1);
-      factionState.choices[build.id] = normalizedBuildChoiceCounts(
-        build,
-        factionState.builds[build.id],
-        factionState.choices[build.id] ?? {}
-      );
+      addBuildToPlan(build.id, 1);
       renderResults();
     });
     els.availableBuilds.append(item);
   });
+}
+
+function selectedBoxPlanEntries() {
+  const factionState = currentState();
+  return currentFaction().boxes
+    .map((box) => ({
+      box,
+      count: factionState.boxes[box.id] ?? 0,
+      plan: box.buildPlan ? normalizeBuildPlan(box.buildPlan) : null
+    }))
+    .filter((entry) => entry.count > 0 && entry.plan);
+}
+
+function addSelectedBoxPlans() {
+  const entries = selectedBoxPlanEntries();
+  if (entries.length === 0) return;
+
+  if (entries.some((entry) => entry.plan.choices.length > 0)) {
+    openBuildPlanDialog(entries);
+    return;
+  }
+
+  applyBoxPlans(entries, {});
+}
+
+function openBuildPlanDialog(entries) {
+  const dialog = document.createElement("dialog");
+  dialog.className = "build-plan-dialog";
+  const choices = makePlanChoiceState(entries);
+
+  dialog.innerHTML = `
+    <form class="build-plan-modal" method="dialog">
+      <div class="build-plan-modal-header">
+        <span>
+          <strong>옵션 조립 부품 선택</strong>
+          <small>선택한 박스의 buildPlan을 현재 조립 계획에 추가합니다.</small>
+        </span>
+        <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
+      </div>
+      <div class="build-plan-choice-list"></div>
+      <div class="build-plan-modal-actions">
+        <button class="ghost-button" value="cancel" type="submit">취소</button>
+        <button class="primary-button" value="confirm" type="submit">확인</button>
+      </div>
+    </form>
+  `;
+
+  const choiceList = dialog.querySelector(".build-plan-choice-list");
+
+  function renderChoices() {
+    choiceList.innerHTML = choices.map((choice) => `
+      <section class="build-plan-choice">
+        <h3>${choice.box.nameKo} · ${choice.id}</h3>
+        <small>${selectedPlanChoiceTotal(choice.counts)} / ${choice.total}개 선택 가능</small>
+        <div class="build-plan-options">
+          ${choice.options.map((buildId, optionIndex) => {
+            const build = indexes.builds[buildId];
+            const selectedTotal = selectedPlanChoiceTotal(choice.counts);
+            return `
+              <div class="plan-choice-option">
+                <span>
+                  <strong>${build?.nameKo ?? buildId}</strong>
+                  <small>${build?.nameEn ?? buildId}</small>
+                </span>
+                <span
+                  class="stepper"
+                  aria-label="${build?.nameKo ?? buildId} 수량"
+                  data-choice-key="${choice.key}"
+                  data-option-index="${optionIndex}"
+                >
+                  <button
+                    type="button"
+                    data-step="-1"
+                    aria-label="감소"
+                    ${choice.counts[optionIndex] <= 0 ? "disabled" : ""}
+                  >${iconSvg("minus")}</button>
+                  <strong>${choice.counts[optionIndex] ?? 0}</strong>
+                  <button
+                    type="button"
+                    data-step="1"
+                    aria-label="증가"
+                    ${selectedTotal >= choice.total ? "disabled" : ""}
+                  >${iconSvg("plus")}</button>
+                </span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </section>
+    `).join("");
+  }
+
+  choiceList.addEventListener("click", (event) => {
+    const button = event.target.closest(".stepper button");
+    if (!button) return;
+    const stepper = button.closest(".stepper");
+    const choice = choices.find((entry) => entry.key === stepper.dataset.choiceKey);
+    if (!choice) return;
+    choice.counts = adjustPlanChoiceCount(
+      choice.counts,
+      Number(stepper.dataset.optionIndex),
+      Number(button.dataset.step),
+      choice.total
+    );
+    renderChoices();
+  });
+
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "confirm") {
+      applyBoxPlans(entries, Object.fromEntries(choices.map((choice) => [choice.key, choice])));
+    }
+    dialog.remove();
+  });
+
+  renderChoices();
+  document.body.append(dialog);
+  dialog.showModal();
+}
+
+function makePlanChoiceState(entries) {
+  return entries.flatMap((entry) => entry.plan.choices.map((choice) => {
+    const total = choice.pick * entry.count;
+    return {
+      key: `${entry.box.id}:${choice.id}`,
+      id: choice.id,
+      box: entry.box,
+      total,
+      options: choice.options,
+      counts: Object.fromEntries(choice.options.map((_, index) => [index, 0]))
+    };
+  }));
+}
+
+function adjustPlanChoiceCount(counts, optionIndex, step, maxCount) {
+  const next = { ...counts };
+  const current = next[optionIndex] ?? 0;
+  if (step > 0 && selectedPlanChoiceTotal(next) >= maxCount) return next;
+  if (step < 0 && current <= 0) return next;
+
+  next[optionIndex] = current + step;
+
+  return next;
+}
+
+function selectedPlanChoiceTotal(counts) {
+  return Object.values(counts).reduce((sum, count) => sum + count, 0);
+}
+
+function applyBoxPlans(entries, selectedChoices) {
+  entries.forEach((entry) => {
+    entry.plan.always.forEach((item) => {
+      addBuildToPlan(item.build, item.count * entry.count);
+    });
+
+    entry.plan.choices.forEach((choice) => {
+      const selected = selectedChoices[`${entry.box.id}:${choice.id}`];
+      if (!selected) return;
+      Object.entries(selected.counts).forEach(([optionIndex, count]) => {
+        addBuildToPlan(choice.options[optionIndex], count);
+      });
+    });
+  });
+
+  render();
+}
+
+function addBuildToPlan(buildId, count) {
+  if (count <= 0) return;
+  const factionState = currentState();
+  const build = currentFaction().builds.find((candidate) => candidate.id === buildId);
+  if (!build) return;
+
+  const nextCount = (factionState.builds[buildId] ?? 0) + count;
+  factionState.builds[buildId] = nextCount;
+  factionState.choices[buildId] = normalizedBuildChoiceCounts(
+    build,
+    nextCount,
+    factionState.choices[buildId] ?? {}
+  );
 }
 
 function renderSelectedBuilds() {
@@ -301,7 +481,7 @@ function renderSelectedBuilds() {
       </div>
       ${buildChoiceRowsHtml(build, factionState.choices[build.id] ?? {}, count)}
     `;
-    bindStepper(item, count, 0, 10, (value) => {
+    bindStepper(item, count, 0, Math.max(10, count), (value) => {
       factionState.builds[build.id] = value;
       if (value === 0) delete factionState.choices[build.id];
       if (value > 0) {
