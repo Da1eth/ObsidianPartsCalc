@@ -740,6 +740,18 @@ input[type="search"] {
   grid-template-columns: 1fr 1fr;
 }
 
+.build-plan-modal-actions .ghost-button,
+.build-plan-modal-actions .primary-button {
+  min-height: 38px;
+  padding: 0 12px;
+}
+
+.build-plan-modal-actions .ghost-button:hover {
+  border-color: var(--accent);
+  background: var(--soft);
+  color: var(--accent);
+}
+
 .control-icon {
   width: 16px;
   height: 16px;
