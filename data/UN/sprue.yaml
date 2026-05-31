@@ -33,6 +33,8 @@
     SD12: 2
     SD19: 2
     SD21: 2
+  equivalentParts:
+    - [SD13, SD18]
 - id: DA
   nameKo: UN 스프루 DA
   nameEn: UN Sprue DA

@@ -1,3 +1,5 @@
+import { normalizeBuildPlan } from "./build-plan.js";
+
 export function calculateInventory(catalog, selectedBoxes) {
   const inventory = {};
   const spruesById = Object.fromEntries(catalog.sprues.map((sprue) => [sprue.id, normalizeSprueParts(sprue)]));
@@ -43,17 +45,52 @@ export function calculateInventoryStats(catalog, selectedBoxes) {
 export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}) {
   const required = {};
   const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
+  const equivalents = makeEquivalentIndex(catalog);
 
   Object.entries(selectedBuilds).forEach(([buildId, count]) => {
     if (count <= 0) return;
     const build = buildsById[buildId];
+    if (!build) return;
     for (let index = 0; index < count; index += 1) {
-      addParts(required, build.requires, 1);
-      addOptionParts(required, build.optionRequires ?? [], inventory);
+      addFlexibleParts(required, build.requires, inventory, equivalents);
+      addOptionParts(required, build.optionRequires ?? [], inventory, equivalents);
     }
   });
 
   return required;
+}
+
+export function calculateBuildPlanShortages(catalog, selectedBoxes) {
+  const remaining = calculateInventory(catalog, selectedBoxes);
+  const shortages = {};
+  const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
+  const equivalents = makeEquivalentIndex(catalog);
+
+  catalog.boxes.forEach((box) => {
+    const boxCount = selectedBoxes[box.id] ?? 0;
+    if (boxCount <= 0 || !box.buildPlan) return;
+
+    for (let boxIndex = 0; boxIndex < boxCount; boxIndex += 1) {
+      const plan = normalizeBuildPlan(box.buildPlan);
+
+      plan.always.forEach((entry) => {
+        const build = buildsById[entry.build];
+        if (!build) return;
+        for (let count = 0; count < entry.count; count += 1) {
+          consumeBuildForPlan(build, remaining, shortages, equivalents);
+        }
+      });
+
+      plan.choices.forEach((choice) => {
+        for (let count = 0; count < choice.pick; count += 1) {
+          const build = choosePlanOption(choice.options, buildsById, remaining, equivalents);
+          if (build) consumeBuildForPlan(build, remaining, shortages, equivalents);
+        }
+      });
+    }
+  });
+
+  return shortages;
 }
 
 export function calculateLeftovers(inventory, required) {
@@ -71,8 +108,9 @@ export function calculateLeftovers(inventory, required) {
 }
 
 export function calculateAvailableBuilds(catalog, leftovers) {
+  const equivalents = makeEquivalentIndex(catalog);
   return catalog.builds
-    .map((build) => ({ build, max: maxBuildCount(build, leftovers) }))
+    .map((build) => ({ build, max: maxBuildCount(build, leftovers, equivalents) }))
     .filter((entry) => entry.max > 0)
     .sort((a, b) => a.build.slot.localeCompare(b.build.slot) || a.build.nameKo.localeCompare(b.build.nameKo));
 }
@@ -96,15 +134,24 @@ function addParts(target, parts, multiplier) {
   });
 }
 
-function addOptionParts(required, optionRequires, inventory) {
+function addFlexibleParts(required, parts, inventory, equivalents) {
+  Object.entries(parts).forEach(([partId, count]) => {
+    for (let index = 0; index < count; index += 1) {
+      const chosenPart = chooseEquivalentPart(partId, inventory, required, equivalents);
+      required[chosenPart] = (required[chosenPart] ?? 0) + 1;
+    }
+  });
+}
+
+function addOptionParts(required, optionRequires, inventory, equivalents) {
   optionRequires.forEach((option) => {
-    const partId = chooseOptionPart(option, inventory, required);
+    const partId = chooseOptionPart(option, inventory, required, equivalents);
     required[partId] = (required[partId] ?? 0) + option.count;
   });
 }
 
-function chooseOptionPart(option, inventory, required) {
-  return [...option.parts].sort((a, b) => {
+function chooseOptionPart(option, inventory, required, equivalents) {
+  return uniqueParts(option.parts.flatMap((partId) => equivalentParts(partId, equivalents))).sort((a, b) => {
     const aRemaining = (inventory[a] ?? 0) - (required[a] ?? 0);
     const bRemaining = (inventory[b] ?? 0) - (required[b] ?? 0);
     return bRemaining - aRemaining;
@@ -131,6 +178,36 @@ function normalizeSprueParts(sprue) {
   return parts;
 }
 
+function makeEquivalentIndex(catalog) {
+  const index = {};
+
+  catalog.sprues.forEach((sprue) => {
+    (sprue.equivalentParts ?? []).forEach((group) => {
+      group.forEach((partId) => {
+        index[partId] = uniqueParts([partId, ...group]);
+      });
+    });
+  });
+
+  return index;
+}
+
+function equivalentParts(partId, equivalents) {
+  return equivalents[partId] ?? [partId];
+}
+
+function uniqueParts(parts) {
+  return [...new Set(parts)];
+}
+
+function chooseEquivalentPart(partId, inventory, required, equivalents) {
+  return equivalentParts(partId, equivalents).sort((a, b) => {
+    const aRemaining = (inventory[a] ?? 0) - (required[a] ?? 0);
+    const bRemaining = (inventory[b] ?? 0) - (required[b] ?? 0);
+    return bRemaining - aRemaining;
+  })[0];
+}
+
 function expandPartRange(range) {
   const numbers = range.only ?? numbersFromRange(range.from, range.to)
     .filter((number) => !(range.except ?? []).includes(number));
@@ -149,40 +226,90 @@ function formatPartId(prefix, number, pad = 0) {
   return `${prefix}${String(number).padStart(pad, "0")}`;
 }
 
-function maxBuildCount(build, inventory) {
+function maxBuildCount(build, inventory, equivalents) {
   const remaining = { ...inventory };
   let count = 0;
 
-  while (consumeBuild(build, remaining)) {
+  while (consumeBuild(build, remaining, equivalents)) {
     count += 1;
   }
 
   return count;
 }
 
-function consumeBuild(build, inventory) {
-  if (!hasParts(build.requires, inventory)) return false;
-  subtractParts(build.requires, inventory);
+function consumeBuild(build, inventory, equivalents) {
+  const remaining = { ...inventory };
+  if (!consumeParts(build.requires, remaining, equivalents)) return false;
 
   for (const option of build.optionRequires ?? []) {
-    const partId = chooseConsumableOptionPart(option, inventory);
+    const partId = chooseConsumableOptionPart(option, remaining, equivalents);
     if (!partId) return false;
-    inventory[partId] -= option.count;
+    remaining[partId] -= option.count;
   }
 
+  Object.assign(inventory, remaining);
   return true;
 }
 
-function hasParts(parts, inventory) {
-  return Object.entries(parts).every(([partId, count]) => (inventory[partId] ?? 0) >= count);
-}
-
-function subtractParts(parts, inventory) {
-  Object.entries(parts).forEach(([partId, count]) => {
-    inventory[partId] -= count;
+function consumeParts(parts, inventory, equivalents) {
+  return Object.entries(parts).every(([partId, count]) => {
+    for (let index = 0; index < count; index += 1) {
+      const consumed = consumeOneEquivalentPart(partId, inventory, equivalents);
+      if (!consumed) return false;
+    }
+    return true;
   });
 }
 
-function chooseConsumableOptionPart(option, inventory) {
-  return option.parts.find((partId) => (inventory[partId] ?? 0) >= option.count);
+function consumeOneEquivalentPart(partId, inventory, equivalents) {
+  const candidate = equivalentParts(partId, equivalents)
+    .find((candidatePartId) => (inventory[candidatePartId] ?? 0) > 0);
+  if (!candidate) return null;
+  inventory[candidate] -= 1;
+  return candidate;
+}
+
+function chooseConsumableOptionPart(option, inventory, equivalents) {
+  return uniqueParts(option.parts.flatMap((partId) => equivalentParts(partId, equivalents)))
+    .find((partId) => (inventory[partId] ?? 0) >= option.count);
+}
+
+function consumeBuildForPlan(build, remaining, shortages, equivalents) {
+  consumePartsForPlan(build.requires, remaining, shortages, equivalents);
+
+  (build.optionRequires ?? []).forEach((option) => {
+    for (let count = 0; count < option.count; count += 1) {
+      const partId = chooseConsumableOptionPart({ ...option, count: 1 }, remaining, equivalents)
+        ?? option.parts[0];
+      consumePartForPlan(partId, remaining, shortages, equivalents);
+    }
+  });
+}
+
+function consumePartsForPlan(parts, remaining, shortages, equivalents) {
+  Object.entries(parts).forEach(([partId, count]) => {
+    for (let index = 0; index < count; index += 1) {
+      consumePartForPlan(partId, remaining, shortages, equivalents);
+    }
+  });
+}
+
+function consumePartForPlan(partId, remaining, shortages, equivalents) {
+  const consumed = consumeOneEquivalentPart(partId, remaining, equivalents);
+  if (consumed) return;
+  shortages[partId] = (shortages[partId] ?? 0) + 1;
+}
+
+function choosePlanOption(options, buildsById, remaining, equivalents) {
+  return options
+    .map((buildId) => buildsById[buildId])
+    .filter(Boolean)
+    .sort((a, b) => countMissingParts(a, remaining, equivalents) - countMissingParts(b, remaining, equivalents))[0];
+}
+
+function countMissingParts(build, inventory, equivalents) {
+  const remaining = { ...inventory };
+  const shortages = {};
+  consumeBuildForPlan(build, remaining, shortages, equivalents);
+  return Object.values(shortages).reduce((sum, count) => sum + count, 0);
 }

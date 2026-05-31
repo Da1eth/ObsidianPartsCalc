@@ -1,5 +1,6 @@
 import {
   calculateAvailableBuilds,
+  calculateBuildPlanShortages,
   calculateInventory,
   calculateInventoryStats,
   calculateLeftovers,
@@ -26,7 +27,9 @@ const els = {
   leftoverParts: document.querySelector("#leftover-parts"),
   availableBuilds: document.querySelector("#available-builds"),
   shortagePanel: document.querySelector("#shortage-panel"),
-  shortageParts: document.querySelector("#shortage-parts")
+  shortageParts: document.querySelector("#shortage-parts"),
+  planShortagePanel: document.querySelector("#plan-shortage-panel"),
+  planShortageParts: document.querySelector("#plan-shortage-parts")
 };
 
 const catalog = await loadCatalog();
@@ -135,6 +138,7 @@ function renderResults() {
   const inventoryStats = calculateInventoryStats(catalog, state.boxes);
   const required = calculateRequiredParts(catalog, state.builds, inventory);
   const { leftovers, shortages } = calculateLeftovers(inventory, required);
+  const planShortages = calculateBuildPlanShortages(catalog, state.boxes);
   const available = calculateAvailableBuilds(catalog, leftovers);
   const selectedCount = Object.values(state.builds).reduce((sum, count) => sum + count, 0);
   const boxCount = Object.values(state.boxes).reduce((sum, count) => sum + count, 0);
@@ -151,6 +155,8 @@ function renderResults() {
   renderPartTable(els.leftoverParts, formatPartList(leftovers, indexes.parts), "남는 파츠가 없습니다.");
   renderPartTable(els.shortageParts, formatPartList(shortages, indexes.parts), "부족한 파츠가 없습니다.");
   els.shortagePanel.hidden = Object.keys(shortages).length === 0;
+  renderPartTable(els.planShortageParts, formatPartList(planShortages, indexes.parts), "박스 조립 계획 기준 부족한 파츠가 없습니다.");
+  els.planShortagePanel.hidden = Object.keys(planShortages).length === 0;
 
   els.availableBuilds.innerHTML = "";
   if (available.length === 0) {
