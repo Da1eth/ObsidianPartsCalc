@@ -24,7 +24,7 @@ const state = {
 
 const els = {
   workspace: document.querySelector("#workspace"),
-  headerSummary: document.querySelector("#header-summary"),
+  summaryStats: document.querySelector("#summary-stats"),
   sidebar: document.querySelector("#sidebar"),
   sidebarOpen: document.querySelector("#sidebar-open"),
   sidebarClose: document.querySelector("#sidebar-close"),
@@ -239,13 +239,7 @@ function renderResults() {
   const selectedCount = Object.values(factionState.builds).reduce((sum, count) => sum + count, 0);
   const boxCount = Object.values(factionState.boxes).reduce((sum, count) => sum + count, 0);
 
-  els.headerSummary.innerHTML = `
-    <span><strong>${boxCount}</strong> boxes</span>
-    <span><strong>${selectedCount}</strong> builds</span>
-    <span><strong>${inventoryStats.totalParts}</strong> parts</span>
-    <span><strong>${inventoryStats.byMaterial.plastic ?? 0}</strong> plastic</span>
-    <span><strong>${inventoryStats.byMaterial.resin ?? 0}</strong> resin</span>
-  `;
+  els.summaryStats.textContent = `${boxCount} boxes · ${selectedCount} builds · ${inventoryStats.totalParts} parts · ${inventoryStats.byMaterial.plastic ?? 0} plastic · ${inventoryStats.byMaterial.resin ?? 0} resin`;
 
   renderSelectedBuilds();
   renderGroupedLeftovers(leftovers, scopedCatalog);
@@ -875,13 +869,9 @@ function bindStepper(root, initialValue, min, max, onChange) {
 
 function partRowHtml(row) {
   return `
-    <div class="part-row">
+    <div class="part-row" title="${row.nameEn}">
       <code>${row.id}</code>
-      <span>
-        <strong>${row.nameKo}</strong>
-        <small>${row.nameEn}</small>
-      </span>
-      <b>${row.count}</b>
+      <b>× ${row.count}</b>
     </div>
   `;
 }

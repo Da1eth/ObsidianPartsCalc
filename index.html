@@ -26,6 +26,10 @@
             <h2>남는 파츠</h2>
             <div id="leftover-parts" class="sprue-groups"></div>
           </section>
+
+          <section class="sidebar-summary-panel">
+            <div class="summary-stats" id="summary-stats"></div>
+          </section>
         </div>
       </div>
     </aside>
@@ -38,7 +42,10 @@
             <p class="eyebrow">Obsidian Protocol</p>
             <h1>파츠 계산기</h1>
           </div>
-          <div class="header-summary" id="header-summary"></div>
+          <div class="header-actions">
+            <button class="ghost-button" id="reset-builds" type="button">초기화</button>
+            <button class="ghost-button" id="add-available-builds" type="button">전부 담기</button>
+          </div>
         </header>
 
         <section class="workspace" id="workspace">
@@ -57,7 +64,6 @@
             <section class="panel selected-panel">
               <div class="section-title-row">
                 <h2>조립 계획</h2>
-                <button class="ghost-button" id="reset-builds" type="button">초기화</button>
               </div>
               <div id="selected-builds" class="selected-builds"></div>
             </section>
@@ -71,7 +77,6 @@
               <section class="panel">
                 <div class="section-title-row">
                   <h2>추가 조립 가능 부품</h2>
-                  <button class="ghost-button" id="add-available-builds" type="button">전부 담기</button>
                 </div>
                 <div id="available-builds" class="available-list"></div>
               </section>

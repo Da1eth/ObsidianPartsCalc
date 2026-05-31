@@ -1,4 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/CSS/pyeojin-font.css");
+@import url("https://cdn.jsdelivr.net/gh/Joungkyun/font-d2coding-ligature/d2coding-ligature.css");
 
 :root {
   color-scheme: light;
@@ -112,23 +113,18 @@ h2 {
   font-size: 1rem;
 }
 
-.header-summary {
+.header-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   justify-content: end;
 }
 
-.header-summary span {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--panel);
-  padding: 8px 12px;
+.summary-stats {
   color: var(--muted);
-}
-
-.header-summary strong {
-  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .workspace {
@@ -173,7 +169,7 @@ h2 {
 .selected-builds,
 .dashboard .part-table,
 .available-list,
-.sidebar-content > .panel:last-child .sprue-groups {
+.sidebar-content > .panel:nth-last-child(2) .sprue-groups {
   scrollbar-width: none;
 }
 
@@ -183,7 +179,7 @@ h2 {
 .selected-builds::-webkit-scrollbar,
 .dashboard .part-table::-webkit-scrollbar,
 .available-list::-webkit-scrollbar,
-.sidebar-content > .panel:last-child .sprue-groups::-webkit-scrollbar {
+.sidebar-content > .panel:nth-last-child(2) .sprue-groups::-webkit-scrollbar {
   display: none;
 }
 
@@ -261,7 +257,7 @@ h2 {
 
 .sidebar-content {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 16px;
   width: calc(var(--sidebar-width) - 32px);
   height: calc(100vh - 44px);
@@ -312,6 +308,12 @@ h2 {
   cursor: pointer;
 }
 
+.ghost-button:hover {
+  border-color: var(--accent);
+  background: var(--soft);
+  color: var(--accent);
+}
+
 .primary-button {
   border: 1px solid var(--accent);
   border-radius: 6px;
@@ -333,6 +335,12 @@ h2 {
 .ghost-button:disabled {
   color: #b4ada3;
   cursor: not-allowed;
+}
+
+.ghost-button:disabled:hover {
+  border-color: var(--line);
+  background: transparent;
+  color: #b4ada3;
 }
 
 .box-plan-button {
@@ -428,7 +436,9 @@ h2 {
 }
 
 .part-row {
-  grid-template-columns: 58px 1fr minmax(32px, auto);
+  grid-template-columns: minmax(0, 1fr) 4.5ch;
+  min-height: 34px;
+  padding: 7px 9px;
 }
 
 .selected-item {
@@ -761,12 +771,6 @@ input[type="search"] {
   padding: 0 12px;
 }
 
-.build-plan-modal-actions .ghost-button:hover {
-  border-color: var(--accent);
-  background: var(--soft);
-  color: var(--accent);
-}
-
 .control-icon {
   width: 16px;
   height: 16px;
@@ -805,15 +809,20 @@ input[type="search"] {
 }
 
 code {
-  border-radius: 5px;
-  background: #eef0eb;
-  padding: 5px 6px;
-  color: #354044;
-  font-size: 0.82rem;
+  color: var(--muted);
+  font-family: "D2 coding Ligature", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 b {
   justify-self: end;
+  color: var(--ink);
+  font-family: "D2 coding Ligature", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .empty {
@@ -833,8 +842,8 @@ b {
   grid-template-columns: 1fr minmax(32px, auto);
   align-items: center;
   gap: 10px;
-  min-height: 44px;
-  padding: 10px;
+  min-height: 38px;
+  padding: 8px 10px;
   cursor: pointer;
 }
 
@@ -843,22 +852,41 @@ b {
 }
 
 .sprue-group .part-table {
+  display: grid;
   border-top: 1px solid var(--line);
-  padding: 8px;
+  gap: 0;
+  padding: 4px 8px;
 }
 
-.sprue-group .part-row {
-  border-color: #ece7df;
-  background: var(--panel);
+.dashboard .part-table {
+  display: grid;
+  gap: 0;
+}
+
+.sprue-group .part-row,
+.dashboard .part-row {
+  border-width: 0;
+  border-radius: 0;
+  border-top: 1px solid #ece7df;
+  background: transparent;
+}
+
+.sprue-group .part-row:first-child,
+.dashboard .part-row:first-child {
+  border-top: 0;
 }
 
 .sidebar-content > .panel:last-child {
+  display: block;
+}
+
+.sidebar-content > .panel:nth-last-child(2) {
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
-.sidebar-content > .panel:last-child .sprue-groups {
+.sidebar-content > .panel:nth-last-child(2) .sprue-groups {
   flex: 1 1 auto;
   min-height: 0;
   align-content: start;
@@ -993,7 +1021,7 @@ b {
     grid-template-columns: 1fr;
   }
 
-  .header-summary {
+  .header-actions {
     grid-column: 1 / -1;
     justify-content: start;
   }
@@ -1020,7 +1048,6 @@ b {
   }
 
   .build-row,
-  .part-row,
   .available-item {
     grid-template-columns: 34px 1fr auto;
   }
