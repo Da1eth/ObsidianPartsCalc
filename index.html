@@ -45,7 +45,6 @@
           <section class="panel build-controls">
             <div class="section-title-row">
               <h2>조립할 부품</h2>
-              <button class="ghost-button" id="reset-builds" type="button">초기화</button>
             </div>
             <div class="slot-tabs" id="slot-tabs"></div>
             <label class="search">
@@ -57,7 +56,10 @@
 
           <section class="dashboard" aria-label="결과">
             <section class="panel selected-panel">
-              <h2>현재 조립 계획</h2>
+              <div class="section-title-row">
+                <h2>현재 조립 계획</h2>
+                <button class="ghost-button" id="reset-builds" type="button">초기화</button>
+              </div>
               <div id="selected-builds" class="selected-builds"></div>
             </section>
 
@@ -67,13 +69,8 @@
                 <div id="shortage-parts" class="part-table"></div>
               </section>
 
-              <section class="panel warning-panel" id="plan-shortage-panel">
-                <h2>박스 조립 계획 부족 파츠</h2>
-                <div id="plan-shortage-parts" class="part-table"></div>
-              </section>
-
               <section class="panel">
-                <h2>추가 조립 가능</h2>
+                <h2>추가 조립 가능 부품</h2>
                 <div id="available-builds" class="available-list"></div>
               </section>
             </section>

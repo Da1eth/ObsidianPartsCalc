@@ -1,6 +1,5 @@
 import {
   calculateAvailableBuilds,
-  calculateBuildPlanShortages,
   calculateInventory,
   calculateInventoryStats,
   calculateLeftovers,
@@ -35,9 +34,7 @@ const els = {
   leftoverParts: document.querySelector("#leftover-parts"),
   availableBuilds: document.querySelector("#available-builds"),
   shortagePanel: document.querySelector("#shortage-panel"),
-  shortageParts: document.querySelector("#shortage-parts"),
-  planShortagePanel: document.querySelector("#plan-shortage-panel"),
-  planShortageParts: document.querySelector("#plan-shortage-parts")
+  shortageParts: document.querySelector("#shortage-parts")
 };
 
 const catalog = await loadCatalog();
@@ -145,7 +142,7 @@ function renderBoxes() {
   els.boxList.innerHTML = "";
   const factionState = currentState();
   currentFaction().boxes.forEach((box) => {
-    const row = document.createElement("label");
+    const row = document.createElement("div");
     row.className = "quantity-row";
     row.innerHTML = `
       <span>
@@ -191,18 +188,20 @@ function renderBuildList() {
   els.buildList.innerHTML = "";
   builds.forEach((build) => {
     const slot = indexes.slots[build.slot];
-    const row = document.createElement("label");
+    const row = document.createElement("button");
     row.className = "build-row";
+    row.type = "button";
+    row.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     row.innerHTML = `
       <span class="slot-icon" aria-hidden="true">${slot.icon}</span>
       <span class="build-meta">
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
       </span>
-      ${stepperHtml(factionState.builds[build.id] ?? 0, "부품 수량")}
     `;
-    bindStepper(row, factionState.builds[build.id] ?? 0, 0, 10, (value) => {
-      factionState.builds[build.id] = value;
+    row.addEventListener("click", () => {
+      const currentCount = factionState.builds[build.id] ?? 0;
+      factionState.builds[build.id] = Math.min(10, currentCount + 1);
       renderResults();
     });
     els.buildList.append(row);
@@ -216,7 +215,6 @@ function renderResults() {
   const inventoryStats = calculateInventoryStats(scopedCatalog, factionState.boxes);
   const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory);
   const { leftovers, shortages } = calculateLeftovers(inventory, required);
-  const planShortages = calculateBuildPlanShortages(scopedCatalog, factionState.boxes);
   const available = calculateAvailableBuilds(scopedCatalog, leftovers);
   const selectedCount = Object.values(factionState.builds).reduce((sum, count) => sum + count, 0);
   const boxCount = Object.values(factionState.boxes).reduce((sum, count) => sum + count, 0);
@@ -233,8 +231,6 @@ function renderResults() {
   renderGroupedLeftovers(leftovers, scopedCatalog);
   renderPartTable(els.shortageParts, formatPartList(shortages, indexes.parts), "부족한 파츠가 없습니다.");
   els.shortagePanel.hidden = Object.keys(shortages).length === 0;
-  renderPartTable(els.planShortageParts, formatPartList(planShortages, indexes.parts), "박스 조립 계획 기준 부족한 파츠가 없습니다.");
-  els.planShortagePanel.hidden = Object.keys(planShortages).length === 0;
 
   els.availableBuilds.innerHTML = "";
   if (available.length === 0) {
@@ -244,16 +240,22 @@ function renderResults() {
 
   available.forEach(({ build, max }) => {
     const slot = indexes.slots[build.slot];
-    const item = document.createElement("div");
+    const item = document.createElement("button");
     item.className = "available-item";
+    item.type = "button";
+    item.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     item.innerHTML = `
       <span class="slot-icon" aria-hidden="true">${slot.icon}</span>
       <span>
         <strong>${build.nameKo}</strong>
-        <small>${build.nameEn}</small>
+        <small>${build.nameEn} · ${max}개 조립 가능</small>
       </span>
-      <b>${max}</b>
     `;
+    item.addEventListener("click", () => {
+      const currentCount = factionState.builds[build.id] ?? 0;
+      factionState.builds[build.id] = Math.min(10, currentCount + 1);
+      renderResults();
+    });
     els.availableBuilds.append(item);
   });
 }
@@ -276,12 +278,15 @@ function renderSelectedBuilds() {
     item.className = "selected-item";
     item.innerHTML = `
       <span>${slot.icon} ${build.nameKo}</span>
-      <strong>${count}</strong>
-      <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">×</button>
+      ${stepperHtml(count, `${build.nameKo} 수량`)}
+      <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
     `;
-    item.querySelector("button").addEventListener("click", () => {
+    bindStepper(item, count, 0, 10, (value) => {
+      factionState.builds[build.id] = value;
+      renderResults();
+    });
+    item.querySelector(".icon-button").addEventListener("click", () => {
       factionState.builds[build.id] = 0;
-      renderBuildList();
       renderResults();
     });
     els.selectedBuilds.append(item);
@@ -356,10 +361,24 @@ function renderPartTable(target, rows, emptyText) {
 function stepperHtml(value, label) {
   return `
     <span class="stepper" aria-label="${label}">
-      <button type="button" data-step="-1" aria-label="감소">−</button>
+      <button type="button" data-step="-1" aria-label="감소">${iconSvg("minus")}</button>
       <strong>${value}</strong>
-      <button type="button" data-step="1" aria-label="증가">+</button>
+      <button type="button" data-step="1" aria-label="증가">${iconSvg("plus")}</button>
     </span>
+  `;
+}
+
+function iconSvg(name) {
+  const paths = {
+    minus: `<path d="M5 12h14"></path>`,
+    plus: `<path d="M12 5v14"></path><path d="M5 12h14"></path>`,
+    x: `<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>`
+  };
+
+  return `
+    <svg class="control-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      ${paths[name]}
+    </svg>
   `;
 }
 
