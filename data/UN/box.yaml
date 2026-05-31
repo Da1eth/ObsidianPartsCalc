@@ -1,3 +1,19 @@
+- id: UN-Core
+  nameKo: UN 코어 박스
+  nameEn: UN Core Box
+  sprues:
+    SB: 4
+    SC: 3
+    SD: 10
+    DA: 2
+    DB: 2
+    DC: 2
+    DD: 2
+    DE: 3
+    DF: 4
+    DG: 4
+    DH: 2
+
 - id: UN-Taurus
   nameKo: UN 타우르스 단품 킷
   nameEn: UN Taurus Box

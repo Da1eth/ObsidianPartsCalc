@@ -1,0 +1,37 @@
+- id: ADK30F
+  slot: drone
+  nameKo: ADK30F "타란튤라" 화력 사양
+  nameEn: ADK30F "Tarantula" Firepower Type
+  requires:
+    DH13: 4
+    DH14: 4
+    DH12: 1
+    DH11: 1
+    DD17: 1
+    DD14: 1
+    DD11: 1
+    DD18: 1
+- id: ADK30C
+  slot: drone
+  nameKo: ADK30F "타란튤라" 수송 사양
+  nameEn: ADK30F "Tarantula" Carrier Type
+  requires:
+    DH13: 4
+    DH14: 4
+    DH12: 1
+    DH11: 1
+- id: SGM2_U
+  slot: projectiles
+  nameKo: SGM2 "폴커스" 자동 지뢰
+  nameEn: SGM2 "Pholcus" Automatic Mine
+  requires:
+    DC5: 1
+    DC3: 1
+- id: SGM2_F
+  slot: drone
+  nameKo: SGM2 "폴커스" 자동 지뢰(전개)
+  nameEn: SGM2 "Pholcus" Automatic Mine(Unfold)
+  requires:
+    DC6: 1
+    DC9: 1
+    DC1: 1

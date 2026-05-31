@@ -33,6 +33,39 @@
     SD12: 2
     SD19: 2
     SD21: 2
+- id: DA
+  nameKo: UN 스프루 DA
+  nameEn: UN Sprue DA
+  material: plastic
+  partRange:
+    prefix: DA
+    from: 1
+    to: 25
+  extraParts:
+    DA11: 2
+    DA12: 2
+- id: DB
+  nameKo: UN 스프루 DB
+  nameEn: UN Sprue DB
+  material: plastic
+  partRange:
+    prefix: DB
+    from: 1
+    to: 20
+- id: DC
+  nameKo: UN 스프루 DC
+  nameEn: UN Sprue DC
+  material: plastic
+  partRange:
+    prefix: DC
+    from: 1
+    to: 14
+  extraParts:
+    DC1: 3
+    DC3: 3
+    DC5: 3
+    DC6: 3
+    DC9: 3
 - id: DD
   nameKo: UN 스프루 DD
   nameEn: UN Sprue DD
@@ -78,6 +111,17 @@
     prefix: DG
     from: 1
     to: 25
+- id: DH
+  nameKo: UN 스프루 DH
+  nameEn: UN Sprue DH
+  material: plastic
+  partRange:
+    prefix: DH
+    from: 1
+    to: 15
+  extraParts:
+    DH13: 4
+    DH14: 4
 - id: FB
   nameKo: UN 스프루 FB
   nameEn: UN Sprue FB
