@@ -1,17 +1,14 @@
 import { parseYaml } from "./yaml.js";
+import { catalogConfig } from "./catalog-config.js";
 
 export async function loadCatalog() {
   const dataRoot = new URL("../data/", import.meta.url);
-  const index = await fetchYaml("index.yaml", dataRoot);
-  const [common, factions] = await Promise.all([
-    fetchYaml(index.common, dataRoot),
-    Promise.all(index.factions.map((faction) => fetchFaction(faction, dataRoot)))
-  ]);
+  const factions = await Promise.all(catalogConfig.factions.map((faction) => fetchFaction(faction, dataRoot)));
 
   return {
-    schemaVersion: index.schemaVersion,
-    slots: common.slots,
-    parts: common.parts,
+    schemaVersion: catalogConfig.schemaVersion,
+    slots: catalogConfig.slots,
+    parts: catalogConfig.parts,
     factions,
     boxes: factions.flatMap((faction) => faction.boxes ?? []),
     sprues: factions.flatMap((faction) => faction.sprues ?? []),
@@ -20,15 +17,13 @@ export async function loadCatalog() {
 }
 
 async function fetchFaction(faction, baseUrl) {
-  const files = faction.files;
-  const [boxes, sprues, torso, chassis, rightArm, leftArm, backpack] = await Promise.all([
-    fetchYaml(files.boxes, baseUrl),
-    fetchYaml(files.sprues, baseUrl),
-    fetchYaml(files.torso, baseUrl),
-    fetchYaml(files.chassis, baseUrl),
-    fetchYaml(files.rightArm, baseUrl),
-    fetchYaml(files.leftArm, baseUrl),
-    fetchYaml(files.backpack, baseUrl)
+  const files = catalogConfig.factionFiles;
+  const factionUrl = new URL(`${faction.folder}/`, baseUrl);
+  const buildFileKeys = ["torso", "chassis", "rightArm", "leftArm", "backpack", "drone"];
+  const [boxes, sprues, ...buildFiles] = await Promise.all([
+    fetchYaml(files.boxes, factionUrl),
+    fetchYaml(files.sprues, factionUrl),
+    ...buildFileKeys.map((key) => fetchYaml(files[key], factionUrl))
   ]);
 
   return {
@@ -37,13 +32,7 @@ async function fetchFaction(faction, baseUrl) {
     nameEn: faction.nameEn,
     boxes,
     sprues,
-    builds: [
-      ...torso,
-      ...chassis,
-      ...rightArm,
-      ...leftArm,
-      ...backpack
-    ]
+    builds: buildFiles.flat()
   };
 }
 

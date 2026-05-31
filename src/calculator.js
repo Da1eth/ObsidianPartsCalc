@@ -89,7 +89,9 @@ export function formatPartList(parts, partIndex) {
 }
 
 function addParts(target, parts, multiplier) {
+  if (multiplier <= 0) return;
   Object.entries(parts).forEach(([partId, count]) => {
+    if (count <= 0) return;
     target[partId] = (target[partId] ?? 0) + count * multiplier;
   });
 }
