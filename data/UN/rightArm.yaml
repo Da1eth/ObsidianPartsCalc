@@ -113,7 +113,7 @@
   requires:
     DB3: 1
     DB4: 1
-    DB: 1
+    DB8: 1
     DB2: 1
     DB19: 1
     DB20: 1
