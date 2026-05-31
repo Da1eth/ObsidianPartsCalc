@@ -52,7 +52,10 @@ export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}) 
     const build = buildsById[buildId];
     if (!build) return;
     for (let index = 0; index < count; index += 1) {
-      addFlexibleParts(required, build.requires, inventory, equivalents);
+      const requirements = normalizeBuildRequirements(build);
+      addFlexibleParts(required, requirements.always, inventory, equivalents);
+      addRequirementChoices(required, requirements.choices, inventory, equivalents);
+      addAlternativeParts(required, build.alternativeRequires ?? [], inventory, equivalents);
       addOptionParts(required, build.optionRequires ?? [], inventory, equivalents);
     }
   });
@@ -143,10 +146,28 @@ function addFlexibleParts(required, parts, inventory, equivalents) {
   });
 }
 
+function addRequirementChoices(required, choices, inventory, equivalents) {
+  choices.forEach((choice) => {
+    for (let count = 0; count < choice.pick; count += 1) {
+      const option = chooseRequirementOption(choice.options, inventory, required, equivalents);
+      if (!option) return;
+      addFlexibleParts(required, option, inventory, equivalents);
+    }
+  });
+}
+
 function addOptionParts(required, optionRequires, inventory, equivalents) {
   optionRequires.forEach((option) => {
     const partId = chooseOptionPart(option, inventory, required, equivalents);
     required[partId] = (required[partId] ?? 0) + option.count;
+  });
+}
+
+function addAlternativeParts(required, alternativeRequires, inventory, equivalents) {
+  alternativeRequires.forEach((group) => {
+    const option = chooseRequirementOption(group.options, inventory, required, equivalents);
+    if (!option) return;
+    addFlexibleParts(required, option, inventory, equivalents);
   });
 }
 
@@ -243,7 +264,10 @@ function maxBuildCount(build, inventory, equivalents) {
 
 function consumeBuild(build, inventory, equivalents) {
   const remaining = { ...inventory };
-  if (!consumeParts(build.requires, remaining, equivalents)) return false;
+  const requirements = normalizeBuildRequirements(build);
+  if (!consumeParts(requirements.always, remaining, equivalents)) return false;
+  if (!consumeRequirementChoices(requirements.choices, remaining, equivalents)) return false;
+  if (!consumeAlternativeParts(build.alternativeRequires ?? [], remaining, equivalents)) return false;
 
   for (const option of build.optionRequires ?? []) {
     const partId = chooseConsumableOptionPart(option, remaining, equivalents);
@@ -253,6 +277,24 @@ function consumeBuild(build, inventory, equivalents) {
 
   Object.assign(inventory, remaining);
   return true;
+}
+
+function consumeRequirementChoices(choices, inventory, equivalents) {
+  return choices.every((choice) => {
+    for (let count = 0; count < choice.pick; count += 1) {
+      const option = chooseConsumableRequirementOption(choice.options, inventory, equivalents);
+      if (!option || !consumeParts(option, inventory, equivalents)) return false;
+    }
+    return true;
+  });
+}
+
+function consumeAlternativeParts(alternativeRequires, inventory, equivalents) {
+  return alternativeRequires.every((group) => {
+    const option = chooseConsumableRequirementOption(group.options, inventory, equivalents);
+    if (!option) return false;
+    return consumeParts(option, inventory, equivalents);
+  });
 }
 
 function consumeParts(parts, inventory, equivalents) {
@@ -279,7 +321,10 @@ function chooseConsumableOptionPart(option, inventory, equivalents) {
 }
 
 function consumeBuildForPlan(build, remaining, shortages, equivalents) {
-  consumePartsForPlan(build.requires, remaining, shortages, equivalents);
+  const requirements = normalizeBuildRequirements(build);
+  consumePartsForPlan(requirements.always, remaining, shortages, equivalents);
+  consumeRequirementChoicesForPlan(requirements.choices, remaining, shortages, equivalents);
+  consumeAlternativePartsForPlan(build.alternativeRequires ?? [], remaining, shortages, equivalents);
 
   (build.optionRequires ?? []).forEach((option) => {
     for (let count = 0; count < option.count; count += 1) {
@@ -287,6 +332,24 @@ function consumeBuildForPlan(build, remaining, shortages, equivalents) {
         ?? option.parts[0];
       consumePartForPlan(partId, remaining, shortages, equivalents);
     }
+  });
+}
+
+function consumeRequirementChoicesForPlan(choices, remaining, shortages, equivalents) {
+  choices.forEach((choice) => {
+    for (let count = 0; count < choice.pick; count += 1) {
+      const option = chooseRequirementOption(choice.options, remaining, {}, equivalents);
+      if (!option) return;
+      consumePartsForPlan(option, remaining, shortages, equivalents);
+    }
+  });
+}
+
+function consumeAlternativePartsForPlan(alternativeRequires, remaining, shortages, equivalents) {
+  alternativeRequires.forEach((group) => {
+    const option = chooseRequirementOption(group.options, remaining, {}, equivalents);
+    if (!option) return;
+    consumePartsForPlan(option, remaining, shortages, equivalents);
   });
 }
 
@@ -316,4 +379,66 @@ function countMissingParts(build, inventory, equivalents) {
   const shortages = {};
   consumeBuildForPlan(build, remaining, shortages, equivalents);
   return Object.values(shortages).reduce((sum, count) => sum + count, 0);
+}
+
+function chooseRequirementOption(options = [], inventory, required, equivalents) {
+  return [...options].sort((a, b) => {
+    const aScore = countMissingRequirementParts(a, inventory, required, equivalents);
+    const bScore = countMissingRequirementParts(b, inventory, required, equivalents);
+    if (aScore !== bScore) return aScore - bScore;
+    return countRequirementParts(a) - countRequirementParts(b);
+  })[0];
+}
+
+function chooseConsumableRequirementOption(options, inventory, equivalents) {
+  return chooseRequirementOption(options, inventory, {}, equivalents);
+}
+
+function countMissingRequirementParts(parts, inventory, required, equivalents) {
+  const remaining = { ...inventory };
+  Object.entries(required).forEach(([partId, count]) => {
+    remaining[partId] = (remaining[partId] ?? 0) - count;
+  });
+
+  let missing = 0;
+  Object.entries(parts).forEach(([partId, count]) => {
+    for (let index = 0; index < count; index += 1) {
+      const consumed = consumeOneEquivalentPart(partId, remaining, equivalents);
+      if (!consumed) missing += 1;
+    }
+  });
+  return missing;
+}
+
+function countRequirementParts(parts) {
+  return Object.values(parts).reduce((sum, count) => sum + count, 0);
+}
+
+function normalizeBuildRequirements(build) {
+  const always = {};
+  const choices = [];
+
+  Object.entries(build.requires ?? {}).forEach(([partId, value]) => {
+    if (Array.isArray(value)) {
+      const [pick, ...options] = value;
+      choices.push({
+        id: partId,
+        pick,
+        options: options.map(normalizeRequirementOption)
+      });
+      return;
+    }
+
+    always[partId] = value;
+  });
+
+  return { always, choices };
+}
+
+function normalizeRequirementOption(option) {
+  if (typeof option === "object") return option;
+  return option.split("+").reduce((parts, partId) => {
+    parts[partId] = (parts[partId] ?? 0) + 1;
+    return parts;
+  }, {});
 }
