@@ -19,6 +19,11 @@
       <section class="workspace">
         <aside class="panel controls" aria-label="입력">
           <section>
+            <h2>팩션</h2>
+            <select class="faction-select" id="faction-select"></select>
+          </section>
+
+          <section>
             <h2>박스</h2>
             <div id="box-list" class="stack"></div>
           </section>
@@ -43,16 +48,6 @@
             <div id="selected-builds" class="selected-builds"></div>
           </section>
 
-          <section class="panel">
-            <h2>남는 파츠</h2>
-            <div id="leftover-parts" class="part-table"></div>
-          </section>
-
-          <section class="panel">
-            <h2>추가 조립 가능</h2>
-            <div id="available-builds" class="available-list"></div>
-          </section>
-
           <section class="panel warning-panel" id="shortage-panel">
             <h2>부족한 파츠</h2>
             <div id="shortage-parts" class="part-table"></div>
@@ -61,6 +56,16 @@
           <section class="panel warning-panel" id="plan-shortage-panel">
             <h2>박스 조립 계획 부족 파츠</h2>
             <div id="plan-shortage-parts" class="part-table"></div>
+          </section>
+
+          <section class="panel">
+            <h2>남는 파츠</h2>
+            <div id="leftover-parts" class="sprue-groups"></div>
+          </section>
+
+          <section class="panel">
+            <h2>추가 조립 가능</h2>
+            <div id="available-builds" class="available-list"></div>
           </section>
         </section>
       </section>

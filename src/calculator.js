@@ -178,6 +178,10 @@ function normalizeSprueParts(sprue) {
   return parts;
 }
 
+export function getSprueParts(sprue) {
+  return normalizeSprueParts(sprue);
+}
+
 function makeEquivalentIndex(catalog) {
   const index = {};
 

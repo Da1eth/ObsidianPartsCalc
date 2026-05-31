@@ -24,7 +24,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -123,7 +124,8 @@ h2 {
 .build-list,
 .selected-builds,
 .available-list,
-.part-table {
+.part-table,
+.sprue-groups {
   display: grid;
   gap: 8px;
 }
@@ -143,6 +145,16 @@ h2 {
   min-height: 34px;
   padding: 0 10px;
   cursor: pointer;
+}
+
+.faction-select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-height: 38px;
+  background: #fff;
+  color: var(--ink);
+  padding: 8px 10px;
 }
 
 .quantity-row,
@@ -173,7 +185,7 @@ h2 {
 }
 
 .selected-item {
-  grid-template-columns: 1fr minmax(32px, auto);
+  grid-template-columns: 1fr minmax(32px, auto) 34px;
 }
 
 small {
@@ -192,6 +204,23 @@ input[type="search"] {
   background: #fff;
   color: var(--ink);
   padding: 8px 10px;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
 }
 
 .slot-tabs {
@@ -256,6 +285,37 @@ b {
 .empty {
   margin: 0;
   color: var(--muted);
+}
+
+.sprue-group {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.sprue-group summary {
+  display: grid;
+  grid-template-columns: 1fr minmax(32px, auto);
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sprue-group summary::marker {
+  color: var(--accent);
+}
+
+.sprue-group .part-table {
+  border-top: 1px solid var(--line);
+  padding: 8px;
+}
+
+.sprue-group .part-row {
+  border-color: #ece7df;
+  background: var(--panel);
 }
 
 [hidden] {

@@ -5,19 +5,21 @@ import {
   calculateInventoryStats,
   calculateLeftovers,
   calculateRequiredParts,
-  formatPartList
+  formatPartList,
+  getSprueParts
 } from "./calculator.js";
 import { loadCatalog } from "./catalog-loader.js";
 
 const state = {
-  boxes: {},
-  builds: {},
+  factionId: "",
+  factions: {},
   slot: "all",
   query: ""
 };
 
 const els = {
   headerSummary: document.querySelector("#header-summary"),
+  factionSelect: document.querySelector("#faction-select"),
   boxList: document.querySelector("#box-list"),
   slotTabs: document.querySelector("#slot-tabs"),
   buildSearch: document.querySelector("#build-search"),
@@ -35,11 +37,20 @@ const els = {
 const catalog = await loadCatalog();
 const indexes = makeIndexes(catalog);
 
-catalog.boxes.forEach((box) => {
-  state.boxes[box.id] = box.id === catalog.boxes[0]?.id ? 1 : 0;
+state.factionId = catalog.factions[0]?.id ?? "";
+catalog.factions.forEach((faction) => {
+  state.factions[faction.id] = { boxes: {}, builds: {} };
+  faction.boxes.forEach((box) => {
+    state.factions[faction.id].boxes[box.id] = 0;
+  });
 });
 
 render();
+
+els.factionSelect.addEventListener("change", (event) => {
+  state.factionId = event.target.value;
+  render();
+});
 
 els.buildSearch.addEventListener("input", (event) => {
   state.query = event.target.value.trim().toLowerCase();
@@ -47,7 +58,7 @@ els.buildSearch.addEventListener("input", (event) => {
 });
 
 els.resetBuilds.addEventListener("click", () => {
-  state.builds = {};
+  currentState().builds = {};
   render();
 });
 
@@ -62,15 +73,47 @@ function makeIndexes(data) {
 }
 
 function render() {
+  renderFactions();
   renderBoxes();
   renderSlots();
   renderBuildList();
   renderResults();
 }
 
+function currentFaction() {
+  return catalog.factions.find((faction) => faction.id === state.factionId) ?? catalog.factions[0];
+}
+
+function currentState() {
+  return state.factions[state.factionId];
+}
+
+function currentCatalog() {
+  const faction = currentFaction();
+  return {
+    ...catalog,
+    factions: [faction],
+    boxes: faction.boxes,
+    sprues: faction.sprues,
+    builds: faction.builds
+  };
+}
+
+function renderFactions() {
+  els.factionSelect.innerHTML = "";
+  catalog.factions.forEach((faction) => {
+    const option = document.createElement("option");
+    option.value = faction.id;
+    option.textContent = `${faction.nameKo} / ${faction.nameEn}`;
+    option.selected = faction.id === state.factionId;
+    els.factionSelect.append(option);
+  });
+}
+
 function renderBoxes() {
   els.boxList.innerHTML = "";
-  catalog.boxes.forEach((box) => {
+  const factionState = currentState();
+  currentFaction().boxes.forEach((box) => {
     const row = document.createElement("label");
     row.className = "quantity-row";
     row.innerHTML = `
@@ -78,10 +121,10 @@ function renderBoxes() {
         <strong>${box.nameKo}</strong>
         <small>${box.nameEn}</small>
       </span>
-      <input min="0" type="number" inputmode="numeric" value="${state.boxes[box.id] ?? 0}">
+      <input min="0" type="number" inputmode="numeric" value="${factionState.boxes[box.id] ?? 0}">
     `;
     row.querySelector("input").addEventListener("input", (event) => {
-      state.boxes[box.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
+      factionState.boxes[box.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
       renderResults();
     });
     els.boxList.append(row);
@@ -98,6 +141,7 @@ function renderSlots() {
     button.textContent = `${slot.icon} ${slot.nameKo}`;
     button.addEventListener("click", () => {
       state.slot = slot.id;
+      renderSlots();
       renderBuildList();
     });
     els.slotTabs.append(button);
@@ -106,7 +150,8 @@ function renderSlots() {
 
 function renderBuildList() {
   const query = state.query;
-  const builds = catalog.builds.filter((build) => {
+  const factionState = currentState();
+  const builds = currentFaction().builds.filter((build) => {
     const slotMatch = state.slot === "all" || build.slot === state.slot;
     const text = `${build.id} ${build.nameKo} ${build.nameEn} ${Object.keys(build.requires).join(" ")}`.toLowerCase();
     return slotMatch && (!query || text.includes(query));
@@ -123,10 +168,10 @@ function renderBuildList() {
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
       </span>
-      <input min="0" type="number" inputmode="numeric" value="${state.builds[build.id] ?? 0}">
+      <input min="0" type="number" inputmode="numeric" value="${factionState.builds[build.id] ?? 0}">
     `;
     row.querySelector("input").addEventListener("input", (event) => {
-      state.builds[build.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
+      factionState.builds[build.id] = Math.max(0, Number.parseInt(event.target.value || "0", 10));
       renderResults();
     });
     els.buildList.append(row);
@@ -134,14 +179,16 @@ function renderBuildList() {
 }
 
 function renderResults() {
-  const inventory = calculateInventory(catalog, state.boxes);
-  const inventoryStats = calculateInventoryStats(catalog, state.boxes);
-  const required = calculateRequiredParts(catalog, state.builds, inventory);
+  const scopedCatalog = currentCatalog();
+  const factionState = currentState();
+  const inventory = calculateInventory(scopedCatalog, factionState.boxes);
+  const inventoryStats = calculateInventoryStats(scopedCatalog, factionState.boxes);
+  const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory);
   const { leftovers, shortages } = calculateLeftovers(inventory, required);
-  const planShortages = calculateBuildPlanShortages(catalog, state.boxes);
-  const available = calculateAvailableBuilds(catalog, leftovers);
-  const selectedCount = Object.values(state.builds).reduce((sum, count) => sum + count, 0);
-  const boxCount = Object.values(state.boxes).reduce((sum, count) => sum + count, 0);
+  const planShortages = calculateBuildPlanShortages(scopedCatalog, factionState.boxes);
+  const available = calculateAvailableBuilds(scopedCatalog, leftovers);
+  const selectedCount = Object.values(factionState.builds).reduce((sum, count) => sum + count, 0);
+  const boxCount = Object.values(factionState.boxes).reduce((sum, count) => sum + count, 0);
 
   els.headerSummary.innerHTML = `
     <span><strong>${boxCount}</strong> boxes</span>
@@ -152,7 +199,7 @@ function renderResults() {
   `;
 
   renderSelectedBuilds();
-  renderPartTable(els.leftoverParts, formatPartList(leftovers, indexes.parts), "남는 파츠가 없습니다.");
+  renderGroupedLeftovers(leftovers, scopedCatalog);
   renderPartTable(els.shortageParts, formatPartList(shortages, indexes.parts), "부족한 파츠가 없습니다.");
   els.shortagePanel.hidden = Object.keys(shortages).length === 0;
   renderPartTable(els.planShortageParts, formatPartList(planShortages, indexes.parts), "박스 조립 계획 기준 부족한 파츠가 없습니다.");
@@ -182,7 +229,8 @@ function renderResults() {
 
 function renderSelectedBuilds() {
   els.selectedBuilds.innerHTML = "";
-  const selected = Object.entries(state.builds)
+  const factionState = currentState();
+  const selected = Object.entries(factionState.builds)
     .filter(([, count]) => count > 0)
     .map(([buildId, count]) => ({ build: indexes.builds[buildId], count }));
 
@@ -198,9 +246,72 @@ function renderSelectedBuilds() {
     item.innerHTML = `
       <span>${slot.icon} ${build.nameKo}</span>
       <strong>${count}</strong>
+      <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">×</button>
     `;
+    item.querySelector("button").addEventListener("click", () => {
+      factionState.builds[build.id] = 0;
+      renderBuildList();
+      renderResults();
+    });
     els.selectedBuilds.append(item);
   });
+}
+
+function renderGroupedLeftovers(leftovers, scopedCatalog) {
+  const rows = formatPartList(leftovers, indexes.parts);
+  if (rows.length === 0) {
+    els.leftoverParts.innerHTML = `<p class="empty">남는 파츠가 없습니다.</p>`;
+    return;
+  }
+
+  const grouped = groupPartsBySprue(rows, scopedCatalog);
+  els.leftoverParts.innerHTML = "";
+
+  grouped.forEach((group, index) => {
+    const details = document.createElement("details");
+    details.className = "sprue-group";
+    details.open = index < 2;
+    details.innerHTML = `
+      <summary>
+        <span>
+          <strong>${group.nameKo}</strong>
+          <small>${group.nameEn}</small>
+        </span>
+        <b>${group.total}</b>
+      </summary>
+      <div class="part-table">
+        ${group.parts.map((row) => partRowHtml(row)).join("")}
+      </div>
+    `;
+    els.leftoverParts.append(details);
+  });
+}
+
+function groupPartsBySprue(rows, scopedCatalog) {
+  const groups = scopedCatalog.sprues.map((sprue) => ({
+    id: sprue.id,
+    nameKo: sprue.nameKo,
+    nameEn: sprue.nameEn,
+    partIds: new Set(Object.keys(getSprueParts(sprue))),
+    parts: [],
+    total: 0
+  }));
+  const unknown = {
+    id: "unknown",
+    nameKo: "기타",
+    nameEn: "Unknown",
+    partIds: new Set(),
+    parts: [],
+    total: 0
+  };
+
+  rows.forEach((row) => {
+    const group = groups.find((candidate) => candidate.partIds.has(row.id)) ?? unknown;
+    group.parts.push(row);
+    group.total += row.count;
+  });
+
+  return [...groups, unknown].filter((group) => group.parts.length > 0);
 }
 
 function renderPartTable(target, rows, emptyText) {
@@ -209,7 +320,11 @@ function renderPartTable(target, rows, emptyText) {
     return;
   }
 
-  target.innerHTML = rows.map((row) => `
+  target.innerHTML = rows.map(partRowHtml).join("");
+}
+
+function partRowHtml(row) {
+  return `
     <div class="part-row">
       <code>${row.id}</code>
       <span>
@@ -218,5 +333,5 @@ function renderPartTable(target, rows, emptyText) {
       </span>
       <b>${row.count}</b>
     </div>
-  `).join("");
+  `;
 }
