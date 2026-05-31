@@ -31,14 +31,16 @@ const partIconSvgs = {
   chassis: chassisPartIconSvg,
   leftArm: leftArmPartIconSvg,
   rightArm: rightArmPartIconSvg,
-  backpack: backpackPartIconSvg
+  backpack: backpackPartIconSvg,
+  drone: dronePartIconSvg,
+  projectiles: projectilesPartIconSvg
 };
 
 function torsoPartIconSvg() {
   return basePartIconSvg(`
     <path
       class="part-icon-fill part-icon-fill-core"
-      d="M17 7h18v17l-3 4H20l-3-4V7Z"
+      d="M22 6h20v20l-4 5H26l-4-5V6Z"
     ></path>
   `);
 }
@@ -47,7 +49,7 @@ function chassisPartIconSvg() {
   return basePartIconSvg(`
     <path
       class="part-icon-fill part-icon-fill-chassis"
-      d="M4 37h44v10l-6 6H29V43h-6v10H10l-6-6V37Z"
+      d="M7 43h50v8l-7 7H36V52h-8v5H14l-7-7V43Z"
     ></path>
   `);
 }
@@ -56,7 +58,7 @@ function leftArmPartIconSvg() {
   return basePartIconSvg(`
     <path
       class="part-icon-fill part-icon-fill-arm"
-      d="M10 7h7v17l3 4v9H4V13l6-6Z"
+      d="M14 6h8v20l4 5v12H7V13l7-7Z"
     ></path>
   `);
 }
@@ -65,7 +67,7 @@ function rightArmPartIconSvg() {
   return basePartIconSvg(`
     <path
       class="part-icon-fill part-icon-fill-arm"
-      d="M35 7h7l6 6v24H32v-9l3-4V7Z"
+      d="M42 6h8l7 7v30H38V31l4-5V6Z"
     ></path>
   `);
 }
@@ -74,34 +76,60 @@ function backpackPartIconSvg() {
   return basePartIconSvg(`
     <path
       class="part-icon-fill part-icon-fill-backpack"
-      d="M20 28h12v9H20V28Z"
+      d="M26 31h12v12H26V31Z"
+    ></path>
+  `);
+}
+
+function dronePartIconSvg() {
+  return baseSquarePartIconSvg(`
+    <path
+      class="part-icon-fill part-icon-fill-drone"
+      d="M32 19l13 13-13 13-13-13 13-13Z"
+    ></path>
+  `);
+}
+
+function projectilesPartIconSvg() {
+  return baseSquarePartIconSvg(`
+    <path
+      class="part-icon-fill part-icon-fill-projectiles"
+      d="M24 23l5-6h6l5 6v22H24V23Z"
     ></path>
   `);
 }
 
 function basePartIconSvg(fill = "") {
   return `
-    <svg class="part-icon" viewBox="0 0 52 55" aria-hidden="true" focusable="false">
+    <svg class="part-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
       ${fill}
       <path
         class="part-icon-line"
-        d="M10 7h32l6 6v34l-6 6H29V43h-6v10H10l-6-6V13l6-6Z"
+        d="M14 6h36l7 7v38l-7 7H36V49h-8v9H14l-7-7V13l7-7Z"
       ></path>
       <path
         class="part-icon-line"
-        d="M17 7v17l3 4h12l3-4V7"
+        d="M22 6v20l4 5h12l4-5V6"
       ></path>
       <path
         class="part-icon-line"
-        d="M20 28v9M32 28v9"
+        d="M26 31v12M38 31v12"
       ></path>
       <path
         class="part-icon-line"
-        d="M4 37h44"
+        d="M7 43h50"
       ></path>
+    </svg>
+  `;
+}
+
+function baseSquarePartIconSvg(fill = "") {
+  return `
+    <svg class="part-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      ${fill}
       <path
         class="part-icon-line"
-        d="M23 53V43h6v10"
+        d="M14 6h36l7 7v38l-7 7H14l-7-7V13l7-7Z"
       ></path>
     </svg>
   `;

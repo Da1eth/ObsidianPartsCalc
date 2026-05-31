@@ -489,7 +489,7 @@ h2 {
 .part-icon-line {
   fill: none;
   stroke: currentColor;
-  stroke-width: 3.25;
+  stroke-width: 4;
   stroke-linecap: square;
   stroke-linejoin: round;
 }
