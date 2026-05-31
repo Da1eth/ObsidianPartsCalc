@@ -8,13 +8,16 @@ export function openAvailableBuildsDialog({
   available,
   leftovers,
   scopedCatalog,
-  indexes,
-  onConfirm
+  indexes
 }) {
   const dialog = document.createElement("dialog");
   dialog.className = "build-plan-dialog";
   const choices = makeAvailableBuildChoiceState(available, leftovers, scopedCatalog);
   const choiceGroups = makeAvailableBuildChoiceGroups(choices, leftovers, scopedCatalog, indexes);
+  let resolveDialog;
+  const result = new Promise((resolve) => {
+    resolveDialog = resolve;
+  });
 
   dialog.innerHTML = `
     <form class="build-plan-modal" method="dialog">
@@ -96,21 +99,27 @@ export function openAvailableBuildsDialog({
   });
 
   dialog.addEventListener("close", () => {
-    if (dialog.returnValue === "confirm") {
-      onConfirm(choices.filter((choice) => choice.count > 0));
-    }
+    resolveDialog(dialog.returnValue === "confirm"
+      ? choices.filter((choice) => choice.count > 0)
+      : []);
     dialog.remove();
   });
 
   renderChoices();
   document.body.append(dialog);
   dialog.showModal();
+
+  return result;
 }
 
-export function openBuildPlanDialog({ entries, indexes, onConfirm }) {
+export function openBuildPlanDialog({ entries, indexes }) {
   const dialog = document.createElement("dialog");
   dialog.className = "build-plan-dialog";
   const choices = makePlanChoiceState(entries);
+  let resolveDialog;
+  const result = new Promise((resolve) => {
+    resolveDialog = resolve;
+  });
 
   dialog.innerHTML = `
     <form class="build-plan-modal" method="dialog">
@@ -143,12 +152,12 @@ export function openBuildPlanDialog({ entries, indexes, onConfirm }) {
             return `
               <div class="plan-choice-option">
                 <span>
-                  <strong>${build?.nameKo ?? buildId}</strong>
-                  <small>${build?.nameEn ?? buildId}</small>
+                  <strong>${build.nameKo}</strong>
+                  <small>${build.nameEn}</small>
                 </span>
                 <span
                   class="stepper"
-                  aria-label="${build?.nameKo ?? buildId} 수량"
+                  aria-label="${build.nameKo} 수량"
                   data-choice-key="${choice.key}"
                   data-option-index="${optionIndex}"
                 >
@@ -190,15 +199,17 @@ export function openBuildPlanDialog({ entries, indexes, onConfirm }) {
   });
 
   dialog.addEventListener("close", () => {
-    if (dialog.returnValue === "confirm") {
-      onConfirm(Object.fromEntries(choices.map((choice) => [choice.key, choice])));
-    }
+    resolveDialog(dialog.returnValue === "confirm"
+      ? Object.fromEntries(choices.map((choice) => [choice.key, choice]))
+      : null);
     dialog.remove();
   });
 
   renderChoices();
   document.body.append(dialog);
   dialog.showModal();
+
+  return result;
 }
 
 function makeAvailableBuildChoiceState(available, leftovers, scopedCatalog) {

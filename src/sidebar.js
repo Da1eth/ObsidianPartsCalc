@@ -1,25 +1,20 @@
-export function bindSidebar({ state, els, render, overlayQuery }) {
-  els.sidebarOpen.addEventListener("click", () => {
-    state.sidebarOpen = true;
-    render();
-  });
+export function setupSidebar() {
+  const els = {
+    sidebar: document.querySelector("#sidebar"),
+    openButton: document.querySelector("#sidebar-open"),
+    closeButton: document.querySelector("#sidebar-close"),
+    backdrop: document.querySelector("#sidebar-backdrop")
+  };
 
-  els.sidebarClose.addEventListener("click", () => {
-    state.sidebarOpen = false;
-    render();
-  });
+  function setOpen(isOpen) {
+    els.sidebar.classList.toggle("open", isOpen);
+    els.sidebar.setAttribute("aria-hidden", String(!isOpen));
+    document.body.classList.toggle("drawer-open", isOpen);
+  }
 
-  els.sidebarBackdrop.addEventListener("click", () => {
-    if (!overlayQuery.matches) {
-      return;
-    }
-    state.sidebarOpen = false;
-    render();
-  });
-}
+  els.openButton.addEventListener("click", () => setOpen(true));
+  els.closeButton.addEventListener("click", () => setOpen(false));
+  els.backdrop.addEventListener("click", () => setOpen(false));
 
-export function renderSidebar({ state, els }) {
-  els.sidebar.classList.toggle("open", state.sidebarOpen);
-  els.sidebar.setAttribute("aria-hidden", String(!state.sidebarOpen));
-  document.body.classList.toggle("drawer-open", state.sidebarOpen);
+  setOpen(false);
 }

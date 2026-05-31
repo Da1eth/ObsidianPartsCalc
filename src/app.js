@@ -15,27 +15,22 @@ import {
   openAvailableBuildsDialog,
   openBuildPlanDialog
 } from "./dialogs.js";
-import {
-  bindSidebar,
-  renderSidebar as renderSidebarPanel
-} from "./sidebar.js";
+import { setupSidebar } from "./sidebar.js";
 import { iconSvg, partIconHtml } from "./svg.js";
+
+const BOX_COUNT_MAX = 10;
+const BUILD_COUNT_MIN_MAX = 10;
+const ALL_SLOT_ID = "all";
 
 const state = {
   factionId: "",
   factions: {},
-  slot: "all",
-  query: "",
-  sidebarOpen: false
+  slot: ALL_SLOT_ID,
+  query: ""
 };
 
 const els = {
-  workspace: document.querySelector("#workspace"),
   summaryStats: document.querySelector("#summary-stats"),
-  sidebar: document.querySelector("#sidebar"),
-  sidebarOpen: document.querySelector("#sidebar-open"),
-  sidebarClose: document.querySelector("#sidebar-close"),
-  sidebarBackdrop: document.querySelector("#sidebar-backdrop"),
   factionTabs: document.querySelector("#faction-tabs"),
   boxList: document.querySelector("#box-list"),
   slotTabs: document.querySelector("#slot-tabs"),
@@ -52,7 +47,6 @@ const els = {
 
 const catalog = await loadCatalog();
 const indexes = makeIndexes(catalog);
-const overlaySidebarQuery = window.matchMedia("(max-width: 1599px)");
 
 state.factionId = catalog.factions[0]?.id ?? "";
 catalog.factions.forEach((faction) => {
@@ -62,8 +56,8 @@ catalog.factions.forEach((faction) => {
   });
 });
 
+setupSidebar();
 render();
-bindSidebar({ state, els, render, overlayQuery: overlaySidebarQuery });
 
 els.buildSearch.addEventListener("input", (event) => {
   state.query = event.target.value.trim().toLowerCase();
@@ -81,15 +75,12 @@ els.addAvailableBuilds.addEventListener("click", addAvailableBuildsToPlan);
 function makeIndexes(data) {
   return {
     parts: Object.fromEntries(data.parts.map((part) => [part.id, part])),
-    sprues: Object.fromEntries(data.sprues.map((sprue) => [sprue.id, sprue])),
-    boxes: Object.fromEntries(data.boxes.map((box) => [box.id, box])),
     slots: Object.fromEntries(data.slots.map((slot) => [slot.id, slot])),
     builds: Object.fromEntries(data.builds.map((build) => [build.id, build]))
   };
 }
 
 function render() {
-  renderSidebarPanel({ state, els });
   renderFactions();
   renderBoxes();
   renderSlots();
@@ -145,7 +136,7 @@ function renderBoxes() {
       </span>
       ${stepperHtml(factionState.boxes[box.id] ?? 0, "박스 수량")}
     `;
-    bindStepper(row, factionState.boxes[box.id] ?? 0, 0, 10, (value) => {
+    bindStepper(row, factionState.boxes[box.id] ?? 0, 0, BOX_COUNT_MAX, (value) => {
       factionState.boxes[box.id] = value;
       renderBoxes();
       renderResults();
@@ -166,7 +157,7 @@ function renderBoxes() {
 
 function renderSlots() {
   els.slotTabs.innerHTML = "";
-  const tabs = [{ id: "all", nameKo: "전체", icon: "✦" }, ...catalog.slots];
+  const tabs = [{ id: ALL_SLOT_ID, nameKo: "전체", icon: "✦" }, ...catalog.slots];
   tabs.forEach((slot) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -185,7 +176,7 @@ function renderBuildList() {
   const query = state.query;
   const factionState = currentState();
   const builds = currentFaction().builds.filter((build) => {
-    const slotMatch = state.slot === "all" || build.slot === state.slot;
+    const slotMatch = state.slot === ALL_SLOT_ID || build.slot === state.slot;
     const text = `${build.id} ${build.nameKo} ${build.nameEn} ${Object.keys(build.requires).join(" ")}`.toLowerCase();
     return slotMatch && (!query || text.includes(query));
   });
@@ -258,7 +249,7 @@ function renderResults() {
   });
 }
 
-function addAvailableBuildsToPlan() {
+async function addAvailableBuildsToPlan() {
   const scopedCatalog = currentCatalog();
   const factionState = currentState();
   const inventory = calculateInventory(scopedCatalog, factionState.boxes);
@@ -275,16 +266,14 @@ function addAvailableBuildsToPlan() {
     return;
   }
 
-  openAvailableBuildsDialog({
+  const choices = await openAvailableBuildsDialog({
     available,
     leftovers,
     scopedCatalog,
-    indexes,
-    onConfirm(choices) {
-      choices.forEach((choice) => addBuildToPlan(choice.build.id, choice.count));
-      render();
-    }
+    indexes
   });
+  choices.forEach((choice) => addBuildToPlan(choice.build.id, choice.count));
+  if (choices.length > 0) render();
 }
 
 function selectedBoxPlanEntries() {
@@ -298,18 +287,16 @@ function selectedBoxPlanEntries() {
     .filter((entry) => entry.count > 0 && entry.plan);
 }
 
-function addSelectedBoxPlans() {
+async function addSelectedBoxPlans() {
   const entries = selectedBoxPlanEntries();
   if (entries.length === 0) return;
 
   if (entries.some((entry) => entry.plan.choices.length > 0)) {
-    openBuildPlanDialog({
+    const selectedChoices = await openBuildPlanDialog({
       entries,
-      indexes,
-      onConfirm(selectedChoices) {
-        applyBoxPlans(entries, selectedChoices);
-      }
+      indexes
     });
+    if (selectedChoices) applyBoxPlans(entries, selectedChoices);
     return;
   }
 
@@ -378,7 +365,7 @@ function renderSelectedBuilds() {
       </div>
       ${buildChoiceRowsHtml(build, factionState.choices[build.id] ?? {}, count)}
     `;
-    bindStepper(item, count, 0, Math.max(10, count), (value) => {
+    bindStepper(item, count, 0, Math.max(BUILD_COUNT_MIN_MAX, count), (value) => {
       factionState.builds[build.id] = value;
       if (value === 0) delete factionState.choices[build.id];
       if (value > 0) {
@@ -455,11 +442,6 @@ function normalizedChoiceCounts(choice, buildCount, selectedCounts) {
   const maxCount = choice.pick * buildCount;
   const counts = Object.fromEntries(choice.options.map((_, index) => [index, 0]));
 
-  if (Number.isInteger(selectedCounts)) {
-    counts[selectedCounts] = maxCount;
-    return counts;
-  }
-
   let remaining = maxCount;
   Object.entries(selectedCounts ?? {}).forEach(([optionIndex, count]) => {
     if (!choice.options[optionIndex]) return;
@@ -509,7 +491,7 @@ function renderGroupedLeftovers(leftovers, scopedCatalog) {
   const grouped = groupPartsBySprue(rows, scopedCatalog);
   els.leftoverParts.innerHTML = "";
 
-  grouped.forEach((group, index) => {
+  grouped.forEach((group) => {
     const details = document.createElement("details");
     details.className = "sprue-group";
     details.innerHTML = `
