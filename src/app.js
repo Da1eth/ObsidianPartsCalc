@@ -5,6 +5,7 @@ import {
   calculateLeftovers,
   calculateRequiredParts,
   formatPartList,
+  getBuildRequirementChoices,
   getSprueParts
 } from "./calculator.js";
 import { loadCatalog } from "./catalog-loader.js";
@@ -43,7 +44,7 @@ const mobileSidebarQuery = window.matchMedia("(max-width: 900px)");
 
 state.factionId = catalog.factions[0]?.id ?? "";
 catalog.factions.forEach((faction) => {
-  state.factions[faction.id] = { boxes: {}, builds: {} };
+  state.factions[faction.id] = { boxes: {}, builds: {}, choices: {} };
   faction.boxes.forEach((box) => {
     state.factions[faction.id].boxes[box.id] = 0;
   });
@@ -76,6 +77,7 @@ els.buildSearch.addEventListener("input", (event) => {
 
 els.resetBuilds.addEventListener("click", () => {
   currentState().builds = {};
+  currentState().choices = {};
   render();
 });
 
@@ -202,6 +204,11 @@ function renderBuildList() {
     row.addEventListener("click", () => {
       const currentCount = factionState.builds[build.id] ?? 0;
       factionState.builds[build.id] = Math.min(10, currentCount + 1);
+      factionState.choices[build.id] = normalizedBuildChoiceCounts(
+        build,
+        factionState.builds[build.id],
+        factionState.choices[build.id] ?? {}
+      );
       renderResults();
     });
     els.buildList.append(row);
@@ -213,7 +220,7 @@ function renderResults() {
   const factionState = currentState();
   const inventory = calculateInventory(scopedCatalog, factionState.boxes);
   const inventoryStats = calculateInventoryStats(scopedCatalog, factionState.boxes);
-  const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory);
+  const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory, factionState.choices);
   const { leftovers, shortages } = calculateLeftovers(inventory, required);
   const available = calculateAvailableBuilds(scopedCatalog, leftovers);
   const selectedCount = Object.values(factionState.builds).reduce((sum, count) => sum + count, 0);
@@ -254,6 +261,11 @@ function renderResults() {
     item.addEventListener("click", () => {
       const currentCount = factionState.builds[build.id] ?? 0;
       factionState.builds[build.id] = Math.min(10, currentCount + 1);
+      factionState.choices[build.id] = normalizedBuildChoiceCounts(
+        build,
+        factionState.builds[build.id],
+        factionState.choices[build.id] ?? {}
+      );
       renderResults();
     });
     els.availableBuilds.append(item);
@@ -263,9 +275,11 @@ function renderResults() {
 function renderSelectedBuilds() {
   els.selectedBuilds.innerHTML = "";
   const factionState = currentState();
+  const buildsById = Object.fromEntries(currentFaction().builds.map((build) => [build.id, build]));
   const selected = Object.entries(factionState.builds)
     .filter(([, count]) => count > 0)
-    .map(([buildId, count]) => ({ build: indexes.builds[buildId], count }));
+    .map(([buildId, count]) => ({ build: buildsById[buildId], count }))
+    .filter(({ build }) => build);
 
   if (selected.length === 0) {
     els.selectedBuilds.innerHTML = `<p class="empty">아직 선택한 부품이 없습니다.</p>`;
@@ -275,22 +289,137 @@ function renderSelectedBuilds() {
   selected.forEach(({ build, count }) => {
     const slot = indexes.slots[build.slot];
     const item = document.createElement("div");
-    item.className = "selected-item";
+    item.className = "selected-entry";
     item.innerHTML = `
-      <span>${slot.icon} ${build.nameKo}</span>
-      ${stepperHtml(count, `${build.nameKo} 수량`)}
-      <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
+      <div class="selected-item">
+        <span class="selected-build-name">
+          <span class="selected-slot-icon" aria-hidden="true">${slot.icon}</span>
+          <strong>${build.nameKo}</strong>
+        </span>
+        ${stepperHtml(count, `${build.nameKo} 수량`)}
+        <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
+      </div>
+      ${buildChoiceRowsHtml(build, factionState.choices[build.id] ?? {}, count)}
     `;
     bindStepper(item, count, 0, 10, (value) => {
       factionState.builds[build.id] = value;
+      if (value === 0) delete factionState.choices[build.id];
+      if (value > 0) {
+        factionState.choices[build.id] = normalizedBuildChoiceCounts(
+          build,
+          value,
+          factionState.choices[build.id] ?? {}
+        );
+      }
       renderResults();
     });
     item.querySelector(".icon-button").addEventListener("click", () => {
       factionState.builds[build.id] = 0;
+      delete factionState.choices[build.id];
       renderResults();
+    });
+    item.querySelectorAll(".choice-cycle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const choiceId = button.dataset.choiceId;
+        const optionIndex = Number(button.dataset.optionIndex);
+        const maxCount = Number(button.dataset.maxCount);
+        const choice = getBuildRequirementChoices(build).find((entry) => entry.id === choiceId);
+        const buildChoices = factionState.choices[build.id] ?? {};
+        const counts = normalizedChoiceCounts(choice, count, buildChoices[choiceId]);
+        factionState.choices[build.id] = {
+          ...buildChoices,
+          [choiceId]: cycleChoiceCount(counts, optionIndex, maxCount)
+        };
+        renderResults();
+      });
     });
     els.selectedBuilds.append(item);
   });
+}
+
+function buildChoiceRowsHtml(build, selectedChoices, buildCount) {
+  const choices = getBuildRequirementChoices(build).filter((choice) => choice.options.length > 1);
+  if (choices.length === 0) return "";
+
+  return `
+    <div class="selected-choice-list">
+      ${choices.map((choice) => {
+        const counts = normalizedChoiceCounts(choice, buildCount, selectedChoices[choice.id]);
+        const maxCount = choice.pick * buildCount;
+        return `
+          ${choice.options.map((option, optionIndex) => `
+            <div class="selected-choice-row">
+              <span class="choice-branch" aria-hidden="true">└</span>
+              <button
+                class="selected-choice choice-cycle"
+                type="button"
+                data-choice-id="${choice.id}"
+                data-option-index="${optionIndex}"
+                data-max-count="${maxCount}"
+                aria-label="${build.nameKo} ${option.label} 수량 변경"
+              >
+                <span class="choice-meta">선택 파츠 : ${option.label} × ${counts[optionIndex] ?? 0}</span>
+              </button>
+            </div>
+          `).join("")}
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function normalizedBuildChoiceCounts(build, buildCount, selectedChoices) {
+  return Object.fromEntries(getBuildRequirementChoices(build)
+    .filter((choice) => choice.options.length > 1)
+    .map((choice) => [choice.id, normalizedChoiceCounts(choice, buildCount, selectedChoices[choice.id])]));
+}
+
+function normalizedChoiceCounts(choice, buildCount, selectedCounts) {
+  const maxCount = choice.pick * buildCount;
+  const counts = Object.fromEntries(choice.options.map((_, index) => [index, 0]));
+
+  if (Number.isInteger(selectedCounts)) {
+    counts[selectedCounts] = maxCount;
+    return counts;
+  }
+
+  let remaining = maxCount;
+  Object.entries(selectedCounts ?? {}).forEach(([optionIndex, count]) => {
+    if (!choice.options[optionIndex]) return;
+    const bounded = Math.min(Math.max(0, Number(count) || 0), remaining);
+    counts[optionIndex] = bounded;
+    remaining -= bounded;
+  });
+
+  if (remaining > 0) {
+    counts[0] = (counts[0] ?? 0) + remaining;
+  }
+
+  return counts;
+}
+
+function cycleChoiceCount(counts, optionIndex, maxCount) {
+  const next = { ...counts };
+  next[optionIndex] = next[optionIndex] >= maxCount ? 0 : next[optionIndex] + 1;
+
+  let total = Object.values(next).reduce((sum, count) => sum + count, 0);
+  if (total > maxCount) {
+    let excess = total - maxCount;
+    Object.keys(next).forEach((index) => {
+      if (Number(index) === optionIndex || excess <= 0) return;
+      const removed = Math.min(next[index], excess);
+      next[index] -= removed;
+      excess -= removed;
+    });
+  }
+
+  total = Object.values(next).reduce((sum, count) => sum + count, 0);
+  if (total < maxCount) {
+    const fallbackIndex = Object.keys(next).find((index) => Number(index) !== optionIndex) ?? String(optionIndex);
+    next[fallbackIndex] += maxCount - total;
+  }
+
+  return next;
 }
 
 function renderGroupedLeftovers(leftovers, scopedCatalog) {

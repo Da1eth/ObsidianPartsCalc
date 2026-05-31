@@ -42,7 +42,7 @@ export function calculateInventoryStats(catalog, selectedBoxes) {
   return stats;
 }
 
-export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}) {
+export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}, selectedChoices = {}) {
   const required = {};
   const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
   const equivalents = makeEquivalentIndex(catalog);
@@ -51,13 +51,13 @@ export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}) 
     if (count <= 0) return;
     const build = buildsById[buildId];
     if (!build) return;
+    const requirements = normalizeBuildRequirements(build);
     for (let index = 0; index < count; index += 1) {
-      const requirements = normalizeBuildRequirements(build);
       addFlexibleParts(required, requirements.always, inventory, equivalents);
-      addRequirementChoices(required, requirements.choices, inventory, equivalents);
       addAlternativeParts(required, build.alternativeRequires ?? [], inventory, equivalents);
       addOptionParts(required, build.optionRequires ?? [], inventory, equivalents);
     }
+    addRequirementChoices(required, requirements.choices, count, inventory, equivalents, selectedChoices[buildId] ?? {});
   });
 
   return required;
@@ -129,6 +129,17 @@ export function formatPartList(parts, partIndex) {
     .sort((a, b) => a.id.localeCompare(b.id));
 }
 
+export function getBuildRequirementChoices(build) {
+  return normalizeBuildRequirements(build).choices.map((choice) => ({
+    id: choice.id,
+    pick: choice.pick,
+    options: choice.options.map((option) => ({
+      label: option.label,
+      parts: option.parts
+    }))
+  }));
+}
+
 function addParts(target, parts, multiplier) {
   if (multiplier <= 0) return;
   Object.entries(parts).forEach(([partId, count]) => {
@@ -146,12 +157,24 @@ function addFlexibleParts(required, parts, inventory, equivalents) {
   });
 }
 
-function addRequirementChoices(required, choices, inventory, equivalents) {
+function addRequirementChoices(required, choices, buildCount, inventory, equivalents, selectedChoices) {
   choices.forEach((choice) => {
-    for (let count = 0; count < choice.pick; count += 1) {
-      const option = chooseRequirementOption(choice.options, inventory, required, equivalents);
+    const totalPick = choice.pick * buildCount;
+    const selectedCounts = normalizeSelectedChoiceCounts(choice, selectedChoices[choice.id], totalPick);
+    Object.entries(selectedCounts).forEach(([optionIndex, count]) => {
+      const option = choice.options[optionIndex];
       if (!option) return;
-      addFlexibleParts(required, option, inventory, equivalents);
+      for (let index = 0; index < count; index += 1) {
+        addFlexibleParts(required, option.parts, inventory, equivalents);
+      }
+    });
+
+    const selectedTotal = Object.values(selectedCounts).reduce((sum, count) => sum + count, 0);
+    for (let count = selectedTotal; count < totalPick; count += 1) {
+      const option = selectedRequirementOption(choice, selectedChoices)
+        ?? chooseRequirementOption(choice.options, inventory, required, equivalents);
+      if (!option) return;
+      addFlexibleParts(required, option.parts, inventory, equivalents);
     }
   });
 }
@@ -165,9 +188,9 @@ function addOptionParts(required, optionRequires, inventory, equivalents) {
 
 function addAlternativeParts(required, alternativeRequires, inventory, equivalents) {
   alternativeRequires.forEach((group) => {
-    const option = chooseRequirementOption(group.options, inventory, required, equivalents);
+    const option = chooseRequirementOption(normalizeRequirementOptions(group.options), inventory, required, equivalents);
     if (!option) return;
-    addFlexibleParts(required, option, inventory, equivalents);
+    addFlexibleParts(required, option.parts, inventory, equivalents);
   });
 }
 
@@ -283,7 +306,7 @@ function consumeRequirementChoices(choices, inventory, equivalents) {
   return choices.every((choice) => {
     for (let count = 0; count < choice.pick; count += 1) {
       const option = chooseConsumableRequirementOption(choice.options, inventory, equivalents);
-      if (!option || !consumeParts(option, inventory, equivalents)) return false;
+      if (!option || !consumeParts(option.parts, inventory, equivalents)) return false;
     }
     return true;
   });
@@ -291,9 +314,9 @@ function consumeRequirementChoices(choices, inventory, equivalents) {
 
 function consumeAlternativeParts(alternativeRequires, inventory, equivalents) {
   return alternativeRequires.every((group) => {
-    const option = chooseConsumableRequirementOption(group.options, inventory, equivalents);
+    const option = chooseConsumableRequirementOption(normalizeRequirementOptions(group.options), inventory, equivalents);
     if (!option) return false;
-    return consumeParts(option, inventory, equivalents);
+    return consumeParts(option.parts, inventory, equivalents);
   });
 }
 
@@ -340,16 +363,16 @@ function consumeRequirementChoicesForPlan(choices, remaining, shortages, equival
     for (let count = 0; count < choice.pick; count += 1) {
       const option = chooseRequirementOption(choice.options, remaining, {}, equivalents);
       if (!option) return;
-      consumePartsForPlan(option, remaining, shortages, equivalents);
+      consumePartsForPlan(option.parts, remaining, shortages, equivalents);
     }
   });
 }
 
 function consumeAlternativePartsForPlan(alternativeRequires, remaining, shortages, equivalents) {
   alternativeRequires.forEach((group) => {
-    const option = chooseRequirementOption(group.options, remaining, {}, equivalents);
+    const option = chooseRequirementOption(normalizeRequirementOptions(group.options), remaining, {}, equivalents);
     if (!option) return;
-    consumePartsForPlan(option, remaining, shortages, equivalents);
+    consumePartsForPlan(option.parts, remaining, shortages, equivalents);
   });
 }
 
@@ -383,10 +406,10 @@ function countMissingParts(build, inventory, equivalents) {
 
 function chooseRequirementOption(options = [], inventory, required, equivalents) {
   return [...options].sort((a, b) => {
-    const aScore = countMissingRequirementParts(a, inventory, required, equivalents);
-    const bScore = countMissingRequirementParts(b, inventory, required, equivalents);
+    const aScore = countMissingRequirementParts(a.parts, inventory, required, equivalents);
+    const bScore = countMissingRequirementParts(b.parts, inventory, required, equivalents);
     if (aScore !== bScore) return aScore - bScore;
-    return countRequirementParts(a) - countRequirementParts(b);
+    return countRequirementParts(a.parts) - countRequirementParts(b.parts);
   })[0];
 }
 
@@ -424,7 +447,7 @@ function normalizeBuildRequirements(build) {
       choices.push({
         id: partId,
         pick,
-        options: options.map(normalizeRequirementOption)
+        options: normalizeRequirementOptions(options)
       });
       return;
     }
@@ -436,9 +459,45 @@ function normalizeBuildRequirements(build) {
 }
 
 function normalizeRequirementOption(option) {
-  if (typeof option === "object") return option;
-  return option.split("+").reduce((parts, partId) => {
-    parts[partId] = (parts[partId] ?? 0) + 1;
-    return parts;
+  if (typeof option === "object") {
+    return {
+      label: Object.keys(option).join("+"),
+      parts: option
+    };
+  }
+
+  const parts = option.split("+").reduce((partMap, partId) => {
+    partMap[partId] = (partMap[partId] ?? 0) + 1;
+    return partMap;
   }, {});
+  return { label: option, parts };
+}
+
+function normalizeRequirementOptions(options = []) {
+  return options.map(normalizeRequirementOption);
+}
+
+function selectedRequirementOption(choice, selectedChoices) {
+  const selectedIndex = selectedChoices[choice.id];
+  if (!Number.isInteger(selectedIndex)) return null;
+  return choice.options[selectedIndex] ?? null;
+}
+
+function normalizeSelectedChoiceCounts(choice, selected, totalPick) {
+  if (Number.isInteger(selected)) {
+    return { [selected]: totalPick };
+  }
+
+  if (!selected || typeof selected !== "object") {
+    return {};
+  }
+
+  let remaining = totalPick;
+  return Object.fromEntries(Object.entries(selected)
+    .map(([optionIndex, count]) => {
+      const bounded = Math.min(Math.max(0, Number(count) || 0), remaining);
+      remaining -= bounded;
+      return [optionIndex, bounded];
+    })
+    .filter(([optionIndex, count]) => count > 0 && choice.options[optionIndex]));
 }
