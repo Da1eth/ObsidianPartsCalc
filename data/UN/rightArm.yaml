@@ -1,3 +1,59 @@
+- id: S100+R6SS
+  slot: rightArm
+  nameKo: S100 실드+R6SS SMG
+  nameEn: S100 Shield+R6SS SMG
+  requires:
+    DE6: 1
+    DE7: 1
+    DE13: 1
+    DE1: 1
+    DE2: 1
+    DE14: 1
+    DE9: 2
+    DE12: 2
+    DE15: 1
+    DE8: 1
+    SD21: 1
+    SD24: 1
+    DE5: 1
+    SD11: 1
+    SD12: 1
+  optionRequires:
+    - count: 1
+      parts: [DE3, DE11]
+- id: R6
+  slot: rightArm
+  nameKo: R6 SMG
+  nameEn: R6 SMG
+  requires:
+    SD2: 1
+    SD8: 1
+    SD10: 1
+    SD21: 1
+    SD22: 1
+    DB15: 1
+    DB16: 1
+    DB14: 1
+    DB17: 1
+    DB18: 1
+    DB6: 1
+    SD18: 1
+- id: R7
+  slot: rightArm
+  nameKo: 자동 라이플
+  nameEn: Automatic Rifle
+  requires:
+    DG8: 1
+    DG19: 1
+    DG18: 1
+    DG20: 1
+    DG10: 1
+    DG9: 1
+    SD3: 1
+    SD5: 1
+    SD22: 1
+    SD21: 1
+    SD13: 1
 - id: R7MG
   slot: rightArm
   nameKo: LMG
@@ -15,19 +71,46 @@
     SD22: 1
     SD11: 1
     SD12: 1
-- id: R7
+- id: R33
   slot: rightArm
-  nameKo: 자동 라이플
-  nameEn: Automatic Rifle
+  nameKo: R33 저격 라이플
+  nameEn: R33 Sniper Rifle
   requires:
-    DG8: 1
-    DG19: 1
-    DG18: 1
-    DG20: 1
-    DG10: 1
-    DG9: 1
-    SD3: 1
-    SD5: 1
-    SD22: 1
+    DB3: 1
+    DB4: 1
+    DB: 1
+    DB2: 1
+    DB19: 1
+    DB20: 1
+    DG5: 1
+    DB9: 1
+    DB1: 1
+    DB10: 1
+    DB11: 1
+    DB7: 1
+    DB12: 1
+    DB13: 1
     SD21: 1
-    SD13: 1
+    SD24: 1
+    SD11: 1
+    SD12: 1
+- id: RH21+M3_R
+  slot: rightArm
+  nameKo: RH21 피스톨+M3 초진동 블레이드(우)
+  nameEn: RH21 Pistol+M3 Vibroblade(우)
+  requires:
+    SC3: 1
+    SC22: 1
+    SC4: 1
+    SC7: 1
+    SC12: 1
+    SC16: 1
+    SD18: 1
+    SD21: 1
+    SD22: 1
+    DD8: 1
+    DD10: 1
+    DD16: 1
+    DD4: 1
+    DD6: 1
+    DD12: 1

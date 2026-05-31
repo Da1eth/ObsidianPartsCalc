@@ -8,3 +8,22 @@
     DG13: 1
     DG14: 1
     DG7: 1
+- id: EBS/X40
+  slot: backpack
+  nameKo: EBS/X40 장갑 충전기
+  nameEn: EBS/X40 Armor Energy Charger
+  requires:
+    DC2: 1
+    DC10: 1
+    DC7: 1
+    DC8: 1
+    DC11: 1
+    DC4: 1
+- id: GSD2A
+  slot: backpack
+  nameKo: GSD2A "폴커스" 지뢰 랙
+  nameEn: GSD2A "Pholcus" Mine Rack
+  requires:
+    DC14: 1
+    DC12: 1
+    DC13: 1

@@ -1,3 +1,12 @@
+- id: ADK30C
+  slot: drone
+  nameKo: ADK30F "타란튤라" 수송 사양
+  nameEn: ADK30F "Tarantula" Carrier Type
+  requires:
+    DH13: 4
+    DH14: 4
+    DH12: 1
+    DH11: 1
 - id: ADK30F
   slot: drone
   nameKo: ADK30F "타란튤라" 화력 사양
@@ -11,15 +20,40 @@
     DD14: 1
     DD11: 1
     DD18: 1
-- id: ADK30C
+- id: ADK60EC
   slot: drone
-  nameKo: ADK30F "타란튤라" 수송 사양
-  nameEn: ADK30F "Tarantula" Carrier Type
+  nameKo: ADK60EC "레이븐" EC 사양
+  nameEn: ADK60EC "Raven" EC Type
   requires:
-    DH13: 4
-    DH14: 4
-    DH12: 1
-    DH11: 1
+    DH2: 1
+    DH3: 1
+    DH7: 1
+    DH6: 1
+    DH4: 1
+    DH5: 1
+- id: ADK60R
+  slot: drone
+  nameKo: ADK60R "레이븐" 정찰 사양
+  nameEn: ADK60R "Raven" Scout Type
+  requires:
+    DH2: 1
+    DH3: 1
+    DH7: 1
+    DH6: 1
+    DH1: 9
+    DH1: 1
+- id: ADK60S
+  slot: drone
+  nameKo: ADK60S "레이븐" 간섭 사양
+  nameEn: ADK60S "Raven" Interference Type
+  requires:
+    DH2: 1
+    DH3: 1
+    DH7: 1
+    DH6: 1
+    DH8: 1
+    DH15: 1
+    DH10: 1
 - id: SGM2_U
   slot: projectiles
   nameKo: SGM2 "폴커스" 자동 지뢰
