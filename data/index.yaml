@@ -1,0 +1,47 @@
+schemaVersion: 1
+common: ./common.yaml
+factions:
+  - id: UN
+    nameKo: UN
+    nameEn: UN
+    files:
+      boxes: ./UN/box.yaml
+      sprues: ./UN/sprue.yaml
+      torso: ./UN/torso.yaml
+      chassis: ./UN/chassis.yaml
+      rightArm: ./UN/rightArm.yaml
+      leftArm: ./UN/leftArm.yaml
+      backpack: ./UN/backpack.yaml
+  - id: RDL
+    nameKo: RDL
+    nameEn: RDL
+    files:
+      boxes: ./RDL/box.yaml
+      sprues: ./RDL/sprue.yaml
+      torso: ./RDL/torso.yaml
+      chassis: ./RDL/chassis.yaml
+      rightArm: ./RDL/rightArm.yaml
+      leftArm: ./RDL/leftArm.yaml
+      backpack: ./RDL/backpack.yaml
+  - id: GOF
+    nameKo: GOF
+    nameEn: GOF
+    files:
+      boxes: ./GOF/box.yaml
+      sprues: ./GOF/sprue.yaml
+      torso: ./GOF/torso.yaml
+      chassis: ./GOF/chassis.yaml
+      rightArm: ./GOF/rightArm.yaml
+      leftArm: ./GOF/leftArm.yaml
+      backpack: ./GOF/backpack.yaml
+  - id: Other
+    nameKo: 기타
+    nameEn: Other
+    files:
+      boxes: ./Other/box.yaml
+      sprues: ./Other/sprue.yaml
+      torso: ./Other/torso.yaml
+      chassis: ./Other/chassis.yaml
+      rightArm: ./Other/rightArm.yaml
+      leftArm: ./Other/leftArm.yaml
+      backpack: ./Other/backpack.yaml

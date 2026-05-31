@@ -1,0 +1,63 @@
+- id: S100_G
+  slot: leftArm
+  nameKo: S100 실드+유탄 포드
+  nameEn: S100 Shield+Grenade Pod
+  requires:
+    SC8: 1
+    SC30: 1
+    SC9: 1
+    SC28: 1
+    SC21: 1
+    SC29: 1
+    DE9: 2
+    DE12: 2
+    SD19: 1
+    SD23: 1
+    DE8: 1
+    DE5: 1
+    SD11: 1
+    SD12: 1
+  optionRequires:
+    - count: 1
+      parts: [DE4, DE10]
+- id: S100
+  slot: leftArm
+  nameKo: S100 실드
+  nameEn: S100 Shield
+  requires:
+    SC14: 1
+    SC15: 1
+    SC28: 1
+    SC21: 1
+    SC29: 1
+    DE9: 2
+    DE12: 2
+    SD19: 1
+    SD23: 1
+    DE8: 1
+    DE5: 1
+    SD11: 1
+    SD12: 1
+  optionRequires:
+    - count: 1
+      parts: [DE4, DE10]
+- id: RH21+M3_L
+  slot: leftArm
+  nameKo: RH21 피스톨+M3 초진동 블레이드(좌)
+  nameEn: RH21 Pistol+M3 Vibroblade(L)
+  requires:
+    SC4: 1
+    SC24: 1
+    SC13: 1
+    SC17: 1
+    SC6: 1
+    SC3: 1
+    SD19: 1
+    SD20: 1
+    SD13: 1
+    DD7: 1
+    DD15: 1
+    DD9: 1
+    DD5: 1
+    DD4: 1
+    DD13: 1

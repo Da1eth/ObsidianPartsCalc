@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Obsidian Protocol Parts Calculator</title>
+    <link rel="stylesheet" href="./src/styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Obsidian Protocol</p>
+          <h1>파츠 계산기</h1>
+        </div>
+        <div class="header-summary" id="header-summary"></div>
+      </header>
+
+      <section class="workspace">
+        <aside class="panel controls" aria-label="입력">
+          <section>
+            <h2>박스</h2>
+            <div id="box-list" class="stack"></div>
+          </section>
+
+          <section>
+            <div class="section-title-row">
+              <h2>조립할 부품</h2>
+              <button class="ghost-button" id="reset-builds" type="button">초기화</button>
+            </div>
+            <div class="slot-tabs" id="slot-tabs"></div>
+            <label class="search">
+              <span>검색</span>
+              <input id="build-search" type="search" placeholder="부품명, 영문명, 파츠 번호">
+            </label>
+            <div id="build-list" class="build-list"></div>
+          </section>
+        </aside>
+
+        <section class="results" aria-label="결과">
+          <section class="panel">
+            <h2>현재 조립 계획</h2>
+            <div id="selected-builds" class="selected-builds"></div>
+          </section>
+
+          <section class="panel">
+            <h2>남는 파츠</h2>
+            <div id="leftover-parts" class="part-table"></div>
+          </section>
+
+          <section class="panel">
+            <h2>추가 조립 가능</h2>
+            <div id="available-builds" class="available-list"></div>
+          </section>
+
+          <section class="panel warning-panel" id="shortage-panel">
+            <h2>부족한 파츠</h2>
+            <div id="shortage-parts" class="part-table"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

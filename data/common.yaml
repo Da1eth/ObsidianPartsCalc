@@ -1,0 +1,22 @@
+slots:
+  - id: torso
+    nameKo: 토르소
+    nameEn: Torso
+    icon: ⬢
+  - id: chassis
+    nameKo: 섀시
+    nameEn: Chassis
+    icon: ◆
+  - id: leftArm
+    nameKo: 왼팔
+    nameEn: Left Arm
+    icon: ◀
+  - id: rightArm
+    nameKo: 오른팔
+    nameEn: Right Arm
+    icon: ▶
+  - id: backpack
+    nameKo: 백팩
+    nameEn: Backpack
+    icon: ▣
+parts: []

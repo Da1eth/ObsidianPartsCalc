@@ -1,0 +1,33 @@
+- id: R7MG
+  slot: rightArm
+  nameKo: LMG
+  nameEn: LMG
+  requires:
+    SD14: 1
+    SD16: 1
+    B3: 2
+    B4: 1
+    SC19: 1
+    SC18: 1
+    B1: 1
+    B2: 1
+    SD21: 1
+    SD22: 1
+    SD11: 1
+    SD12: 1
+- id: R7
+  slot: rightArm
+  nameKo: 자동 라이플
+  nameEn: Automatic Rifle
+  requires:
+    DG8: 1
+    DG19: 1
+    DG18: 1
+    DG20: 1
+    DG10: 1
+    DG9: 1
+    SD3: 1
+    SD5: 1
+    SD22: 1
+    SD21: 1
+    SD13: 1

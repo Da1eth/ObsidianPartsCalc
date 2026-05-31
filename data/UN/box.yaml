@@ -1,0 +1,27 @@
+- id: UN-Taurus
+  nameKo: UN 타우르스 단품 킷
+  nameEn: UN Taurus Box
+  sprues:
+    SB: 1
+    SC: 1
+    SD: 1
+    DD: 1
+    DE: 1
+    DF: 1
+    DG: 1
+    FB: 1
+    Taurus-Resin-A: 1
+    Taurus-Resin-B: 1
+  buildPlan:
+    always: [LM231, R7MG, R7, RH21+M3_L, CSC60]
+    choices:
+      - id: core
+        nameKo: 코어 선택
+        nameEn: Core choice
+        pick: 1
+        options: [TM35BT, TM35N]
+      - id: shield
+        nameKo: 실드 선택
+        nameEn: Shield choice
+        pick: 1
+        options: [S100_G, S100]

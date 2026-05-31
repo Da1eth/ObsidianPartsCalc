@@ -1,0 +1,42 @@
+- id: TM35BT
+  slot: torso
+  nameKo: TM35BT "타우러스" 실험 코어
+  nameEn: TM35BT "Taurus" Experimental Core
+  requires:
+    FB9: 1
+    FB10: 1
+    FB15: 1
+    FB16: 1
+    FB11: 1
+    FB12: 1
+    A1: 1
+    A2R: 1
+    A2L: 1
+    A3: 1
+    FB13: 1
+    FB14: 1
+    FB1: 1
+    FB4: 1
+    FB2: 1
+    FB3: 1
+- id: TM35N
+  slot: torso
+  nameKo: TM35N "엘리게이터" 전자전 코어
+  nameEn: TM35N "Alligator" Electronic Warfare Core
+  requires:
+    FB9: 1
+    FB10: 1
+    FB15: 1
+    FB16: 1
+    FB11: 1
+    FB12: 1
+    FB17: 1
+    FB18: 1
+    FB7: 1
+    FB8: 1
+    FB13: 1
+    FB14: 1
+    FB1: 1
+    FB4: 1
+    FB2: 1
+    FB3: 1

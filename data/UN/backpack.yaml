@@ -1,0 +1,10 @@
+- id: CSC60
+  slot: backpack
+  nameKo: CSC60 냉각기
+  nameEn: CSC60 Cooler
+  requires:
+    DG2: 1
+    DG3: 1
+    DG13: 1
+    DG14: 1
+    DG7: 1

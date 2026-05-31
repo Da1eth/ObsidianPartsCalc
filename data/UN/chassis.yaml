@@ -1,0 +1,38 @@
+- id: LM231
+  slot: chassis
+  nameKo: 표준 섀시
+  nameEn: Standard Chassis
+  requires:
+    SB19: 1
+    SB12: 1
+    SB20: 1
+    SB13: 1
+    SB14: 1
+    SB21: 1
+    DG23: 1
+    DG22: 1
+    DF9: 1
+    DG17: 1
+    DG16: 1
+    DG24: 1
+    DG25: 1
+    SB3: 1
+    SB4: 1
+    DF13: 1
+    DF10: 1
+    SB8: 1
+    DF12: 1
+    SB7: 1
+    DF11: 1
+    DF7: 2
+    DF8: 2
+    DF1: 1
+    DF2: 1
+    DF3: 1
+    DF4: 1
+    DF5: 2
+    DF6: 2
+    DF14: 1
+    DF15: 1
+    DF16: 1
+    DF17: 1
