@@ -361,7 +361,7 @@ function renderSelectedBuilds() {
           <strong>${build.nameKo}</strong>
         </span>
         ${stepperHtml(count, `${build.nameKo} 수량`)}
-        <button class="icon-button" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
+        <button class="button-icon button-danger" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
       </div>
       ${buildChoiceRowsHtml(build, factionState.choices[build.id] ?? {}, count)}
     `;
@@ -377,7 +377,7 @@ function renderSelectedBuilds() {
       }
       renderResults();
     });
-    item.querySelector(".icon-button").addEventListener("click", () => {
+    item.querySelector(".button-icon").addEventListener("click", () => {
       factionState.builds[build.id] = 0;
       delete factionState.choices[build.id];
       renderResults();

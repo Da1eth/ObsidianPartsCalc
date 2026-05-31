@@ -26,11 +26,11 @@ export function openAvailableBuildsDialog({
           <strong>추가 조립 부품 선택</strong>
           <small>서로 같은 파츠를 쓰는 부품이 있어서 전부 담을 수 없습니다. 담을 부품을 선택해주세요.</small>
         </span>
-        <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
+        <button class="button-icon button-danger" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
       </div>
       <div class="build-plan-choice-list"></div>
       <div class="build-plan-modal-actions">
-        <button class="button button-muted" value="cancel" type="submit">취소</button>
+        <button class="button button-danger" value="cancel" type="submit">취소</button>
         <button class="button button-primary" value="confirm" type="submit">확인</button>
       </div>
     </form>
@@ -128,11 +128,11 @@ export function openBuildPlanDialog({ entries, indexes }) {
           <strong>조립 부품 선택</strong>
           <small>이 박스에는 선택 조립 부품이 포함되어 있습니다. 조립할 부품을 골라주세요.</small>
         </span>
-        <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
+        <button class="button-icon button-danger" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
       </div>
       <div class="build-plan-choice-list"></div>
       <div class="build-plan-modal-actions">
-        <button class="button button-muted" value="cancel" type="submit">취소</button>
+        <button class="button button-danger" value="cancel" type="submit">취소</button>
         <button class="button button-primary" value="confirm" type="submit">확인</button>
       </div>
     </form>

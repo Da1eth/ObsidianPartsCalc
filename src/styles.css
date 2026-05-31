@@ -333,9 +333,15 @@ h2 {
 
 .button-primary {
   border-color: var(--accent);
+  background: var(--soft);
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.button-primary:hover {
+  border-color: var(--accent);
   background: var(--accent);
   color: #fff;
-  font-weight: 800;
 }
 
 .button-primary:disabled,
@@ -343,6 +349,18 @@ h2 {
   border-color: var(--line);
   background: #e3ded6;
   color: var(--muted);
+}
+
+.button-danger {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.button-danger:hover {
+  border-color: var(--accent-2);
+  background: var(--warn);
+  color: var(--accent-2);
 }
 
 .button-strong {
@@ -653,7 +671,7 @@ input[type="search"] {
   font-size: 0.92rem;
 }
 
-.icon-button {
+.button-icon {
   display: grid;
   place-items: center;
   width: var(--control-size);
@@ -664,12 +682,6 @@ input[type="search"] {
   background: #fff;
   color: var(--muted);
   cursor: pointer;
-}
-
-.icon-button:hover {
-  border-color: var(--accent-2);
-  background: var(--warn);
-  color: var(--accent-2);
 }
 
 .build-plan-dialog {
