@@ -10,6 +10,7 @@ import {
 } from "./calculator.js";
 import { normalizeBuildPlan } from "./build-plan.js";
 import { loadCatalog } from "./catalog-loader.js";
+import { iconSvg, partIconHtml } from "./svg.js";
 
 const state = {
   factionId: "",
@@ -181,7 +182,7 @@ function renderSlots() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = state.slot === slot.id ? "active" : "";
-    button.textContent = `${slot.icon} ${slot.nameKo}`;
+    button.innerHTML = `${partIconHtml(slot, "slot-tab-icon")}<span>${slot.nameKo}</span>`;
     button.addEventListener("click", () => {
       state.slot = slot.id;
       renderSlots();
@@ -208,7 +209,7 @@ function renderBuildList() {
     row.type = "button";
     row.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     row.innerHTML = `
-      <span class="slot-icon" aria-hidden="true">${slot.icon}</span>
+      ${partIconHtml(slot)}
       <span class="build-meta">
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
@@ -259,7 +260,7 @@ function renderResults() {
     item.type = "button";
     item.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     item.innerHTML = `
-      <span class="slot-icon" aria-hidden="true">${slot.icon}</span>
+      ${partIconHtml(slot)}
       <span>
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn} · ${max}개 조립 가능</small>
@@ -473,7 +474,7 @@ function renderSelectedBuilds() {
     item.innerHTML = `
       <div class="selected-item">
         <span class="selected-build-name">
-          <span class="selected-slot-icon" aria-hidden="true">${slot.icon}</span>
+          ${partIconHtml(slot, "selected-slot-icon")}
           <strong>${build.nameKo}</strong>
         </span>
         ${stepperHtml(count, `${build.nameKo} 수량`)}
@@ -674,20 +675,6 @@ function stepperHtml(value, label) {
       <strong>${value}</strong>
       <button type="button" data-step="1" aria-label="증가">${iconSvg("plus")}</button>
     </span>
-  `;
-}
-
-function iconSvg(name) {
-  const paths = {
-    minus: `<path d="M5 12h14"></path>`,
-    plus: `<path d="M12 5v14"></path><path d="M5 12h14"></path>`,
-    x: `<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>`
-  };
-
-  return `
-    <svg class="control-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      ${paths[name]}
-    </svg>
   `;
 }
 

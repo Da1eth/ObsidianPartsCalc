@@ -375,6 +375,14 @@ h2 {
   cursor: pointer;
 }
 
+.slot-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+
 .faction-tabs button {
   font-weight: 800;
 }
@@ -444,6 +452,54 @@ h2 {
   background: var(--soft);
   color: var(--accent);
   font-weight: 900;
+}
+
+.slot-tab-icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  color: currentColor;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.part-pill {
+  color: var(--accent);
+}
+
+.slot-tabs button .part-pill,
+.slot-tabs button.active .part-pill {
+  color: currentColor;
+}
+
+.part-icon {
+  display: block;
+  width: 100%;
+  max-width: 30px;
+  height: auto;
+}
+
+.part-icon-fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.part-icon-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.25;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+}
+
+.slot-icon .part-icon {
+  width: 30px;
+}
+
+.selected-slot-icon .part-icon {
+  width: 22px;
 }
 
 .selected-choice-list {
@@ -862,10 +918,6 @@ b {
   .available-list {
     min-height: 0;
     overflow: auto;
-  }
-
-  .selected-builds {
-    padding-right: 4px;
   }
 }
 
