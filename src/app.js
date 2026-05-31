@@ -1,10 +1,12 @@
 import {
   calculateAvailableBuilds,
+  canConsumeBuildEntries,
   calculateInventory,
   calculateInventoryStats,
   calculateLeftovers,
   calculateRequiredParts,
   formatPartList,
+  getBuildCompetitionGroups,
   getBuildRequirementChoices,
   getSprueParts
 } from "./calculator.js";
@@ -33,6 +35,7 @@ const els = {
   buildSearch: document.querySelector("#build-search"),
   buildList: document.querySelector("#build-list"),
   resetBuilds: document.querySelector("#reset-builds"),
+  addAvailableBuilds: document.querySelector("#add-available-builds"),
   selectedBuilds: document.querySelector("#selected-builds"),
   leftoverParts: document.querySelector("#leftover-parts"),
   availableBuilds: document.querySelector("#available-builds"),
@@ -82,6 +85,8 @@ els.resetBuilds.addEventListener("click", () => {
   currentState().choices = {};
   render();
 });
+
+els.addAvailableBuilds.addEventListener("click", addAvailableBuildsToPlan);
 
 function makeIndexes(data) {
   return {
@@ -248,6 +253,7 @@ function renderResults() {
   els.shortagePanel.hidden = Object.keys(shortages).length === 0;
 
   els.availableBuilds.innerHTML = "";
+  els.addAvailableBuilds.disabled = available.length === 0;
   if (available.length === 0) {
     els.availableBuilds.innerHTML = `<p class="empty">남은 파츠로 바로 조립 가능한 부품이 없습니다.</p>`;
     return;
@@ -272,6 +278,183 @@ function renderResults() {
     });
     els.availableBuilds.append(item);
   });
+}
+
+function addAvailableBuildsToPlan() {
+  const scopedCatalog = currentCatalog();
+  const factionState = currentState();
+  const inventory = calculateInventory(scopedCatalog, factionState.boxes);
+  const required = calculateRequiredParts(scopedCatalog, factionState.builds, inventory, factionState.choices);
+  const { leftovers } = calculateLeftovers(inventory, required);
+  const available = calculateAvailableBuilds(scopedCatalog, leftovers);
+  const entries = available.map(({ build, max }) => ({ buildId: build.id, count: max }));
+
+  if (entries.length === 0) return;
+
+  if (canConsumeBuildEntries(scopedCatalog, leftovers, entries)) {
+    entries.forEach((entry) => addBuildToPlan(entry.buildId, entry.count));
+    render();
+    return;
+  }
+
+  openAvailableBuildsDialog(available, leftovers, scopedCatalog);
+}
+
+function openAvailableBuildsDialog(available, leftovers, scopedCatalog) {
+  const dialog = document.createElement("dialog");
+  dialog.className = "build-plan-dialog";
+  const choices = makeAvailableBuildChoiceState(available, leftovers, scopedCatalog);
+  const choiceGroups = makeAvailableBuildChoiceGroups(choices, leftovers, scopedCatalog);
+
+  dialog.innerHTML = `
+    <form class="build-plan-modal" method="dialog">
+      <div class="build-plan-modal-header">
+        <span>
+          <strong>추가 조립 부품 선택</strong>
+          <small>서로 같은 파츠를 쓰는 부품이 있어서 전부 담을 수 없습니다. 담을 부품을 선택해주세요.</small>
+        </span>
+        <button class="icon-button" value="cancel" type="submit" aria-label="닫기">${iconSvg("x")}</button>
+      </div>
+      <div class="build-plan-choice-list available-build-choice-list"></div>
+      <div class="build-plan-modal-actions">
+        <button class="ghost-button" value="cancel" type="submit">취소</button>
+        <button class="primary-button" value="confirm" type="submit">확인</button>
+      </div>
+    </form>
+  `;
+
+  const choiceList = dialog.querySelector(".build-plan-choice-list");
+
+  function choiceRowHtml(index) {
+    const choice = choices[index];
+    const slot = indexes.slots[choice.build.slot];
+    const canDecrease = choice.count > 0;
+    const canIncrease = canConsumeBuildEntries(scopedCatalog, leftovers, choices.map((entry, choiceIndex) => ({
+      buildId: entry.build.id,
+      count: entry.count + (choiceIndex === index ? 1 : 0)
+    })));
+
+    return `
+      <div class="plan-choice-option available-build-choice">
+        ${partIconHtml(slot)}
+        <span>
+          <strong>${choice.build.nameKo}</strong>
+          <small>${choice.build.nameEn}</small>
+        </span>
+        <span
+          class="stepper"
+          aria-label="${choice.build.nameKo} 수량"
+          data-choice-index="${index}"
+        >
+          <button
+            type="button"
+            data-step="-1"
+            aria-label="감소"
+            ${!canDecrease ? "disabled" : ""}
+          >${iconSvg("minus")}</button>
+          <strong>${choice.count}</strong>
+          <button
+            type="button"
+            data-step="1"
+            aria-label="증가"
+            ${choice.count >= choice.max || !canIncrease ? "disabled" : ""}
+          >${iconSvg("plus")}</button>
+        </span>
+      </div>
+    `;
+  }
+
+  function renderChoices() {
+    choiceList.innerHTML = choiceGroups.map((group) => `
+      <section class="build-plan-choice">
+        <h3>${group.title}</h3>
+        <small>${group.detail}</small>
+        <div class="build-plan-options">
+          ${group.indexes.map(choiceRowHtml).join("")}
+        </div>
+      </section>
+    `).join("");
+  }
+
+  choiceList.addEventListener("click", (event) => {
+    const button = event.target.closest(".stepper button");
+    if (!button) return;
+    const choice = choices[Number(button.closest(".stepper").dataset.choiceIndex)];
+    if (!choice) return;
+    choice.count = Math.min(choice.max, Math.max(0, choice.count + Number(button.dataset.step)));
+    renderChoices();
+  });
+
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "confirm") {
+      choices
+        .filter((choice) => choice.count > 0)
+        .forEach((choice) => addBuildToPlan(choice.build.id, choice.count));
+      render();
+    }
+    dialog.remove();
+  });
+
+  renderChoices();
+  document.body.append(dialog);
+  dialog.showModal();
+}
+
+function makeAvailableBuildChoiceState(available, leftovers, scopedCatalog) {
+  const choices = available.map(({ build, max }) => ({ build, max, count: 0 }));
+
+  choices.forEach((choice, index) => {
+    while (
+      choice.count < choice.max
+      && canConsumeBuildEntries(scopedCatalog, leftovers, choices.map((entry, choiceIndex) => ({
+        buildId: entry.build.id,
+        count: entry.count + (choiceIndex === index ? 1 : 0)
+      })))
+    ) {
+      choice.count += 1;
+    }
+  });
+
+  return choices;
+}
+
+function makeAvailableBuildChoiceGroups(choices, leftovers, scopedCatalog) {
+  const choiceIndexesByBuildId = Object.fromEntries(choices.map((choice, index) => [choice.build.id, index]));
+  const competitionGroups = getBuildCompetitionGroups(
+    scopedCatalog,
+    leftovers,
+    choices.map((choice) => ({ buildId: choice.build.id, count: choice.max }))
+  );
+  let competitionIndex = 0;
+  const groups = competitionGroups.map((group) => {
+    const choiceIndexes = group.buildIds
+      .map((buildId) => choiceIndexesByBuildId[buildId])
+      .filter((choiceIndex) => Number.isInteger(choiceIndex));
+    const partNames = group.partIds.slice(0, 4).map((partId) => indexes.parts[partId]?.nameKo ?? partId);
+    const hiddenCount = Math.max(0, group.partIds.length - partNames.length);
+
+    return {
+      indexes: choiceIndexes,
+      title: choiceIndexes.length > 1 ? `그룹 ${competitionIndex += 1}` : "독립 부품",
+      detail: group.partIds.length > 0
+        ? `공유 파츠: ${partNames.join(", ")}${hiddenCount > 0 ? ` 외 ${hiddenCount}개` : ""}`
+        : "이 부품들은 전부 담을 수 있습니다."
+    };
+  });
+
+  const independent = groups.filter((group) => group.indexes.length === 1);
+  const competing = groups.filter((group) => group.indexes.length > 1);
+
+  if (independent.length <= 1) return groups;
+
+  return [
+    ...competing,
+    {
+      indexes: independent.flatMap((group) => group.indexes),
+      title: "독립 부품",
+      detail: "이 부품들은 전부 담을 수 있습니다."
+    }
+  ];
 }
 
 function selectedBoxPlanEntries() {

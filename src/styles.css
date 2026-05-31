@@ -330,6 +330,11 @@ h2 {
   cursor: not-allowed;
 }
 
+.ghost-button:disabled {
+  color: #b4ada3;
+  cursor: not-allowed;
+}
+
 .box-plan-button {
   width: 100%;
   min-height: 38px;
@@ -681,6 +686,7 @@ input[type="search"] {
 }
 
 .build-plan-modal {
+  --modal-title-gap: 8px;
   display: grid;
   gap: 14px;
   padding: 18px;
@@ -696,6 +702,11 @@ input[type="search"] {
 
 .build-plan-modal-header {
   grid-template-columns: 1fr var(--control-size);
+}
+
+.build-plan-modal-header > span {
+  display: grid;
+  gap: var(--modal-title-gap);
 }
 
 .build-plan-modal-header strong {
@@ -716,7 +727,7 @@ input[type="search"] {
 
 .build-plan-choice {
   display: grid;
-  gap: 8px;
+  gap: var(--modal-title-gap);
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #fff;
@@ -734,6 +745,10 @@ input[type="search"] {
   border-radius: 6px;
   background: var(--panel);
   padding: 10px;
+}
+
+.available-build-choice {
+  grid-template-columns: 38px 1fr auto;
 }
 
 .build-plan-modal-actions {

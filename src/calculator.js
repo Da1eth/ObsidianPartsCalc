@@ -118,6 +118,91 @@ export function calculateAvailableBuilds(catalog, leftovers) {
     .sort((a, b) => a.build.slot.localeCompare(b.build.slot) || a.build.nameKo.localeCompare(b.build.nameKo));
 }
 
+export function canConsumeBuildEntries(catalog, leftovers, entries) {
+  const remaining = { ...leftovers };
+  const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
+  const equivalents = makeEquivalentIndex(catalog);
+
+  return entries.every((entry) => {
+    const build = buildsById[entry.buildId];
+    if (!build || entry.count <= 0) return entry.count <= 0;
+
+    for (let count = 0; count < entry.count; count += 1) {
+      if (!consumeBuild(build, remaining, equivalents)) return false;
+    }
+
+    return true;
+  });
+}
+
+export function getBuildCompetitionGroups(catalog, leftovers, entries) {
+  const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
+  const equivalents = makeEquivalentIndex(catalog);
+  const buildEntries = entries
+    .filter((entry) => entry.count > 0 && buildsById[entry.buildId])
+    .map((entry) => ({
+      ...entry,
+      build: buildsById[entry.buildId]
+    }));
+  const partSets = Object.fromEntries(buildEntries.map((entry) => [
+    entry.buildId,
+    buildCompetitionPartIds(entry.build, equivalents)
+  ]));
+  const competingIds = new Set();
+  const connectedIds = {};
+
+  buildEntries.forEach((entry) => {
+    connectedIds[entry.buildId] = new Set();
+  });
+
+  function connectEntries(entriesToConnect) {
+    entriesToConnect.forEach((entry, index) => {
+      entriesToConnect.slice(index + 1).forEach((otherEntry) => {
+        competingIds.add(entry.buildId);
+        competingIds.add(otherEntry.buildId);
+        connectedIds[entry.buildId].add(otherEntry.buildId);
+        connectedIds[otherEntry.buildId].add(entry.buildId);
+      });
+    });
+  }
+
+  buildEntries.forEach((entry, index) => {
+    buildEntries.slice(index + 1).forEach((otherEntry) => {
+      if (!entriesActuallyCompete(catalog, leftovers, entry, otherEntry)) return;
+      connectEntries([entry, otherEntry]);
+    });
+  });
+
+  const visited = new Set();
+  const groups = [];
+
+  buildEntries.forEach((entry) => {
+    if (visited.has(entry.buildId)) return;
+
+    const group = [];
+    const queue = [entry.buildId];
+    visited.add(entry.buildId);
+
+    while (queue.length > 0) {
+      const currentBuildId = queue.shift();
+      group.push(currentBuildId);
+
+      connectedIds[currentBuildId].forEach((candidateBuildId) => {
+        if (visited.has(candidateBuildId)) return;
+        visited.add(candidateBuildId);
+        queue.push(candidateBuildId);
+      });
+    }
+
+    groups.push({
+      buildIds: group,
+      partIds: competingIds.has(entry.buildId) ? sharedCompetitionPartIds(group, partSets) : []
+    });
+  });
+
+  return groups;
+}
+
 export function formatPartList(parts, partIndex) {
   return Object.entries(parts)
     .map(([id, count]) => ({
@@ -138,6 +223,62 @@ export function getBuildRequirementChoices(build) {
       parts: option.parts
     }))
   }));
+}
+
+function buildCompetitionPartIds(build, equivalents) {
+  const requirements = normalizeBuildRequirements(build);
+  const partIds = new Set();
+  addEquivalentPartIds(partIds, requirements.always, equivalents);
+
+  requirements.choices.forEach((choice) => {
+    choice.options.forEach((option) => addEquivalentPartIds(partIds, option.parts, equivalents));
+  });
+
+  (build.alternativeRequires ?? []).forEach((group) => {
+    normalizeRequirementOptions(group.options).forEach((option) => {
+      addEquivalentPartIds(partIds, option.parts, equivalents);
+    });
+  });
+
+  (build.optionRequires ?? []).forEach((option) => {
+    option.parts.forEach((partId) => {
+      equivalentParts(partId, equivalents).forEach((equivalentPartId) => partIds.add(equivalentPartId));
+    });
+  });
+
+  return partIds;
+}
+
+function addEquivalentPartIds(target, parts, equivalents) {
+  Object.keys(parts).forEach((partId) => {
+    equivalentParts(partId, equivalents).forEach((equivalentPartId) => target.add(equivalentPartId));
+  });
+}
+
+function entriesActuallyCompete(catalog, leftovers, entry, otherEntry) {
+  return !entriesCanConsumeInEitherOrder(catalog, leftovers, [entry, otherEntry]);
+}
+
+function entriesCanConsumeInEitherOrder(catalog, leftovers, entries) {
+  const entriesToCheck = entries.map((entry) => ({ buildId: entry.buildId, count: entry.count }));
+  const reversedEntries = [...entriesToCheck].reverse();
+
+  return canConsumeBuildEntries(catalog, leftovers, entriesToCheck)
+    || canConsumeBuildEntries(catalog, leftovers, reversedEntries);
+}
+
+function sharedCompetitionPartIds(buildIds, partSets) {
+  const shared = new Set();
+
+  buildIds.forEach((buildId, index) => {
+    buildIds.slice(index + 1).forEach((otherBuildId) => {
+      partSets[buildId].forEach((partId) => {
+        if (partSets[otherBuildId].has(partId)) shared.add(partId);
+      });
+    });
+  });
+
+  return [...shared].sort((a, b) => a.localeCompare(b));
 }
 
 function addParts(target, parts, multiplier) {
