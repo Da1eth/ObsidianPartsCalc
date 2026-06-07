@@ -156,6 +156,24 @@
     ED12: 1
     ED6: 1
     SD13: 1
+- id: S9+IGX106
+  nameKo: "메테오" 실드+이온 샷건
+  nameEn: "Meteor" Shield+Ion Shotgun
+  requires:
+    SD1: 1
+    SD7: 1
+    SD9: 1
+    SD14: 1
+    SD16: 1
+    DG21: 1
+    SD19: 1
+    SD23: 1
+    DI3: 1
+    DI10: 1
+    DI18: 1
+    DG4: 1
+    DG11: 1
+    DG12: 1
 - id: S9+M5
   nameKo: "메테오" 실드+파일 벙커
   nameEn: "Meteor" Shield+Pile Bunker

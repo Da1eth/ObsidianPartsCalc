@@ -23,6 +23,29 @@
     DA7: 1
     DA11: 1
     DA12: 1
+- id: TM31Q
+  nameKo: "와일드 캣" 전투 코어
+  nameEn: "Wild Cat" Battle Core
+  requires:
+    SB1: 1
+    SB2: 1
+    SB9: 1
+    SB10: 1
+    SB15: 1
+    SB16: 1
+    SB17: 1
+    DA1: 1
+    DA2: 1
+    DA4: 1
+    DA14: 1
+    DA15: 1
+    DA5: 1
+    DI15: 1
+    DI16: 1
+    DI6: 1
+    DI13: 1
+    DA11: 1
+    DA12: 1
 - id: TM31R
   nameKo: "카라칼" 전투 코어
   nameEn: "Caracal" Battle Core

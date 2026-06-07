@@ -104,6 +104,31 @@
     RKG70_P: 2
     DBP_P: 1
     M9: 1
+- id: UN-Raid
+  nameKo: 레이드 스타터 세트
+  nameEn: Raid Starter Set
+  sprues:
+    SB: 1
+    SC: 1
+    SD: 1
+    FF: 1
+    DA: 1
+    DB: 1
+    DF: 1
+    DG: 1
+    DH: 1
+    DI: 1
+  buildPlan:
+    CSC60: 1
+    JP5: 1
+    TM31: [1, TM31Q, TM31R]
+    LM231: 1
+    S9: [1, S9+IGX106, S9+M5]
+    R7: [1, R7K, R7, R6]
+    R33: 1
+    ADK15: [1, ADK15D, ADK15P]
+    ADK30: [1, ADK30C, ADK30F]
+    ADK60: [1, ADK60R, ADK60EC, ADK60S]
 - id: UN-Taurus
   nameKo: 타우르스 단품 킷
   nameEn: Taurus Box
@@ -125,17 +150,3 @@
     S100: [1, S100+G, S100]
     RH21+M3_L: 1
     R7: [1, R7, R7MG]
-- id: UN-Raid
-  nameKo: 레이드 스타터 세트
-  nameEn: Raid Starter Set
-  sprues:
-    SB: 1
-    SC: 1
-    SD: 1
-    FF: 1
-    DA: 1
-    DB: 1
-    DF: 1
-    DG: 1
-    DH: 1
-    DI: 1

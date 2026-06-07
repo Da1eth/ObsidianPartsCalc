@@ -25,6 +25,19 @@
     FE4: 1
     FE12: 1
     FE18: 1
+- id: ADK15P
+  nameKo: "포큐파인" 이온 사양
+  nameEn: "Porcupine" Ion Type
+  requires:
+    FF2: 4
+    FF3: 4
+    FF6: 1
+    FF8: 1
+    DI1: 1
+    DI11: 1
+    DI14: 1
+    DI7: 1
+    DI8: 1
 - id: ADK30C
   nameKo: "타란튤라" 수송 사양
   nameEn: "Tarantula" Carrier Type

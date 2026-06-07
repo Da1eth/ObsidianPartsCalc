@@ -72,6 +72,8 @@
 - id: DI
   material: plastic
   partCount: 19
+  extraParts:
+    DI4: 2
 - id: EA
   material: plastic
   partCount: 17

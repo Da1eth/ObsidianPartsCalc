@@ -56,6 +56,14 @@
     FD13: 1
     FD3: 1
     FD2: 1
+- id: JP5
+  nameKo: 기동 강화 팩
+  nameEn: Mobility Enhancement Pack
+  requires:
+    DI2: 1
+    DI4: 2
+    DI17: 1
+    DI12: 1
 - id: MSH2
   nameKo: 안정화 암
   nameEn: Stabilizer Arm

@@ -157,6 +157,20 @@
     SD22: 1
     SD21: 1
     SD13: 1
+- id: R7K
+  nameKo: 전술 라이플
+  nameEn: Tactical Rifle
+  requires:
+    DI5: 1
+    DI9: 1
+    DI19: 1
+    SD3: 1
+    SD5: 1
+    SD21: 1
+    SD22: 1
+    DG9: 1
+    DG10: 1
+    SD13: 1
 - id: R7MG
   nameKo: LMG
   nameEn: LMG
