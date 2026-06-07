@@ -1095,8 +1095,33 @@ b {
   }
 
   .build-controls {
+    display: flex;
+    flex-direction: column;
     position: static;
-    max-height: none;
+    max-height: calc(100vh - 32px);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .selected-panel,
+  .results .panel {
+    display: flex;
+    flex-direction: column;
+    max-height: min(520px, 62vh);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .build-list,
+  .selected-builds,
+  .dashboard .part-table,
+  .available-list {
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .build-list {
+    max-height: min(460px, 52vh);
   }
 
   .sidebar-panel {
