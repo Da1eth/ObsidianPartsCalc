@@ -51,7 +51,8 @@
     JP1: 2
     EC50: 2
     OCSP: 2
-    TM35: [2, TM35N, TM35B]
+    TM35B: 1
+    TM35N: 1
     LM213B: 2
     MX82: 2
     K7+S10: 1
@@ -84,7 +85,8 @@
     AMDS210: 2
     DPB: 1
     MSH2: 1
-    TM39: [2, TM39, TM641]
+    TM39: 2
+    TM641: 2
     LM210S: 2
     RKG70: 2
     M3S_L: 1
