@@ -1,6 +1,6 @@
 import { formatPartList, getBuildRequirementChoices } from "./calculator.js";
 import { withPartSources } from "./catalogQueries.js";
-import { textHtml } from "./html.js";
+import { bindStepper, stepperHtml, textHtml } from "./html.js";
 import { normalizedChoiceCounts } from "./planState.js";
 import { iconSvg, partIconHtml } from "./svg.js";
 
@@ -261,26 +261,4 @@ function positionPartSourceTooltip(anchor, tooltip) {
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
-}
-
-function stepperHtml(value, label) {
-  return `
-    <span class="stepper" aria-label="${label}">
-      <button type="button" data-step="-1" aria-label="감소">${iconSvg("minus")}</button>
-      <strong>${value}</strong>
-      <button type="button" data-step="1" aria-label="증가">${iconSvg("plus")}</button>
-    </span>
-  `;
-}
-
-function bindStepper(root, initialValue, min, max, onChange) {
-  let value = initialValue;
-  const display = root.querySelector(".stepper strong");
-  root.querySelectorAll(".stepper button").forEach((button) => {
-    button.addEventListener("click", () => {
-      value = Math.min(max, Math.max(min, value + Number(button.dataset.step)));
-      display.textContent = value;
-      onChange(value);
-    });
-  });
 }

@@ -53,7 +53,6 @@ export function makeBoxPartSources(scopedCatalog) {
     Object.entries(boxParts).forEach(([partId, count]) => {
       sources[partId] ??= [];
       sources[partId].push({
-        boxId: box.id,
         nameKo: box.nameKo,
         count
       });
@@ -86,7 +85,6 @@ export function makeBoxBuildSources(scopedCatalog) {
     Object.entries(buildCounts).forEach(([buildId, count]) => {
       sources[buildId] ??= [];
       sources[buildId].push({
-        boxId: box.id,
         nameKo: box.nameKo,
         count
       });

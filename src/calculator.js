@@ -21,14 +21,12 @@ export function calculateInventory(catalog, selectedBoxes) {
 
 export function calculateInventoryStats(catalog, selectedBoxes) {
   const stats = {
-    uniquePartIds: 0,
     totalParts: 0,
     byMaterial: {}
   };
   const inventory = calculateInventory(catalog, selectedBoxes);
   const spruesById = Object.fromEntries(catalog.sprues.map((sprue) => [sprue.id, sprue]));
 
-  stats.uniquePartIds = Object.keys(inventory).length;
   stats.totalParts = Object.values(inventory).reduce((sum, count) => sum + count, 0);
 
   catalog.boxes.forEach((box) => {
@@ -292,8 +290,7 @@ function addRequirementChoices(required, choices, buildCount, inventory, equival
 
     const selectedTotal = Object.values(selectedCounts).reduce((sum, count) => sum + count, 0);
     for (let count = selectedTotal; count < totalPick; count += 1) {
-      const option = selectedRequirementOption(choice, selectedChoices)
-        ?? chooseRequirementOption(choice.options, inventory, required, equivalents);
+      const option = chooseRequirementOption(choice.options, inventory, required, equivalents);
       if (!option) return;
       addFlexibleParts(required, option.parts, inventory, equivalents);
     }
@@ -535,12 +532,6 @@ function normalizeRequirementOption(option) {
 
 function normalizeRequirementOptions(options = []) {
   return options.map(normalizeRequirementOption);
-}
-
-function selectedRequirementOption(choice, selectedChoices) {
-  const selectedIndex = selectedChoices[choice.id];
-  if (!Number.isInteger(selectedIndex)) return null;
-  return choice.options[selectedIndex] ?? null;
 }
 
 function normalizeSelectedChoiceCounts(choice, selected, totalPick) {
