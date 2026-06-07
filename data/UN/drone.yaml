@@ -16,8 +16,8 @@
     FF9: 1
 - id: ADK15/MAS
   slot: drone
-  nameKo: ADK15D "포큐파인" 극초단파 사양
-  nameEn: ADK15D "Porcupine" Microwave Type
+  nameKo: "포큐파인" 극초단파 사양
+  nameEn: "Porcupine" Microwave Type
   requires:
     FF2: 4
     FF3: 4
@@ -29,8 +29,8 @@
     FE18: 1
 - id: ADK30C
   slot: drone
-  nameKo: ADK30F "타란튤라" 수송 사양
-  nameEn: ADK30F "Tarantula" Carrier Type
+  nameKo: "타란튤라" 수송 사양
+  nameEn: "Tarantula" Carrier Type
   requires:
     DH13: 4
     DH14: 4
@@ -105,14 +105,14 @@
   nameEn: Missile Group
   requires:
     EI1: 3
-- id: SGM2_U
+- id: SGM2_F
   slot: projectiles
   nameKo: "폴커스" 자동 지뢰
   nameEn: "Pholcus" Automatic Mine
   requires:
     DC5: 1
     DC3: 1
-- id: SGM2_F
+- id: SGM2_U
   slot: projectiles
   nameKo: "폴커스" 자동 지뢰(전개)
   nameEn: "Pholcus" Automatic Mine(Unfold)
