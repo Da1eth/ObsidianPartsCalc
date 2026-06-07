@@ -1,7 +1,7 @@
 - id: G6+M5
   slot: rightArm
-  nameKo: G6 샷건+M5 파일 벙커
-  nameEn: G6 Shotgun+M5 Pile Bunker
+  nameKo: 샷건+파일 벙커
+  nameEn: Shotgun+Pile Bunker
   requires:
     FE1: 1
     FE9: 1
@@ -20,8 +20,8 @@
     SD12: 1
 - id: IGX350
   slot: rightArm
-  nameKo: IGX350 이온 샷건
-  nameEn: IGX350 Ion Shotgun
+  nameKo: 이온 샷건
+  nameEn: Ion Shotgun
   requires:
     SC3: 1
     SC22: 1
@@ -40,8 +40,8 @@
     SD22: 1
 - id: IGX920
   slot: rightArm
-  nameKo: IGX920 헤비 이온 건
-  nameEn: IGX920 Heavy Ion Gun
+  nameKo: 헤비 이온 건
+  nameEn: Heavy Ion Gun
   requires:
     EF25: [1, EF24+EF25+EF3, EG25+EG26+EF9]
     EF7: 1
@@ -67,8 +67,8 @@
     EG14: 1
 - id: M3S_R
   slot: rightArm
-  nameKo: M3S 초진동 블레이드(우)
-  nameEn: M3S Vibroblade(R)
+  nameKo: 초진동 블레이드(우)
+  nameEn: Vibroblade(R)
   requires:
     SC18: 1
     SC19: 1
@@ -82,8 +82,8 @@
     SD28: 1
 - id: M4_R+G
   slot: rightArm
-  nameKo: M4 초진동 블레이드(우)+유탄 포드
-  nameEn: M4 Vibroblade(R)+Grenade Pod
+  nameKo: 초진동 블레이드(우)+유탄 포드
+  nameEn: Vibroblade(R)+Grenade Pod
   requires:
     SC10: 1
     SC11: 1
@@ -98,8 +98,8 @@
     SD28: 1
 - id: M15BO
   slot: rightArm
-  nameKo: M15BO "카타나"
-  nameEn: M15BO "Katana"
+  nameKo: "카타나"
+  nameEn: "Katana"
   requires:
     SC3: 1
     SC22: 1
@@ -116,8 +116,8 @@
     SD13: 1
 - id: R6
   slot: rightArm
-  nameKo: R6 SMG
-  nameEn: R6 SMG
+  nameKo: SMG
+  nameEn: SMG
   requires:
     SD2: 1
     SD8: 1
@@ -133,8 +133,8 @@
     SD18: 1
 - id: R6SD
   slot: rightArm
-  nameKo: R6SD SMG
-  nameEn: R6SD SMG
+  nameKo: SMG
+  nameEn: SMG
   requires:
     EA1: 1
     EA7: 1
@@ -185,8 +185,8 @@
     SD12: 1
 - id: R9B
   slot: rightArm
-  nameKo: R9B 전술 라이플
-  nameEn: R9B Tactical Rifle
+  nameKo: 전술 라이플
+  nameEn: Tactical Rifle
   requires:
     ED18: 1
     ED19: 1
@@ -203,8 +203,8 @@
     ED4: 1
 - id: R33
   slot: rightArm
-  nameKo: R33 저격 라이플
-  nameEn: R33 Sniper Rifle
+  nameKo: 저격 라이플
+  nameEn: Sniper Rifle
   requires:
     DB3: 1
     DB4: 1
@@ -226,8 +226,8 @@
     SD12: 1
 - id: RH21+M3_R
   slot: rightArm
-  nameKo: RH21 피스톨+M3 초진동 블레이드(우)
-  nameEn: RH21 Pistol+M3 Vibroblade(우)
+  nameKo: 피스톨+초진동 블레이드(우)
+  nameEn: Pistol+Vibroblade(우)
   requires:
     SC3: 1
     SC22: 1
@@ -246,8 +246,8 @@
     DD12: 1
 - id: S100+R6SS
   slot: rightArm
-  nameKo: S100 실드+R6SS SMG
-  nameEn: S100 Shield+R6SS SMG
+  nameKo: 실드+SMG
+  nameEn: Shield+SMG
   requires:
     DE6: 1
     DE7: 1

@@ -1,14 +1,14 @@
 - id: AMDS2
   slot: backpack
-  nameKo: AMDS2 "델피니움" 운반기
-  nameEn: AMDS2 "Delphinium" Carrier
+  nameKo: "델피니움" 운반기
+  nameEn: "Delphinium" Carrier
   requires:
     EB10: 3
     EB16: 1
 - id: CSC60
   slot: backpack
-  nameKo: CSC60 냉각기
-  nameEn: CSC60 Cooler
+  nameKo: 냉각기
+  nameEn: Cooler
   requires:
     DG2: 1
     DG3: 1
@@ -17,8 +17,8 @@
     DG7: 1
 - id: DBP
   slot: backpack
-  nameKo: DBP "터틀 셸" 방벽 랙
-  nameEn: DBP "Turtle Shell" Barricade Pack
+  nameKo: "터틀 셸" 방벽 랙
+  nameEn: "Turtle Shell" Barricade Pack
   requires:
     EH6: 1
     EH8: 1
@@ -26,8 +26,8 @@
     EH9: 1
 - id: EC50
   slot: backpack
-  nameKo: EC50 전자전 포드
-  nameEn: EC50 Electronic Warfare Pod
+  nameKo: 전자전 포드
+  nameEn: Electronic Warfare Pod
   requires:
     FC1: 1
     FC17: 1
@@ -35,8 +35,8 @@
     FC14: 1
 - id: EBS/X40
   slot: backpack
-  nameKo: EBS/X40 장갑 충전기
-  nameEn: EBS/X40 Armor Energy Charger
+  nameKo: 장갑 충전기
+  nameEn: Armor Energy Charger
   requires:
     DC2: 1
     DC10: 1
@@ -46,16 +46,16 @@
     DC4: 1
 - id: GSD2A
   slot: backpack
-  nameKo: GSD2A "폴커스" 지뢰 랙
-  nameEn: GSD2A "Pholcus" Mine Rack
+  nameKo: "폴커스" 지뢰 랙
+  nameEn: "Pholcus" Mine Rack
   requires:
     DC14: 1
     DC12: 1
     DC13: 1
 - id: JP1
   slot: backpack
-  nameKo: JP1 제트 팩
-  nameEn: JP1 Jetpack
+  nameKo: 제트 팩
+  nameEn: Jetpack
   requires:
     FD8: 1
     FD12: 1
@@ -65,8 +65,8 @@
     FD2: 1
 - id: MSH2
   slot: backpack
-  nameKo: MSH2 안정화 암
-  nameEn: MSH2 Stabilizer Arm
+  nameKo: 안정화 암
+  nameEn: Stabilizer Arm
   requires:
     EG3: 1
     EG7: 1
@@ -86,8 +86,8 @@
     EG9: 1
 - id: OCSP
   slot: backpack
-  nameKo: OCSP 과부하 팩
-  nameEn: OCSP Overloading Pack
+  nameKo: 과부하 팩
+  nameEn: Overloading Pack
   requires:
     FD1: 1
     FD4: 1
@@ -96,8 +96,8 @@
     FD5: 1
 - id: RKG70_B
   slot: backpack
-  nameKo: RKG70 탄약 팩
-  nameEn: RKG70 Ammunition Pack
+  nameKo: 탄약 팩
+  nameEn: Ammunition Pack
   requires:
     EB1: 1
     EB9: 1

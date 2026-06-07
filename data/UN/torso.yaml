@@ -1,7 +1,7 @@
 - id: TM31C
   slot: torso
-  nameKo: TM31C "그레이울프" 전투 코어
-  nameEn: TM31C "Gray Wolf" Battle Core
+  nameKo: "그레이울프" 전투 코어
+  nameEn: "Gray Wolf" Battle Core
   requires:
     SB1: 1
     SB2: 1
@@ -26,8 +26,8 @@
     DA12: 1
 - id: TM31R
   slot: torso
-  nameKo: TM31R "카라칼" 전투 코어
-  nameEn: TM31R "Caracal" Battle Core
+  nameKo: "카라칼" 전투 코어
+  nameEn: "Caracal" Battle Core
   requires:
     SB1: 1
     SB2: 1
@@ -51,8 +51,8 @@
     DA12: 1
 - id: TM35B
   slot: torso
-  nameKo: TM35B "바이슨" 돌격 코어
-  nameEn: TM35B "Bison" Assault Core
+  nameKo: "바이슨" 돌격 코어
+  nameEn: "Bison" Assault Core
   requires:
     FB9: 1
     FB10: 1
@@ -72,8 +72,8 @@
     FB3: 1
 - id: TM35N
   slot: torso
-  nameKo: TM35N "엘리게이터" 전자전 코어
-  nameEn: TM35N "Alligator" Electronic Warfare Core
+  nameKo: "엘리게이터" 전자전 코어
+  nameEn: "Alligator" Electronic Warfare Core
   requires:
     FB9: 1
     FB10: 1
@@ -93,8 +93,8 @@
     FB3: 1
 - id: TM35BT
   slot: torso
-  nameKo: TM35BT "타우러스" 실험 코어
-  nameEn: TM35BT "Taurus" Experimental Core
+  nameKo: "타우러스" 실험 코어
+  nameEn: "Taurus" Experimental Core
   requires:
     FB9: 1
     FB10: 1
@@ -114,8 +114,8 @@
     FB3: 1
 - id: TM39
   slot: torso
-  nameKo: TM39 "바이퍼" 저피탐 코어
-  nameEn: TM39 "Viper" Low Profile Core
+  nameKo: "바이퍼" 저피탐 코어
+  nameEn: "Viper" Low Profile Core
   requires:
     SB1: 1
     SB2: 1
@@ -139,8 +139,8 @@
     SB18: 1
 - id: TM641
   slot: torso
-  nameKo: TM641 "옥토퍼스" 은폐 코어
-  nameEn: TM641 "Octopus" Stealth Core
+  nameKo: "옥토퍼스" 은폐 코어
+  nameEn: "Octopus" Stealth Core
   requires:
     SB1: 1
     SB2: 1

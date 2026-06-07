@@ -32,8 +32,22 @@ async function fetchFaction(faction, baseUrl) {
     nameKo: faction.nameKo,
     nameEn: faction.nameEn,
     boxes,
-    sprues,
+    sprues: sprues.map((sprue) => withSprueDefaults(sprue, faction)),
     builds: buildFiles.flat().map(withBuildDisplayNames)
+  };
+}
+
+function withSprueDefaults(sprue, faction) {
+  return {
+    ...sprue,
+    nameKo: sprue.nameKo ?? `${faction.nameKo} 스프루 ${sprue.id}`,
+    nameEn: sprue.nameEn ?? `${faction.nameEn} Sprue ${sprue.id}`,
+    partRange: sprue.partRange
+      ? {
+          prefix: sprue.id,
+          ...sprue.partRange
+        }
+      : sprue.partRange
   };
 }
 

@@ -1,17 +1,11 @@
 - id: SB
-  nameKo: UN 스프루 SB
-  nameEn: UN Sprue SB
   material: plastic
   partRange:
-    prefix: SB
     from: 1
     to: 21
 - id: SC
-  nameKo: UN 스프루 SC
-  nameEn: UN Sprue SC
   material: plastic
   partRange:
-    prefix: SC
     from: 1
     to: 31
   extraParts:
@@ -21,11 +15,8 @@
     SC23: 2
     SC25: 2
 - id: SD
-  nameKo: UN 스프루 SD
-  nameEn: UN Sprue SD
   material: plastic
   partRange:
-    prefix: SD
     from: 1
     to: 28
   extraParts:
@@ -36,30 +27,21 @@
   equivalentParts:
     - [SD13, SD18]
 - id: DA
-  nameKo: UN 스프루 DA
-  nameEn: UN Sprue DA
   material: plastic
   partRange:
-    prefix: DA
     from: 1
     to: 25
   extraParts:
     DA11: 2
     DA12: 2
 - id: DB
-  nameKo: UN 스프루 DB
-  nameEn: UN Sprue DB
   material: plastic
   partRange:
-    prefix: DB
     from: 1
     to: 20
 - id: DC
-  nameKo: UN 스프루 DC
-  nameEn: UN Sprue DC
   material: plastic
   partRange:
-    prefix: DC
     from: 1
     to: 14
   extraParts:
@@ -69,22 +51,16 @@
     DC6: 3
     DC9: 3
 - id: DD
-  nameKo: UN 스프루 DD
-  nameEn: UN Sprue DD
   material: plastic
   partRange:
-    prefix: DD
     from: 1
     to: 18
   extraParts:
     DD3: 2
     DD4: 2
 - id: DE
-  nameKo: UN 스프루 DE
-  nameEn: UN Sprue DE
   material: plastic
   partRange:
-    prefix: DE
     from: 1
     to: 15
   extraParts:
@@ -93,11 +69,8 @@
     DE9: 2
     DE12: 2
 - id: DF
-  nameKo: UN 스프루 DF
-  nameEn: UN Sprue DF
   material: plastic
   partRange:
-    prefix: DF
     from: 1
     to: 17
   extraParts:
@@ -106,30 +79,21 @@
     DF7: 2
     DF8: 2
 - id: DG
-  nameKo: UN 스프루 DG
-  nameEn: UN Sprue DG
   material: plastic
   partRange:
-    prefix: DG
     from: 1
     to: 25
 - id: DH
-  nameKo: UN 스프루 DH
-  nameEn: UN Sprue DH
   material: plastic
   partRange:
-    prefix: DH
     from: 1
     to: 15
   extraParts:
     DH13: 4
     DH14: 4
 - id: EA
-  nameKo: UN 스프루 EA
-  nameEn: UN Sprue EA
   material: plastic
   partRange:
-    prefix: EA
     from: 1
     to: 17
   extraParts:
@@ -137,82 +101,56 @@
     EA16: 2
     EA17: 2
 - id: EB
-  nameKo: UN 스프루 EB
-  nameEn: UN Sprue EB
   material: plastic
   partRange:
-    prefix: EB
     from: 1
     to: 22
   extraParts:
     EB10: 3
 - id: EC
-  nameKo: UN 스프루 EC
-  nameEn: UN Sprue EC
   material: plastic
   partRange:
-    prefix: EC
     from: 1
     to: 16
 - id: ED
-  nameKo: UN 스프루 ED
-  nameEn: UN Sprue ED
   material: plastic
   partRange:
-    prefix: ED
     from: 1
     to: 21
 - id: EE
-  nameKo: UN 스프루 EE
-  nameEn: UN Sprue EE
   material: plastic
   partRange:
-    prefix: EE
     from: 1
     to: 24
   extraParts:
     EE9: 2
 - id: EF
-  nameKo: UN 스프루 EF
-  nameEn: UN Sprue EF
   material: plastic
   partRange:
-    prefix: EF
     from: 1
     to: 25
   equivalentParts:
     - [EF25, EG26]
 - id: EG
-  nameKo: UN 스프루 EG
-  nameEn: UN Sprue EG
   material: plastic
   partRange:
-    prefix: EG
     from: 1
     to: 26
   equivalentParts:
     - [EF25, EG26]
 - id: EH
-  nameKo: UN 스프루 EH
-  nameEn: UN Sprue EH
   material: plastic
   partRange:
-    prefix: EH
     from: 1
     to: 10
 - id: EI
-  nameKo: UN 스프루 EI
-  nameEn: UN Sprue EI
   material: plastic
   partIds: [EI1]
   extraParts:
     EI1: 6
 - id: FA
-  nameKo: UN 스프루 FA
-  nameEn: UN Sprue FA
   material: plastic
   partRange:
-    prefix: FA
     from: 1
     to: 22
   extraParts:
@@ -223,38 +161,26 @@
     FA15: 2
     FA16: 2
 - id: FB
-  nameKo: UN 스프루 FB
-  nameEn: UN Sprue FB
   material: plastic
   partRange:
-    prefix: FB
     from: 1
     to: 20
 - id: FC
-  nameKo: UN 스프루 FC
-  nameEn: UN Sprue FC
   material: plastic
   partRange:
-    prefix: FC
     from: 1
     to: 22
   extraParts:
     FC12: 2
     FC18: 2
 - id: FD
-  nameKo: UN 스프루 FD
-  nameEn: UN Sprue FD
   material: plastic
   partRange:
-    prefix: FD
     from: 1
     to: 15
 - id: FE
-  nameKo: UN 스프루 FE
-  nameEn: UN Sprue FE
   material: plastic
   partRange:
-    prefix: FE
     from: 1
     to: 19
   extraParts:
@@ -265,11 +191,8 @@
     FE14: 2
     FE15: 2
 - id: FF
-  nameKo: UN 스프루 FF
-  nameEn: UN Sprue FF
   material: plastic
   partRange:
-    prefix: FF
     from: 1
     to: 11
   extraParts:
@@ -288,4 +211,4 @@
   material: resin
   partIds: [Tau_B1, Tau_B2, Tau_B3, Tau_B4]
   extraParts:
-    B3: 2
+    Tau_B3: 2

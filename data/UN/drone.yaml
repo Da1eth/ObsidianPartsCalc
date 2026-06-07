@@ -1,7 +1,7 @@
 - id: ADK15D
   slot: drone
-  nameKo: ADK15D "포큐파인" CIWS 사양
-  nameEn: ADK15D "Porcupine" CIWS Type
+  nameKo: "포큐파인" CIWS 사양
+  nameEn: "Porcupine" CIWS Type
   requires:
     FF2: 4
     FF3: 4
@@ -38,8 +38,8 @@
     DH11: 1
 - id: ADK30F
   slot: drone
-  nameKo: ADK30F "타란튤라" 화력 사양
-  nameEn: ADK30F "Tarantula" Firepower Type
+  nameKo: "타란튤라" 화력 사양
+  nameEn: "Tarantula" Firepower Type
   requires:
     DH13: 4
     DH14: 4
@@ -51,8 +51,8 @@
     DD18: 1
 - id: ADK60EC
   slot: drone
-  nameKo: ADK60EC "레이븐" EC 사양
-  nameEn: ADK60EC "Raven" EC Type
+  nameKo: "레이븐" EC 사양
+  nameEn: "Raven" EC Type
   requires:
     DH2: 1
     DH3: 1
@@ -62,8 +62,8 @@
     DH5: 1
 - id: ADK60R
   slot: drone
-  nameKo: ADK60R "레이븐" 정찰 사양
-  nameEn: ADK60R "Raven" Scout Type
+  nameKo: "레이븐" 정찰 사양
+  nameEn: "Raven" Scout Type
   requires:
     DH2: 1
     DH3: 1
@@ -73,8 +73,8 @@
     DH1: 1
 - id: ADK60S
   slot: drone
-  nameKo: ADK60S "레이븐" 간섭 사양
-  nameEn: ADK60S "Raven" Interference Type
+  nameKo: "레이븐" 간섭 사양
+  nameEn: "Raven" Interference Type
   requires:
     DH2: 1
     DH3: 1
@@ -85,37 +85,37 @@
     DH10: 1
 - id: AMDS210_D
   slot: drone
-  nameKo: AMDS210 "델피니움" 자동 방어 시스템
-  nameEn: AMDS210 "Delphinium" Automatic Defense System
+  nameKo: "델피니움" 자동 방어 시스템
+  nameEn: "Delphinium" Automatic Defense System
   requires:
     EH2: 1
     EH5: 1
     EH10: 1
 - id: DBP_P
   slot: projectiles
-  nameKo: DBP "터틀 셸" 방벽
-  nameEn: DBP "Turtle Shell" Barricade
+  nameKo: "터틀 셸" 방벽
+  nameEn: "Turtle Shell" Barricade
   requires:
     EH1: 1
     EH3: 1
     EH4: 1
 - id: RKG70_P
   slot: projectiles
-  nameKo: RKG70 미사일 편대
-  nameEn: RKG70 Missile Group
+  nameKo: 미사일 편대
+  nameEn: Missile Group
   requires:
     EI1: 3
 - id: SGM2_U
   slot: projectiles
-  nameKo: SGM2 "폴커스" 자동 지뢰
-  nameEn: SGM2 "Pholcus" Automatic Mine
+  nameKo: "폴커스" 자동 지뢰
+  nameEn: "Pholcus" Automatic Mine
   requires:
     DC5: 1
     DC3: 1
 - id: SGM2_F
   slot: projectiles
-  nameKo: SGM2 "폴커스" 자동 지뢰(전개)
-  nameEn: SGM2 "Pholcus" Automatic Mine(Unfold)
+  nameKo: "폴커스" 자동 지뢰(전개)
+  nameEn: "Pholcus" Automatic Mine(Unfold)
   requires:
     DC6: 1
     DC9: 1
