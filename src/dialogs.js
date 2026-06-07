@@ -2,6 +2,7 @@ import {
   canConsumeBuildEntries,
   getBuildCompetitionGroups
 } from "./calculator.js";
+import { refreshSlidingText, slidingTextHtml } from "./sliding-text.js";
 import { iconSvg, partIconHtml } from "./svg.js";
 
 export function openAvailableBuildsDialog({
@@ -51,8 +52,8 @@ export function openAvailableBuildsDialog({
       <div class="surface-row plan-choice-option available-build-choice">
         ${partIconHtml(slot)}
         <span>
-          <strong>${choice.build.nameKo}</strong>
-          <small>${choice.build.nameEn}</small>
+          ${slidingTextHtml(choice.build.nameKo, "strong")}
+          ${slidingTextHtml(choice.build.nameEn, "small")}
         </span>
         <span
           class="stepper"
@@ -81,12 +82,13 @@ export function openAvailableBuildsDialog({
     choiceList.innerHTML = choiceGroups.map((group) => `
       <section class="build-plan-choice">
         <h3>${group.title}</h3>
-        <small>${group.detail}</small>
+        ${slidingTextHtml(group.detail, "small")}
         <div class="build-plan-options">
           ${group.indexes.map(choiceRowHtml).join("")}
         </div>
       </section>
     `).join("");
+    refreshSlidingText(choiceList);
   }
 
   choiceList.addEventListener("click", (event) => {
@@ -143,7 +145,7 @@ export function openBuildPlanDialog({ entries, indexes }) {
   function renderChoices() {
     choiceList.innerHTML = choices.map((choice) => `
       <section class="build-plan-choice">
-        <h3>${choice.box.nameKo} · ${choice.id}</h3>
+        ${slidingTextHtml(`${choice.box.nameKo} · ${choice.id}`, "h3")}
         <small>${selectedPlanChoiceTotal(choice.counts)} / ${choice.total}개 선택 가능</small>
         <div class="build-plan-options">
           ${choice.options.map((buildId, optionIndex) => {
@@ -152,8 +154,8 @@ export function openBuildPlanDialog({ entries, indexes }) {
             return `
               <div class="surface-row plan-choice-option">
                 <span>
-                  <strong>${build.nameKo}</strong>
-                  <small>${build.nameEn}</small>
+                  ${slidingTextHtml(build.nameKo, "strong")}
+                  ${slidingTextHtml(build.nameEn, "small")}
                 </span>
                 <span
                   class="stepper"
@@ -181,6 +183,7 @@ export function openBuildPlanDialog({ entries, indexes }) {
         </div>
       </section>
     `).join("");
+    refreshSlidingText(choiceList);
   }
 
   choiceList.addEventListener("click", (event) => {

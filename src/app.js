@@ -16,6 +16,7 @@ import {
   openBuildPlanDialog
 } from "./dialogs.js";
 import { setupSidebar } from "./sidebar.js";
+import { refreshSlidingText, slidingTextHtml } from "./sliding-text.js";
 import { iconSvg, partIconHtml } from "./svg.js";
 
 const BOX_COUNT_MAX = 10;
@@ -71,6 +72,8 @@ els.resetBuilds.addEventListener("click", () => {
 });
 
 els.addAvailableBuilds.addEventListener("click", addAvailableBuildsToPlan);
+window.addEventListener("resize", () => refreshSlidingText());
+document.fonts?.ready.then(() => refreshSlidingText());
 
 function makeIndexes(data) {
   return {
@@ -131,7 +134,7 @@ function renderBoxes() {
     row.className = "surface-row quantity-row";
     row.innerHTML = `
       <span>
-        <strong>${box.nameKo}</strong>
+        ${slidingTextHtml(box.nameKo, "strong")}
       </span>
       ${stepperHtml(factionState.boxes[box.id] ?? 0, "박스 수량")}
     `;
@@ -152,6 +155,7 @@ function renderBoxes() {
   `;
   actions.querySelector("button").addEventListener("click", addSelectedBoxPlans);
   els.boxList.append(actions);
+  refreshSlidingText(els.boxList);
 }
 
 function renderSlots() {
@@ -191,8 +195,8 @@ function renderBuildList() {
     row.innerHTML = `
       ${partIconHtml(slot)}
       <span${sources.length > 0 ? ' class="part-source-anchor"' : ""}>
-        <strong>${build.nameKo}</strong>
-        <small>${build.nameEn}</small>
+        ${slidingTextHtml(build.nameKo, "strong")}
+        ${slidingTextHtml(build.nameEn, "small")}
         ${sources.length > 0 ? partSourceTooltipHtml("이 부품 카드가 포함된 박스", sources) : ""}
       </span>
     `;
@@ -203,6 +207,7 @@ function renderBuildList() {
     els.buildList.append(row);
   });
   bindPartSourceTooltips(els.buildList);
+  refreshSlidingText(els.buildList);
 }
 
 function renderResults() {
@@ -244,8 +249,8 @@ function renderResults() {
     item.innerHTML = `
       ${partIconHtml(slot)}
       <span>
-        <strong>${build.nameKo}</strong>
-        <small>${build.nameEn} · ${max}개 조립 가능</small>
+        ${slidingTextHtml(build.nameKo, "strong")}
+        ${slidingTextHtml(`${build.nameEn} · ${max}개 조립 가능`, "small")}
       </span>
     `;
     item.addEventListener("click", () => {
@@ -254,6 +259,7 @@ function renderResults() {
     });
     els.availableBuilds.append(item);
   });
+  refreshSlidingText(els.availableBuilds);
 }
 
 async function addAvailableBuildsToPlan() {
@@ -365,7 +371,7 @@ function renderSelectedBuilds() {
       <div class="surface-row selected-item">
         <span class="selected-build-name">
           ${partIconHtml(slot, "part-icon-frame selected-slot-icon")}
-          <strong>${build.nameKo}</strong>
+          ${slidingTextHtml(build.nameKo, "strong")}
         </span>
         ${stepperHtml(count, `${build.nameKo} 수량`)}
         <button class="button-icon button-danger" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
@@ -406,6 +412,7 @@ function renderSelectedBuilds() {
     });
     els.selectedBuilds.append(item);
   });
+  refreshSlidingText(els.selectedBuilds);
 }
 
 function buildChoiceRowsHtml(build, selectedChoices, buildCount) {
@@ -429,7 +436,7 @@ function buildChoiceRowsHtml(build, selectedChoices, buildCount) {
                 data-max-count="${maxCount}"
                 aria-label="${build.nameKo} ${option.label} 수량 변경"
               >
-                <span class="choice-meta">선택 파츠 : ${option.label} × ${counts[optionIndex] ?? 0}</span>
+                ${slidingTextHtml(`선택 파츠 : ${option.label} × ${counts[optionIndex] ?? 0}`, "span", "choice-meta")}
               </button>
             </div>
           `).join("")}

@@ -21,7 +21,7 @@ function formatCompositeBuildName(id, name) {
 }
 
 function displayIdForPart(id) {
-  return id.replace(/_[A-Z]+$/, "");
+  return id.replace(/\/.+$/, "").replace(/_[A-Z]+$/, "");
 }
 
 function prefixMissingId(displayId, name) {
@@ -33,5 +33,8 @@ function prefixMissingId(displayId, name) {
 }
 
 function startsWithDisplayId(name, displayId) {
-  return name === displayId || name.startsWith(`${displayId} `);
+  if (name === displayId || name.startsWith(`${displayId} `)) return true;
+
+  const suffix = name.slice(displayId.length);
+  return name.startsWith(displayId) && /^[A-Z0-9]/.test(suffix);
 }
