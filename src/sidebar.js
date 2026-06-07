@@ -1,6 +1,6 @@
 import { formatPartList } from "./calculator.js";
 import { groupPartsBySprue } from "./catalogQueries.js";
-import { refreshSlidingText, slidingTextHtml } from "./slidingText.js";
+import { textHtml } from "./html.js";
 import { iconSvg } from "./svg.js";
 
 export function setupSidebar() {
@@ -52,7 +52,7 @@ export function renderSidebarBoxes({
     row.className = "surface-row quantity-row";
     row.innerHTML = `
       <span>
-        ${slidingTextHtml(box.nameKo, "strong")}
+        ${textHtml(box.nameKo, "strong")}
       </span>
       ${stepperHtml(count, "박스 수량")}
     `;
@@ -69,7 +69,6 @@ export function renderSidebarBoxes({
   `;
   actions.querySelector("button").addEventListener("click", onAddSelectedBoxPlans);
   target.append(actions);
-  refreshSlidingText(target);
 }
 
 export function renderSidebarLeftovers({ target, leftovers, partIndex, scopedCatalog }) {

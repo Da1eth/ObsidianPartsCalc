@@ -31,7 +31,6 @@ import {
   renderSummaryStats,
   setupSidebar
 } from "./sidebar.js";
-import { refreshSlidingText } from "./slidingText.js";
 import {
   renderAvailableBuilds,
   renderBuildList,
@@ -93,8 +92,6 @@ els.resetBuilds.addEventListener("click", () => {
 });
 
 els.addAvailableBuilds.addEventListener("click", addAvailableBuildsToPlan);
-window.addEventListener("resize", () => refreshSlidingText());
-document.fonts?.ready.then(() => refreshSlidingText());
 
 function render() {
   renderFactionTabs();

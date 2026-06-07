@@ -436,33 +436,16 @@ h2 {
 .surface-row > span:not(.stepper):not(.part-icon-frame),
 .build-plan-modal-header > span {
   min-width: 0;
-  width: 100%;
   overflow: hidden;
 }
 
-.part-source-anchor {
-  width: 100%;
-}
-
-.sliding-text {
+.text-ellipsis {
   display: block;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: clip;
-}
-
-.sliding-track {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--sliding-gap, 36px);
-  min-width: max-content;
-  margin-left: 0;
-}
-
-.sliding-track > span {
-  flex: 0 0 auto;
+  text-overflow: ellipsis;
 }
 
 .quantity-row {
@@ -573,7 +556,8 @@ h2 {
   min-width: 0;
 }
 
-.selected-build-name strong {
+.selected-build-name .text-ellipsis {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -1104,10 +1088,6 @@ b {
 }
 
 @media (max-width: 900px) {
-  .sliding-text.is-sliding .sliding-track {
-    animation: sliding-text var(--sliding-duration, 8s) steps(var(--sliding-steps, 80), end) infinite;
-  }
-
   .app-frame {
     padding: 0 16px;
   }
@@ -1160,23 +1140,6 @@ b {
 
   .sidebar-panel {
     --sidebar-width: min(420px, 86vw);
-  }
-}
-
-@keyframes sliding-text {
-  from {
-    margin-left: 0;
-  }
-
-  to {
-    margin-left: var(--sliding-travel, -24px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sliding-text.is-sliding .sliding-track {
-    animation: none;
-    margin-left: 0;
   }
 }
 

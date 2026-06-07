@@ -1,7 +1,7 @@
 import { formatPartList, getBuildRequirementChoices } from "./calculator.js";
 import { withPartSources } from "./catalogQueries.js";
+import { textHtml } from "./html.js";
 import { normalizedChoiceCounts } from "./planState.js";
-import { refreshSlidingText, slidingTextHtml } from "./slidingText.js";
 import { iconSvg, partIconHtml } from "./svg.js";
 
 export function renderSlots({ target, slots, activeSlotId, allSlotId, onSelectSlot }) {
@@ -35,8 +35,8 @@ export function renderBuildList({
     row.innerHTML = `
       ${partIconHtml(slot)}
       <span${sources.length > 0 ? ' class="part-source-anchor"' : ""}>
-        ${slidingTextHtml(build.nameKo, "strong")}
-        ${slidingTextHtml(build.nameEn, "small")}
+        ${textHtml(build.nameKo, "strong")}
+        ${textHtml(build.nameEn, "small")}
         ${sources.length > 0 ? partSourceTooltipHtml("이 부품 카드가 포함된 박스", sources) : ""}
       </span>
     `;
@@ -44,7 +44,6 @@ export function renderBuildList({
     target.append(row);
   });
   bindPartSourceTooltips(target);
-  refreshSlidingText(target);
 }
 
 export function renderSelectedBuilds({
@@ -72,7 +71,7 @@ export function renderSelectedBuilds({
       <div class="surface-row selected-item">
         <span class="selected-build-name">
           ${partIconHtml(slot, "part-icon-frame selected-slot-icon")}
-          ${slidingTextHtml(build.nameKo, "strong")}
+          ${textHtml(build.nameKo, "strong")}
         </span>
         ${stepperHtml(count, `${build.nameKo} 수량`)}
         <button class="button-icon button-danger" type="button" aria-label="${build.nameKo} 삭제">${iconSvg("x")}</button>
@@ -93,7 +92,6 @@ export function renderSelectedBuilds({
     });
     target.append(item);
   });
-  refreshSlidingText(target);
 }
 
 export function renderShortages({ target, panel, shortages, partIndex, partSources }) {
@@ -129,14 +127,13 @@ export function renderAvailableBuilds({
     item.innerHTML = `
       ${partIconHtml(slot)}
       <span>
-        ${slidingTextHtml(build.nameKo, "strong")}
-        ${slidingTextHtml(`${build.nameEn} · ${max}개 조립 가능`, "small")}
+        ${textHtml(build.nameKo, "strong")}
+        ${textHtml(`${build.nameEn} · ${max}개 조립 가능`, "small")}
       </span>
     `;
     item.addEventListener("click", () => onAddBuild(build.id, 1));
     target.append(item);
   });
-  refreshSlidingText(target);
 }
 
 function buildChoiceRowsHtml(build, selectedChoices, buildCount) {
@@ -160,7 +157,7 @@ function buildChoiceRowsHtml(build, selectedChoices, buildCount) {
                 data-max-count="${maxCount}"
                 aria-label="${build.nameKo} ${option.label} 수량 변경"
               >
-                ${slidingTextHtml(`선택 파츠 : ${option.label} × ${counts[optionIndex] ?? 0}`, "span", "choice-meta")}
+                ${textHtml(`선택 파츠 : ${option.label} × ${counts[optionIndex] ?? 0}`, "span", "choice-meta")}
               </button>
             </div>
           `).join("")}
