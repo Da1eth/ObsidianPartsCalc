@@ -1,1 +1,61 @@
-[]
+- id: RT-06
+  nameKo: "마이어" 전투 코어
+  nameEn: "Mire" Battle Core
+  requires:
+    SA4: 1
+    SA10: 2
+    SA11: 2
+    SA17: 2
+    SA5: 1
+    AA12: 1
+    AA13: 1
+    AB1: 1
+    AB2: 1
+    AB7: 1
+    AB12: 1
+    AB18: 1
+    AB8: 1
+    AB9: 1
+    SA16: 2
+- id: RTX-06SR
+  nameKo: "마이어 SR" 전투 코어
+  nameEn: "MireSR" Battle Core
+  requires:
+    SA4: 1
+    SA10: 2
+    SA11: 2
+    SA17: 2
+    SA5: 1
+    AA12: 1
+    AA13: 1
+    AB1: 1
+    AB2: 1
+    AB7: 1
+    AB12: 1
+    AB18: 1
+    AH1: 1
+    AH2: 1
+    SA16: 2
+- id: RT-07T
+  nameKo: "듄" 전술 코어
+  nameEn: "Dune" Tactical Core
+  requires:
+    SA4: 1
+    SA10: 2
+    SA11: 2
+    SA17: 2
+    SA5: 1
+    AD3: 1
+    AD4: 1
+    AD27: 2
+    AD11: 1
+    AD12: 1
+    AD21: 1
+    AD9: 1
+    AD32: 1
+    AD22: 1
+    AD23: 1
+    AD24: 1
+    AD5: 2
+    AD29: 2
+    SA16: 2

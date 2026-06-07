@@ -1,1 +1,94 @@
-[]
+- id: RL-06
+  nameKo: 표준 섀시
+  nameEn: Standard Chassis
+  requires:
+    SA3: 1
+    SA6: 1
+    SA7: 1
+    SA15: 1
+    AA8: 1
+    AA9: 1
+    SA2: 1
+    SA8: 1
+    AB10: 1
+    AB11: 1
+    SA1: 1
+    SA9: 1
+    AB14: 1
+    AB15: 1
+    AB5: 1
+    AB6: 1
+    AB3: 1
+    AB4: 1
+    AB19: 2
+    SA16: 4
+    AB13: 2
+    AB16: 2
+    AB20: 2
+- id: RL-08
+  nameKo: 장갑 섀시
+  nameEn: Armored Chassis
+  requires:
+    SA3: 1
+    SA6: 1
+    SA7: 1
+    SA15: 1
+    BA1: 1
+    BA8: 1
+    BA9: 1
+    BA6: 1
+    BA13: 2
+    BA16: 2
+    BA18: 1
+    BA20: 1
+    BA17: 1
+    BA19: 1
+    SA2: 1
+    SA8: 1
+    BA10: 1
+    BA22: 1
+    SA1: 1
+    SA9: 1
+    BA11: 1
+    BA21: 1
+    BA12: 2
+    SA16: 7
+    BA5: 2
+    BA7: 2
+    BA2: 2
+    BA3: 1
+    BA4: 1
+    BA14: 1
+    BA15: 1
+- id: RL-08C
+  nameKo: 장갑 섀시
+  nameEn: Armored Chassis
+  requires:
+    SA3: 1
+    SA6: 1
+    SA7: 1
+    SA15: 1
+    BA1: 1
+    BA8: 1
+    BA9: 1
+    BA6: 1
+    BA13: 2
+    BA16: 2
+    BA18: 1
+    BA20: 1
+    BA17: 1
+    BA19: 1
+    SA2: 1
+    SA8: 1
+    BA10: 1
+    BA22: 1
+    SA1: 1
+    SA9: 1
+    BA11: 1
+    BA21: 1
+    AH4: 2
+    SA16: 5
+    BA5: 2
+    AH12: 2
+    AH13: 2
+    BA7: 2

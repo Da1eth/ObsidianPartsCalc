@@ -1,1 +1,49 @@
-[]
+- id: AMS-190
+  nameKo: 능동 방호 시스템
+  nameEn: Active Defense System
+  requires:
+    AD7: 1
+    AD18: 1
+    AD33: 1
+    AD8: 1
+    AD10: 1
+- id: ECS-2
+  nameKo: 외장형 냉각기
+  nameEn: External Cooler
+  requires:
+    AD25: 1
+    AD16: 1
+    AD15: 1
+    AD17: 1
+    AD16: 1
+    AD19: 1
+    AD31: 1
+- id: ECS-3
+  nameKo: 외장형 냉각기
+  nameEn: External Cooler
+  requires:
+    AD25: 1
+    AD26: 1
+    AH14: 1
+    AH15: 1
+    AH17: 1
+- id: ML-34
+  nameKo: 사연장 미사일 랙
+  nameEn: Quad Missile Rack
+  requires:
+    AD1: 1
+    AD20: 1
+    AD6: 1
+    AD14: 1
+    AD28: 1
+    AD30: 1
+    AD2: 2
+    AD13: 1
+- id: SH-15
+  nameKo: 야전 수리 시스템
+  nameEn: Repair System
+  requires:
+    AA2: 1
+    AA3: 1
+    AA21: 1
+    AA22: 1

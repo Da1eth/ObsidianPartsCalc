@@ -1,1 +1,55 @@
-[]
+- id: AA
+  material: plastic
+  partCount: 22
+- id: AB
+  material: plastic
+  partCount: 20
+  extraParts:
+    AB13: 2
+    AB16: 2
+    AB19: 2
+    AB20: 2
+- id: AD
+  material: plastic
+  partCount: 33
+  extraParts:
+    AD2: 2
+    AD5: 2
+    AD27: 2
+    AD29: 2
+- id: AE
+  material: plastic
+  partCount: 22
+  extraParts:
+    AE15: 2
+    AE16: 2
+- id: AH
+  material: plastic
+  partCount: 19
+  extraParts:
+    AH4: 2
+    AH5: 2
+    AH12: 2
+    AH13: 2
+- id: BA
+  material: plastic
+  partCount: 22
+  extraParts:
+    BA2: 2
+    BA5: 2
+    BA7: 2
+    BA12: 2
+    BA13: 2
+    BA16: 2
+- id: SA
+  material: plastic
+  partCount: 18
+  extraParts:
+    SA10: 2
+    SA11: 2
+    SA12: 6
+    SA13: 6
+    SA14: 6
+    SA16: 8
+    SA17: 2
+    SA18: 6

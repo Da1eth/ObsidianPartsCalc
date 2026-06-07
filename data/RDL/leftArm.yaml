@@ -1,1 +1,47 @@
-[]
+- id: CC-7_L
+  nameKo: 클리버(좌)
+  nameEn: Cleaver(L)
+  requires:
+    AH8: 1
+    AH9: 1
+    AH10: 1
+    AH11: 1
+    SA14: 1
+    SA18: 1
+    SA12: 1
+    SA13: 1
+    AH6: [1, AH6, AH19+AE17, AH19+AE12+AE20]
+- id: R-20_L
+  nameKo: 견착형 레일건(좌)
+  nameEn: Shoulder Mounted Railgun(L)
+  requires:
+    AE13: 1
+    AE21: 1
+    SA14: 1
+    SA18: 1
+    AE5: 1
+    AE6: 1
+    AE9: 1
+    SA12: 1
+    SA13: 1
+    AE1: 1
+    AE3: 1
+    AE16: 1
+    AE15: 1
+    AE18: [1, AE18, AE11+AE19]
+- id: TYPE 55+CC-6
+  nameKo: 실드+클리버
+  nameEn: Shield+Cleaver
+  requires:
+    AA16: 1
+    AA17: 1
+    AB17: 1
+    SA14: 1
+    SA18: 1
+    AA10: 1
+    AA11: 1
+    AA20: 1
+    SA12: 1
+    SA13: 1
+    AA1: 1
+    AA4: 1

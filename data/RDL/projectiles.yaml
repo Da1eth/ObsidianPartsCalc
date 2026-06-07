@@ -1,1 +1,5 @@
-[]
+- id: MC-3
+  nameKo: "레이저" 미사일
+  nameEn: "Razor" Missile
+  requires:
+    AH5: 1

@@ -1,1 +1,26 @@
-[]
+- id: RDL-Raid
+  nameKo: 레이드 스타터 세트
+  nameEn: Raid Starter Set
+  sprues:
+    AA: 1
+    AB: 1
+    AD: 1
+    AE: 1
+    AH: 1
+    BA: 1
+    SA: 2
+  buildPlan:
+    SH-15: 1
+    AMS-190: 1
+    ML-34: 1
+    ECS: [1, ECS-3, ECS-2]
+    RT-06: [1, RTX-06SR, RT-06]
+    RT-07T: 1
+    RL-06: 1
+    RL-08: [1, RL-08C, RL-08]
+    PC-6: [1, PC-6, AC-32]
+    CC-7_L: 1
+    R-20_L: 1
+    R-20_R: 1
+    TYPE 55+CC-6: 1
+    MC-3: 2

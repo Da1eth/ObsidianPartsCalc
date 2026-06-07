@@ -1,1 +1,49 @@
-[]
+- id: AC-32
+  nameKo: 자동 라이플
+  nameEn: Automatic Rifle
+  requires:
+    AA7: 1
+    AA18: 1
+    AA19: 1
+    AA5: 1
+    AA6: 1
+    SA12: 1
+    SA13: 1
+    SA14: 1
+    SA18: 1
+    AA14: 1
+    AA15: 1
+- id: PC-6
+  nameKo: 샷건
+  nameEn: Shotgun
+  requires:
+    AH3: 1
+    AH16: 1
+    AH18: 1
+    AA5: 1
+    AA6: 1
+    SA12: 1
+    SA13: 1
+    SA14: 1
+    SA18: 1
+    AA14: 1
+    AA15: 1
+    AH7: 1
+- id: R-20_R
+  nameKo: 견착형 레일건(우)
+  nameEn: Shoulder Mounted Railgun(R)
+  requires:
+    AE14: 1
+    AE22: 1
+    SA14: 1
+    SA18: 1
+    AE7: 1
+    AE8: 1
+    AE10: 1
+    SA12: 1
+    SA13: 1
+    AE2: 1
+    AE4: 1
+    AE16: 1
+    AE15: 1
+    AE17: [1, AE17, AE12+AE20]
