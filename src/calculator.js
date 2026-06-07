@@ -1,5 +1,3 @@
-import { normalizeBuildPlan } from "./build-plan.js";
-
 const partIdCollator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base"
@@ -66,39 +64,6 @@ export function calculateRequiredParts(catalog, selectedBuilds, inventory = {}, 
   });
 
   return required;
-}
-
-export function calculateBuildPlanShortages(catalog, selectedBoxes) {
-  const remaining = calculateInventory(catalog, selectedBoxes);
-  const shortages = {};
-  const buildsById = Object.fromEntries(catalog.builds.map((build) => [build.id, build]));
-  const equivalents = makeEquivalentIndex(catalog);
-
-  catalog.boxes.forEach((box) => {
-    const boxCount = selectedBoxes[box.id] ?? 0;
-    if (boxCount <= 0 || !box.buildPlan) return;
-
-    for (let boxIndex = 0; boxIndex < boxCount; boxIndex += 1) {
-      const plan = normalizeBuildPlan(box.buildPlan);
-
-      plan.always.forEach((entry) => {
-        const build = buildsById[entry.build];
-        if (!build) return;
-        for (let count = 0; count < entry.count; count += 1) {
-          consumeBuildForPlan(build, remaining, shortages, equivalents);
-        }
-      });
-
-      plan.choices.forEach((choice) => {
-        for (let count = 0; count < choice.pick; count += 1) {
-          const build = choosePlanOption(choice.options, buildsById, remaining, equivalents);
-          if (build) consumeBuildForPlan(build, remaining, shortages, equivalents);
-        }
-      });
-    }
-  });
-
-  return shortages;
 }
 
 export function calculateLeftovers(inventory, required) {
@@ -497,67 +462,6 @@ function consumeOneEquivalentPart(partId, inventory, equivalents) {
 function chooseConsumableOptionPart(option, inventory, equivalents) {
   return uniqueParts(option.parts.flatMap((partId) => equivalentParts(partId, equivalents)))
     .find((partId) => (inventory[partId] ?? 0) >= option.count);
-}
-
-function consumeBuildForPlan(build, remaining, shortages, equivalents) {
-  const requirements = normalizeBuildRequirements(build);
-  consumePartsForPlan(requirements.always, remaining, shortages, equivalents);
-  consumeRequirementChoicesForPlan(requirements.choices, remaining, shortages, equivalents);
-  consumeAlternativePartsForPlan(build.alternativeRequires ?? [], remaining, shortages, equivalents);
-
-  (build.optionRequires ?? []).forEach((option) => {
-    for (let count = 0; count < option.count; count += 1) {
-      const partId = chooseConsumableOptionPart({ ...option, count: 1 }, remaining, equivalents)
-        ?? option.parts[0];
-      consumePartForPlan(partId, remaining, shortages, equivalents);
-    }
-  });
-}
-
-function consumeRequirementChoicesForPlan(choices, remaining, shortages, equivalents) {
-  choices.forEach((choice) => {
-    for (let count = 0; count < choice.pick; count += 1) {
-      const option = chooseRequirementOption(choice.options, remaining, {}, equivalents);
-      if (!option) return;
-      consumePartsForPlan(option.parts, remaining, shortages, equivalents);
-    }
-  });
-}
-
-function consumeAlternativePartsForPlan(alternativeRequires, remaining, shortages, equivalents) {
-  alternativeRequires.forEach((group) => {
-    const option = chooseRequirementOption(normalizeRequirementOptions(group.options), remaining, {}, equivalents);
-    if (!option) return;
-    consumePartsForPlan(option.parts, remaining, shortages, equivalents);
-  });
-}
-
-function consumePartsForPlan(parts, remaining, shortages, equivalents) {
-  Object.entries(parts).forEach(([partId, count]) => {
-    for (let index = 0; index < count; index += 1) {
-      consumePartForPlan(partId, remaining, shortages, equivalents);
-    }
-  });
-}
-
-function consumePartForPlan(partId, remaining, shortages, equivalents) {
-  const consumed = consumeOneEquivalentPart(partId, remaining, equivalents);
-  if (consumed) return;
-  shortages[partId] = (shortages[partId] ?? 0) + 1;
-}
-
-function choosePlanOption(options, buildsById, remaining, equivalents) {
-  return options
-    .map((buildId) => buildsById[buildId])
-    .filter(Boolean)
-    .sort((a, b) => countMissingParts(a, remaining, equivalents) - countMissingParts(b, remaining, equivalents))[0];
-}
-
-function countMissingParts(build, inventory, equivalents) {
-  const remaining = { ...inventory };
-  const shortages = {};
-  consumeBuildForPlan(build, remaining, shortages, equivalents);
-  return Object.values(shortages).reduce((sum, count) => sum + count, 0);
 }
 
 function chooseRequirementOption(options = [], inventory, required, equivalents) {

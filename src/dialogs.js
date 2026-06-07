@@ -2,7 +2,7 @@ import {
   canConsumeBuildEntries,
   getBuildCompetitionGroups
 } from "./calculator.js";
-import { refreshSlidingText, slidingTextHtml } from "./sliding-text.js";
+import { refreshSlidingText, slidingTextHtml } from "./slidingText.js";
 import { iconSvg, partIconHtml } from "./svg.js";
 
 export function openAvailableBuildsDialog({
