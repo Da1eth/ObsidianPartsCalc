@@ -1181,12 +1181,14 @@ b {
 }
 
 @media (max-width: 640px) {
-  .sidebar-backdrop {
-    background: rgba(29, 37, 39, 0.28);
+  body {
+    font-size: 0.9rem;
   }
-}
 
-@media (max-width: 520px) {
+  small {
+    font-size: 0.6rem;
+  }
+  
   .slot-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
