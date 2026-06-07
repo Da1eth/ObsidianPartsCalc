@@ -173,7 +173,7 @@ function renderSlots() {
 
 function renderBuildList() {
   const query = state.query;
-  const factionState = currentState();
+  const buildBoxSources = makeBoxBuildSources(currentCatalog());
   const builds = currentFaction().builds.filter((build) => {
     const slotMatch = state.slot === ALL_SLOT_ID || build.slot === state.slot;
     const text = `${build.id} ${build.nameKo} ${build.nameEn} ${Object.keys(build.requires).join(" ")}`.toLowerCase();
@@ -184,14 +184,16 @@ function renderBuildList() {
   builds.forEach((build) => {
     const slot = indexes.slots[build.slot];
     const row = document.createElement("button");
+    const sources = buildBoxSources[build.id] ?? [];
     row.className = "surface-row action-row build-row";
     row.type = "button";
     row.setAttribute("aria-label", `${build.nameKo} 조립 계획에 추가`);
     row.innerHTML = `
       ${partIconHtml(slot)}
-      <span>
+      <span${sources.length > 0 ? ' class="part-source-anchor"' : ""}>
         <strong>${build.nameKo}</strong>
         <small>${build.nameEn}</small>
+        ${sources.length > 0 ? partSourceTooltipHtml("이 부품 카드가 포함된 박스", sources) : ""}
       </span>
     `;
     row.addEventListener("click", () => {
@@ -200,6 +202,7 @@ function renderBuildList() {
     });
     els.buildList.append(row);
   });
+  bindPartSourceTooltips(els.buildList);
 }
 
 function renderResults() {
@@ -571,6 +574,42 @@ function makeBoxPartSources(scopedCatalog) {
   return sources;
 }
 
+function makeBoxBuildSources(scopedCatalog) {
+  const sources = {};
+
+  scopedCatalog.boxes.forEach((box) => {
+    if (!box.buildPlan) return;
+
+    const plan = normalizeBuildPlan(box.buildPlan);
+    const buildCounts = {};
+
+    plan.always.forEach((entry) => {
+      buildCounts[entry.build] = (buildCounts[entry.build] ?? 0) + entry.count;
+    });
+
+    plan.choices.forEach((choice) => {
+      choice.options.forEach((buildId) => {
+        buildCounts[buildId] = (buildCounts[buildId] ?? 0) + choice.pick;
+      });
+    });
+
+    Object.entries(buildCounts).forEach(([buildId, count]) => {
+      sources[buildId] ??= [];
+      sources[buildId].push({
+        boxId: box.id,
+        nameKo: box.nameKo,
+        count
+      });
+    });
+  });
+
+  Object.values(sources).forEach((entries) => {
+    entries.sort((a, b) => b.count - a.count || a.nameKo.localeCompare(b.nameKo));
+  });
+
+  return sources;
+}
+
 function withPartSources(rows, partSources) {
   return rows.map((row) => ({
     ...row,
@@ -627,15 +666,21 @@ function partLabelHtml(row, sources) {
   return `
     <span class="part-source-anchor" tabindex="0">
       <code>${row.id}</code>
-      <span class="part-source-tooltip" role="tooltip">
-        <strong>이 부품이 포함된 박스</strong>
-        ${sources.map((source) => `
-          <span>
-            <em>${source.nameKo}</em>
-            <b>${source.count}개</b>
-          </span>
-        `).join("")}
-      </span>
+      ${partSourceTooltipHtml("이 파츠가 포함된 박스", sources)}
+    </span>
+  `;
+}
+
+function partSourceTooltipHtml(title, sources) {
+  return `
+    <span class="part-source-tooltip" role="tooltip">
+      <strong>${title}</strong>
+      ${sources.map((source) => `
+        <span>
+          <em>${source.nameKo}</em>
+          <b>${source.count}개</b>
+        </span>
+      `).join("")}
     </span>
   `;
 }
