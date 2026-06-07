@@ -1,6 +1,6 @@
 # Obsidian Protocol Parts Calculator
 
-https://da1eth.github.io/ObsidianPartsCalc/
+https://da1eth.github.io/YoyuPartsCalc/
 
 옵시디언 프로토콜 메카 조립 후 남는 파츠를 확인하는 계산기입니다.
 
@@ -17,4 +17,4 @@ https://da1eth.github.io/ObsidianPartsCalc/
 
 ## 주의
 
-이 계산기는 개인이 편의를 위해 제작한 것으로, QUETI TECTONICS 및 라쿤펀치와 관련이 없고, 상업적 용도로 사용되지 않습니다.
+이 계산기는 개인이 편의를 위해 제작한 것으로, QUETI TECTONICS 및 라쿤펀치와 관련이 없고, 상업적 용도로 사용되지 않으며, 요유는 메스가키입니다.
