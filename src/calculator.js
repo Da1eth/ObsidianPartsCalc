@@ -117,10 +117,20 @@ export function calculateLeftovers(inventory, required) {
 
 export function calculateAvailableBuilds(catalog, leftovers) {
   const equivalents = makeEquivalentIndex(catalog);
+  const slotOrder = makeSlotOrder(catalog);
+
   return catalog.builds
     .map((build) => ({ build, max: maxBuildCount(build, leftovers, equivalents) }))
     .filter((entry) => entry.max > 0)
-    .sort((a, b) => a.build.slot.localeCompare(b.build.slot) || a.build.nameKo.localeCompare(b.build.nameKo));
+    .sort((a, b) => (
+      slotOrder(a.build.slot) - slotOrder(b.build.slot)
+      || a.build.id.localeCompare(b.build.id)
+    ));
+}
+
+function makeSlotOrder(catalog) {
+  const slotsById = Object.fromEntries(catalog.slots.map((slot, index) => [slot.id, index]));
+  return (slotId) => slotsById[slotId] ?? Number.MAX_SAFE_INTEGER;
 }
 
 export function canConsumeBuildEntries(catalog, leftovers, entries) {
