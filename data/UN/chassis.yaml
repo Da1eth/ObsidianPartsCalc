@@ -1,3 +1,38 @@
+- id: LM210S
+  slot: chassis
+  nameKo: 은폐 섀시
+  nameEn: Stealth Chassis
+  requires:
+    SB19: 1
+    SB12: 1
+    SB20: 1
+    SB13: 1
+    SB14: 1
+    SB21: 1
+    EC11: 1
+    EC12: 1
+    EC9: 1
+    EC10: 1
+    EC6: 1
+    EC7: 1
+    EA14: 1
+    EA16: 1
+    EA17: 1
+    EC5: 1
+    EC8: 1
+    EA15: 1
+    EA16: 1
+    EA17: 1
+    EC13: 1
+    EC14: 1
+    EC15: 1
+    EC16: 1
+    EC2: 1
+    EC4: 1
+    EC3: 1
+    EC1: 1
+    EA3: 1
+    EA4: 1
 - id: LM213B
   slot: chassis
   nameKo: 격투 섀시

@@ -1,4 +1,4 @@
-- id: G6_G
+- id: G6+G
   slot: leftArm
   nameKo: G6 샷건+유탄 포드
   nameEn: G6 Shotgun+Granade Pod
@@ -41,6 +41,74 @@
     FC15: 1
     FC22: 1
     FC21: 1
+- id: K9+M14BO
+  slot: leftArm
+  nameKo: K9 네일 건+M14BO "와키자시"
+  nameEn: K9 Nail Gun+M14BO "Wakizashi"
+  requires:
+    EA6: 1
+    EA9: 1
+    EA2: 1
+    EE10: 1
+    EE14: 1
+    EE12: [1, EE12+EE2, EE1]
+    EA10: 1
+    EA12: 1
+    EE15: 1
+    EE16: 1
+    EE17: 1
+    EE3: 1
+    EE24: 1
+    EE20: 1
+    EE21: 1
+- id: M3S_L
+  slot: leftArm
+  nameKo: M3S 초진동 블레이드(좌)
+  nameEn: M3S Vibroblade(L)
+  requires:
+    SC14: 1
+    SC15: 1
+    SC23: 1
+    SD19: 1
+    SD23: 1
+    DD7: 1
+    DD3: 1
+    DD5: 1
+    DD13: 1
+    SD27: 1
+- id: M4_L+G
+  slot: leftArm
+  nameKo: M4 초진동 블레이드(좌)+유탄 포드
+  nameEn: M4 Vibroblade(L)+Grenade Pod
+  requires:
+    SC8: 1
+    SC9: 1
+    SC23: 1
+    SC31: 1
+    SD19: 1
+    SD23: 1
+    DD7: 1
+    DD1: 1
+    DD5: 1
+    DD13: 1
+    SD27: 1
+- id: MSH1
+  slot: leftArm
+  nameKo: MSH1 보조 암(좌)
+  nameEn: MSH1 Assistance Arm(L)
+  requires:
+    SD4: 1
+    SD6: 1
+    EF16: 1
+    EF18: 1
+    EF11: 1
+    EG19: 1
+    EG20: 1
+    EF1: 1
+    EF2: 1
+    EF8: 1
+    EG17: 1
+    EG18: 1
 - id: MX82
   slot: leftArm
   nameKo: MX82 다기능 채찍
@@ -79,6 +147,24 @@
     DD5: 1
     DD4: 1
     DD13: 1
+- id: RKG70
+  slot: leftArm
+  nameKo: RKG70 미사일 포드
+  nameEn: RKG70 Missile Pod
+  requires:
+    SD1: 1
+    SD7: 1
+    SD9: 1
+    SD19: 1
+    SD20: 1
+    ED16: 1
+    ED17: 1
+    ED20: 1
+    ED21: 1
+    ED10: 1
+    ED12: 1
+    ED6: 1
+    SD13: 1
 - id: S9+M5
   slot: leftArm
   nameKo: S9 "메테오" 실드+파일 벙커
@@ -117,7 +203,7 @@
     SD11: 1
     SD12: 1
     DE4: [1, DE4, DE10]
-- id: S100_G
+- id: S100+G
   slot: leftArm
   nameKo: S100 실드+유탄 포드
   nameEn: S100 Shield+Grenade Pod

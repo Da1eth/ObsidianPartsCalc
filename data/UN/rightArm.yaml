@@ -38,6 +38,64 @@
     SD17: 1
     SD21: 1
     SD22: 1
+- id: IGX350
+  slot: rightArm
+  nameKo: IGX920 헤비 이온 건
+  nameEn: IGX920 Heavy Ion Gun
+  requires:
+    EF25: [1, EF24+EF25+EF3, EG25+EG26+EF9]
+    EF7: 1
+    EF21: 1
+    EF22: 1
+    EF4: 1
+    EF5: 1
+    EF6: 1
+    EF13: 1
+    EF14: 1
+    EF15: 1
+    EF20: 1
+    EF23: 1
+    SD3: 1
+    SD5: 1
+    EF12: 1
+    EF17: 1
+    EF19: 1
+    EF10: 1
+    EG15: 1
+    EG16: 1
+    EG13: 1
+    EG14: 1
+- id: M3S_R
+  slot: rightArm
+  nameKo: M3S 초진동 블레이드(우)
+  nameEn: M3S Vibroblade(R)
+  requires:
+    SC18: 1
+    SC19: 1
+    SC25: 1
+    SD21: 1
+    SD24: 1
+    DD8: 1
+    DD3: 1
+    DD6: 1
+    DD12: 1
+    SD28: 1
+- id: M4_R+G
+  slot: rightArm
+  nameKo: M4 초진동 블레이드(우)+유탄 포드
+  nameEn: M4 Vibroblade(R)+Grenade Pod
+  requires:
+    SC10: 1
+    SC11: 1
+    SC25: 1
+    SC31: 1
+    SD21: 1
+    SD24: 1
+    DD8: 1
+    DD2: 1
+    DD6: 1
+    DD12: 1
+    SD28: 1
 - id: M15BO
   slot: rightArm
   nameKo: M15BO "카타나"
@@ -73,6 +131,25 @@
     DB18: 1
     DB6: 1
     SD18: 1
+- id: R6SD
+  slot: rightArm
+  nameKo: R6SD SMG
+  nameEn: R6SD SMG
+  requires:
+    EA1: 1
+    EA7: 1
+    EA8: 1
+    EA12: 1
+    EA13: 1
+    EE22: 1
+    EE23: 1
+    EE13: 1
+    EE6: 1
+    EE18: 1
+    EE19: 1
+    EE7: 1
+    EE8: 1
+    EE9: 2
 - id: R7
   slot: rightArm
   nameKo: 자동 라이플
@@ -96,16 +173,34 @@
   requires:
     SD14: 1
     SD16: 1
-    B3: 2
-    B4: 1
+    Tau_B3: 2
+    Tau_B4: 1
     SC19: 1
     SC18: 1
-    B1: 1
-    B2: 1
+    Tau_B1: 1
+    Tau_B2: 1
     SD21: 1
     SD22: 1
     SD11: 1
     SD12: 1
+- id: R9B
+  slot: rightArm
+  nameKo: R9B 전술 라이플
+  nameEn: R9B Tactical Rifle
+  requires:
+    ED18: 1
+    ED19: 1
+    ED13: 1
+    ED3: 1
+    ED7: 1
+    ED11: 1
+    ED1: 1
+    ED8: 1
+    ED14: 1
+    ED15: 1
+    ED9: 1
+    ED5: 1
+    ED4: 1
 - id: R33
   slot: rightArm
   nameKo: R33 저격 라이플

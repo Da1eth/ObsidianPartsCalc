@@ -21,7 +21,7 @@
     TM31R: 2
     LM231: 4
     S9+M5: 3
-    S100: [2, S100_G, S100]
+    S100: [2, S100+G, S100]
     RH21+M3_R: 2
     R7: 2
     R33: 2
@@ -56,11 +56,52 @@
     MX82: 2
     K7+S10: 1
     S100: 1
-    G6_G: 2
+    G6+G: 2
     M15BO: 2
     G6+M5: 2
     IGX350: 1
     ADK15: [2, ADK15D, ADK15/MAS]
+- id: UN-Scalpel
+  nameKo: UN 스칼펠 박스
+  nameEn: UN Scalpel Box
+  sprues:
+    SB: 4
+    SC: 1
+    SD: 2
+    EA: 2
+    EB: 2
+    EC: 2
+    ED: 2
+    EE: 1
+    EF: 1
+    EG: 1
+    EH: 1
+    DD: 1
+    DH: 2
+    EI: 1
+  buildPlan:
+    RKG70: 2
+    AMDS210: 2
+    DPB: 1
+    MSH2: 1
+    TM39: [2, TM39, TM641]
+    LM210S: 2
+    RKG70: 2
+    M3S_L: 1
+    M4+G_L: 1
+    MSH1: 1
+    K91+M14BO: 1
+    R9B: 2
+    M3S_R: 1
+    M4+G_R: 1
+    IGX920: 1
+    R6SD: 1
+    AMDS210_D: 1
+    ADK30: [2, ADK30C, ADK30F]
+    ADK60: [2, ADK60R, ADK60EC, ADK60S]
+    RKG70_P: 2
+    DPB_P: 1
+    M9: 1
 - id: UN-Taurus
   nameKo: UN 타우르스 단품 킷
   nameEn: UN Taurus Box
@@ -79,6 +120,6 @@
     CSC60: 1
     TM35: [1, TM35BT, TM35N]
     LM231: 1
-    S100: [1, S100_G, S100]
+    S100: [1, S100+G, S100]
     RH21+M3_L: 1
     R7: [1, R7, R7MG]

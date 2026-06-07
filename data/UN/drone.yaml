@@ -83,6 +83,28 @@
     DH8: 1
     DH15: 1
     DH10: 1
+- id: AMDS210_D
+  slot: drone
+  nameKo: AMDS210 "델피니움" 자동 방어 시스템
+  nameEn: AMDS210 "Delphinium" Automatic Defense System
+  requires:
+    EH2: 1
+    EH5: 1
+    EH10: 1
+- id: DBP_P
+  slot: projectiles
+  nameKo: DBP "터틀 셸" 방벽
+  nameEn: DBP "Turtle Shell" Barricade
+  requires:
+    EH1: 1
+    EH3: 1
+    EH4: 1
+- id: RKG70_P
+  slot: projectiles
+  nameKo: RKG70 미사일 편대
+  nameEn: RKG70 Missile Group
+  requires:
+    EI1: 3
 - id: SGM2_U
   slot: projectiles
   nameKo: SGM2 "폴커스" 자동 지뢰

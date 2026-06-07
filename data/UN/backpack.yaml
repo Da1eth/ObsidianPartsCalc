@@ -1,3 +1,10 @@
+- id: AMDS2
+  slot: backpack
+  nameKo: AMDS2 "델피니움" 운반기
+  nameEn: AMDS2 "Delphinium" Carrier
+  requires:
+    EB10: 3
+    EB16: 1
 - id: CSC60
   slot: backpack
   nameKo: CSC60 냉각기
@@ -8,6 +15,15 @@
     DG13: 1
     DG14: 1
     DG7: 1
+- id: DBP
+  slot: backpack
+  nameKo: DBP "터틀 셸" 방벽 랙
+  nameEn: DBP "Turtle Shell" Barricade Pack
+  requires:
+    EH6: 1
+    EH8: 1
+    EH7: 1
+    EH9: 1
 - id: EC50
   slot: backpack
   nameKo: EC50 전자전 포드
@@ -47,6 +63,27 @@
     FD13: 1
     FD3: 1
     FD2: 1
+- id: MSH2
+  slot: backpack
+  nameKo: MSH2 안정화 암
+  nameEn: MSH2 Stabilizer Arm
+  requires:
+    EG3: 1
+    EG7: 1
+    EG22: 1
+    EG23: 1
+    EG21: 1
+    EG1: 1
+    EG5: 1
+    EG24: 1
+    EG2: 1
+    EG6: 1
+    EG4: 1
+    EG8: 1
+    EG10: 1
+    EG11: 1
+    EG12: 1
+    EG9: 1
 - id: OCSP
   slot: backpack
   nameKo: OCSP 과부하 팩
@@ -57,3 +94,14 @@
     FD6: 1
     FD7: 1
     FD5: 1
+- id: RKG70_B
+  slot: backpack
+  nameKo: RKG70 탄약 팩
+  nameEn: RKG70 Ammunition Pack
+  requires:
+    EB1: 1
+    EB9: 1
+    EB6: 1
+    EB8: 1
+    EB21: 1
+    EB14: 1
