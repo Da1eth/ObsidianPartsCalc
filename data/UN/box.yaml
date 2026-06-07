@@ -81,28 +81,28 @@
     DH: 2
     EI: 1
   buildPlan:
-    RKG70: 2
+    RKG70_B: 2
     AMDS210: 2
-    DPB: 1
+    DBP: 1
     MSH2: 1
     TM39: 2
     TM641: 2
     LM210S: 2
     RKG70: 2
     M3S_L: 1
-    M4+G_L: 1
+    M4_L+G: 1
     MSH1: 1
-    K91+M14BO: 1
+    K9+M14BO: 1
     R9B: 2
     M3S_R: 1
-    M4+G_R: 1
+    M4_R+G: 1
     IGX920: 1
     R6SD: 1
     AMDS210_D: 1
     ADK30: [2, ADK30C, ADK30F]
     ADK60: [2, ADK60R, ADK60EC, ADK60S]
     RKG70_P: 2
-    DPB_P: 1
+    DBP_P: 1
     M9: 1
 - id: UN-Taurus
   nameKo: UN 타우르스 단품 킷
