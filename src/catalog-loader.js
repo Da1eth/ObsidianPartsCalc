@@ -1,10 +1,34 @@
 import { parseYaml } from "./yaml.js";
-import { catalogConfig } from "./catalog-config.js";
 import { withBuildDisplayNames } from "./display-name.js";
+
+const catalogConfig = {
+  schemaVersion: 1,
+  slots: [
+    { id: "torso", nameKo: "토르소" },
+    { id: "chassis", nameKo: "섀시" },
+    { id: "leftArm", nameKo: "왼팔" },
+    { id: "rightArm", nameKo: "오른팔" },
+    { id: "backpack", nameKo: "백팩" },
+    { id: "drone", nameKo: "드론" },
+    { id: "projectiles", nameKo: "발사체" }
+  ],
+  parts: [],
+  factions: ["UN", "RDL", "GOF", "Other"],
+  factionFiles: {
+    boxes: "box.yaml",
+    sprues: "sprue.yaml",
+    torso: "torso.yaml",
+    chassis: "chassis.yaml",
+    rightArm: "rightArm.yaml",
+    leftArm: "leftArm.yaml",
+    backpack: "backpack.yaml",
+    drone: "drone.yaml"
+  }
+};
 
 export async function loadCatalog() {
   const dataRoot = new URL("../data/", import.meta.url);
-  const factions = await Promise.all(catalogConfig.factions.map((faction) => fetchFaction(faction, dataRoot)));
+  const factions = await Promise.all(catalogConfig.factions.map((factionId) => fetchFaction(factionId, dataRoot)));
 
   return {
     schemaVersion: catalogConfig.schemaVersion,
@@ -17,9 +41,9 @@ export async function loadCatalog() {
   };
 }
 
-async function fetchFaction(faction, baseUrl) {
+async function fetchFaction(factionId, baseUrl) {
   const files = catalogConfig.factionFiles;
-  const factionUrl = new URL(`${faction.folder}/`, baseUrl);
+  const factionUrl = new URL(`${factionId}/`, baseUrl);
   const buildFileKeys = ["torso", "chassis", "rightArm", "leftArm", "backpack", "drone"];
   const [boxes, sprues, ...buildFiles] = await Promise.all([
     fetchYaml(files.boxes, factionUrl),
@@ -28,20 +52,18 @@ async function fetchFaction(faction, baseUrl) {
   ]);
 
   return {
-    id: faction.id,
-    nameKo: faction.nameKo,
-    nameEn: faction.nameEn,
+    id: factionId,
     boxes,
-    sprues: sprues.map((sprue) => withSprueDefaults(sprue, faction)),
+    sprues: sprues.map((sprue) => withSprueDefaults(sprue, factionId)),
     builds: buildFiles.flat().map(withBuildDisplayNames)
   };
 }
 
-function withSprueDefaults(sprue, faction) {
+function withSprueDefaults(sprue, factionId) {
   return {
     ...sprue,
-    nameKo: sprue.nameKo ?? `${faction.nameKo} 스프루 ${sprue.id}`,
-    nameEn: sprue.nameEn ?? `${faction.nameEn} Sprue ${sprue.id}`,
+    nameKo: sprue.nameKo ?? `${factionId} 스프루 ${sprue.id}`,
+    nameEn: sprue.nameEn ?? `${factionId} Sprue ${sprue.id}`,
     partRange: sprue.partRange
       ? {
           prefix: sprue.id,

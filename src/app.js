@@ -113,7 +113,7 @@ function renderFactions() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `tab-button${faction.id === state.factionId ? " active" : ""}`;
-    button.textContent = faction.nameKo;
+    button.textContent = faction.id;
     button.addEventListener("click", () => {
       state.factionId = faction.id;
       render();
@@ -132,7 +132,6 @@ function renderBoxes() {
     row.innerHTML = `
       <span>
         <strong>${box.nameKo}</strong>
-        <small>${box.nameEn}</small>
       </span>
       ${stepperHtml(factionState.boxes[box.id] ?? 0, "박스 수량")}
     `;
@@ -503,7 +502,6 @@ function renderGroupedLeftovers(leftovers, scopedCatalog) {
       <summary>
         <span>
           <strong>${group.nameKo}</strong>
-          <small>${group.nameEn}</small>
         </span>
         <b>${group.total}</b>
       </summary>
@@ -519,7 +517,6 @@ function groupPartsBySprue(rows, scopedCatalog) {
   const groups = scopedCatalog.sprues.map((sprue) => ({
     id: sprue.id,
     nameKo: sprue.nameKo,
-    nameEn: sprue.nameEn,
     partIds: new Set(Object.keys(getSprueParts(sprue))),
     parts: [],
     total: 0
@@ -527,7 +524,6 @@ function groupPartsBySprue(rows, scopedCatalog) {
   const unknown = {
     id: "unknown",
     nameKo: "기타",
-    nameEn: "Unknown",
     partIds: new Set(),
     parts: [],
     total: 0
@@ -563,7 +559,6 @@ function makeBoxPartSources(scopedCatalog) {
       sources[partId].push({
         boxId: box.id,
         nameKo: box.nameKo,
-        nameEn: box.nameEn,
         count
       });
     });

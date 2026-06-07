@@ -23,7 +23,7 @@ export function partIconHtml(slot, className = "part-icon-frame slot-icon") {
     `;
   }
 
-  return `<span class="${className}" aria-hidden="true">${slot.icon}</span>`;
+  return `<span class="${className}" aria-hidden="true">${slot.icon ?? ""}</span>`;
 }
 
 const partIconSvgs = {
