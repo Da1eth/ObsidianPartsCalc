@@ -1,8 +1,7 @@
 import { formatPartList, getBuildRequirementChoices } from "./calculator.js";
-import { withPartSources } from "./catalogQueries.js";
-import { bindStepper, stepperHtml, textHtml } from "./html.js";
+import { withPartSources } from "./catalog.js";
 import { normalizedChoiceCounts } from "./planState.js";
-import { iconSvg, partIconHtml } from "./svg.js";
+import { bindStepper, iconSvg, partIconHtml, stepperHtml, textHtml } from "./ui.js";
 
 export function renderSlots({ target, slots, activeSlotId, allSlotId, onSelectSlot }) {
   target.innerHTML = "";

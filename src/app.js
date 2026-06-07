@@ -8,7 +8,12 @@ import {
   getBuildRequirementChoices
 } from "./calculator.js";
 import { normalizeBuildPlan } from "./buildPlan.js";
-import { loadCatalog } from "./catalogLoader.js";
+import {
+  loadCatalog,
+  makeBoxBuildSources,
+  makeBoxPartSources,
+  makeIndexes
+} from "./catalog.js";
 import {
   openAvailableBuildsDialog,
   openBuildPlanDialog
@@ -19,11 +24,6 @@ import {
   normalizedChoiceCounts,
   setBuildCount
 } from "./planState.js";
-import {
-  makeBoxBuildSources,
-  makeBoxPartSources,
-  makeIndexes
-} from "./catalogQueries.js";
 import {
   renderSidebarBoxes,
   renderSidebarFactions,

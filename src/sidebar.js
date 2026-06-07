@@ -1,6 +1,6 @@
 import { formatPartList } from "./calculator.js";
-import { groupPartsBySprue } from "./catalogQueries.js";
-import { bindStepper, stepperHtml, textHtml } from "./html.js";
+import { groupPartsBySprue } from "./catalog.js";
+import { bindStepper, stepperHtml, textHtml } from "./ui.js";
 
 export function setupSidebar() {
   const els = {

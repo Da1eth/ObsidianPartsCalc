@@ -2,8 +2,7 @@ import {
   canConsumeBuildEntries,
   getBuildCompetitionGroups
 } from "./calculator.js";
-import { textHtml } from "./html.js";
-import { iconSvg, partIconHtml } from "./svg.js";
+import { iconSvg, partIconHtml, textHtml } from "./ui.js";
 
 export function openAvailableBuildsDialog({
   available,
