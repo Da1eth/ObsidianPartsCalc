@@ -1,5 +1,6 @@
 import { parseYaml } from "./yaml.js";
 import { catalogConfig } from "./catalog-config.js";
+import { withBuildDisplayNames } from "./display-name.js";
 
 export async function loadCatalog() {
   const dataRoot = new URL("../data/", import.meta.url);
@@ -32,7 +33,7 @@ async function fetchFaction(faction, baseUrl) {
     nameEn: faction.nameEn,
     boxes,
     sprues,
-    builds: buildFiles.flat()
+    builds: buildFiles.flat().map(withBuildDisplayNames)
   };
 }
 
