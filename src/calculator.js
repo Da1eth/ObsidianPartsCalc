@@ -1,5 +1,10 @@
 import { normalizeBuildPlan } from "./build-plan.js";
 
+const partIdCollator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base"
+});
+
 export function calculateInventory(catalog, selectedBoxes) {
   const inventory = {};
   const spruesById = Object.fromEntries(catalog.sprues.map((sprue) => [sprue.id, normalizeSprueParts(sprue)]));
@@ -211,7 +216,7 @@ export function formatPartList(parts, partIndex) {
       nameKo: partIndex[id]?.nameKo ?? id,
       nameEn: partIndex[id]?.nameEn ?? id
     }))
-    .sort((a, b) => a.id.localeCompare(b.id));
+    .sort((a, b) => partIdCollator.compare(a.id, b.id));
 }
 
 export function getBuildRequirementChoices(build) {
