@@ -1,5 +1,4 @@
 - id: LM210S
-  slot: chassis
   nameKo: 은폐 섀시
   nameEn: Stealth Chassis
   requires:
@@ -34,7 +33,6 @@
     EA3: 1
     EA4: 1
 - id: LM213B
-  slot: chassis
   nameKo: 격투 섀시
   nameEn: Combat Chassis
   requires:
@@ -71,7 +69,6 @@
     FA5: 2
     FA10: 2
 - id: LM231
-  slot: chassis
   nameKo: 표준 섀시
   nameEn: Standard Chassis
   requires:

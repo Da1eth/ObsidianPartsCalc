@@ -17,13 +17,7 @@ const catalogConfig = {
   factions: ["UN", "RDL", "GOF", "Other"],
   factionFiles: {
     boxes: "box.yaml",
-    sprues: "sprue.yaml",
-    torso: "torso.yaml",
-    chassis: "chassis.yaml",
-    rightArm: "rightArm.yaml",
-    leftArm: "leftArm.yaml",
-    backpack: "backpack.yaml",
-    drone: "drone.yaml"
+    sprues: "sprue.yaml"
   }
 };
 
@@ -146,18 +140,20 @@ export function withPartSources(rows, partSources) {
 async function fetchFaction(factionId, baseUrl) {
   const files = catalogConfig.factionFiles;
   const factionUrl = new URL(`${factionId}/`, baseUrl);
-  const buildFileKeys = ["torso", "chassis", "rightArm", "leftArm", "backpack", "drone"];
+  const buildSlots = catalogConfig.slots.map((slot) => slot.id);
   const [boxes, sprues, ...buildFiles] = await Promise.all([
     fetchYaml(files.boxes, factionUrl),
     fetchYaml(files.sprues, factionUrl),
-    ...buildFileKeys.map((key) => fetchYaml(files[key], factionUrl))
+    ...buildSlots.map((slotId) => fetchYaml(`${slotId}.yaml`, factionUrl))
   ]);
 
   return {
     id: factionId,
     boxes,
     sprues: sprues.map((sprue) => withSprueDefaults(sprue, factionId)),
-    builds: buildFiles.flat().map(withBuildDisplayNames)
+    builds: buildFiles
+      .flatMap((builds, index) => builds.map((build) => ({ ...build, slot: buildSlots[index] })))
+      .map(withBuildDisplayNames)
   };
 }
 
@@ -165,13 +161,7 @@ function withSprueDefaults(sprue, factionId) {
   return {
     ...sprue,
     nameKo: sprue.nameKo ?? `${factionId} 스프루 ${sprue.id}`,
-    nameEn: sprue.nameEn ?? `${factionId} Sprue ${sprue.id}`,
-    partRange: sprue.partRange
-      ? {
-          prefix: sprue.id,
-          ...sprue.partRange
-        }
-      : sprue.partRange
+    nameEn: sprue.nameEn ?? `${factionId} Sprue ${sprue.id}`
   };
 }
 

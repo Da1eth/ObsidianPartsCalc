@@ -323,13 +323,13 @@ function chooseOptionPart(option, inventory, required, equivalents) {
 function normalizeSprueParts(sprue) {
   const parts = {};
 
-  if (sprue.partRange) {
-    Object.entries(expandPartRange(sprue.partRange)).forEach(([partId, count]) => {
-      parts[partId] = count;
+  if (sprue.partCount) {
+    numbersUpTo(sprue.partCount).forEach((number) => {
+      parts[formatPartId(sprue.id, number)] = 1;
     });
   }
 
-  (sprue.partIds ?? []).forEach((partId) => {
+  (sprue.partOnly ?? []).forEach((partId) => {
     parts[partId] = 1;
   });
 
@@ -374,22 +374,12 @@ function chooseEquivalentPart(partId, inventory, required, equivalents) {
   })[0];
 }
 
-function expandPartRange(range) {
-  const numbers = range.only ?? numbersFromRange(range.from, range.to)
-    .filter((number) => !(range.except ?? []).includes(number));
-
-  return Object.fromEntries(numbers.map((number) => [
-    formatPartId(range.prefix, number, range.pad),
-    1
-  ]));
+function numbersUpTo(max) {
+  return Array.from({ length: max }, (_, index) => index + 1);
 }
 
-function numbersFromRange(from, to) {
-  return Array.from({ length: to - from + 1 }, (_, index) => from + index);
-}
-
-function formatPartId(prefix, number, pad = 0) {
-  return `${prefix}${String(number).padStart(pad, "0")}`;
+function formatPartId(prefix, number) {
+  return `${prefix}${number}`;
 }
 
 function maxBuildCount(build, inventory, equivalents) {

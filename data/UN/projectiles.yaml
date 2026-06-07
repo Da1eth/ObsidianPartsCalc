@@ -1,0 +1,25 @@
+- id: DBP_P
+  nameKo: "터틀 셸" 방벽
+  nameEn: "Turtle Shell" Barricade
+  requires:
+    EH1: 1
+    EH3: 1
+    EH4: 1
+- id: RKG70_P
+  nameKo: 미사일 편대
+  nameEn: Missile Group
+  requires:
+    EI1: 3
+- id: SGM2_F
+  nameKo: "폴커스" 자동 지뢰
+  nameEn: "Pholcus" Automatic Mine
+  requires:
+    DC5: 1
+    DC3: 1
+- id: SGM2_U
+  nameKo: "폴커스" 자동 지뢰(전개)
+  nameEn: "Pholcus" Automatic Mine(Unfold)
+  requires:
+    DC6: 1
+    DC9: 1
+    DC1: 1

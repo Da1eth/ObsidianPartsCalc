@@ -1,6 +1,6 @@
 - id: UN-Core
-  nameKo: UN 코어 박스
-  nameEn: UN Core Box
+  nameKo: 코어 박스
+  nameEn: Core Box
   sprues:
     SB: 4
     SC: 3
@@ -34,8 +34,8 @@
     SGM2_F: 6
     M9: 3
 - id: UN-Doorbreaker
-  nameKo: UN 도어브레이커 박스
-  nameEn: UN Doorbreaker Box
+  nameKo: 도어브레이커 박스
+  nameEn: Doorbreaker Box
   sprues:
     SB: 2
     SC: 3
@@ -63,8 +63,8 @@
     IGX350: 1
     ADK15: [2, ADK15D, ADK15/MAS]
 - id: UN-Scalpel
-  nameKo: UN 스칼펠 박스
-  nameEn: UN Scalpel Box
+  nameKo: 스칼펠 박스
+  nameEn: Scalpel Box
   sprues:
     SB: 4
     SC: 1
@@ -105,8 +105,8 @@
     DBP_P: 1
     M9: 1
 - id: UN-Taurus
-  nameKo: UN 타우르스 단품 킷
-  nameEn: UN Taurus Box
+  nameKo: 타우르스 단품 킷
+  nameEn: Taurus Box
   sprues:
     SB: 1
     SC: 1
@@ -116,8 +116,8 @@
     DF: 1
     DG: 1
     FB: 1
-    Taurus-Resin-A: 1
-    Taurus-Resin-B: 1
+    Tau-A: 1
+    Tau-B: 1
   buildPlan:
     CSC60: 1
     TM35: [1, TM35BT, TM35N]
@@ -125,3 +125,17 @@
     S100: [1, S100+G, S100]
     RH21+M3_L: 1
     R7: [1, R7, R7MG]
+- id: UN-Raid
+  nameKo: 레이드 스타터 세트
+  nameEn: Raid Starter Set
+  sprues:
+    SB: 1
+    SC: 1
+    SD: 1
+    FF: 1
+    DA: 1
+    DB: 1
+    DF: 1
+    DG: 1
+    DH: 1
+    DI: 1

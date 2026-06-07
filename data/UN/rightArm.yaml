@@ -1,5 +1,4 @@
 - id: G6+M5
-  slot: rightArm
   nameKo: 샷건+파일 벙커
   nameEn: Shotgun+Pile Bunker
   requires:
@@ -19,7 +18,6 @@
     SD11: 1
     SD12: 1
 - id: IGX350
-  slot: rightArm
   nameKo: 이온 샷건
   nameEn: Ion Shotgun
   requires:
@@ -39,7 +37,6 @@
     SD21: 1
     SD22: 1
 - id: IGX920
-  slot: rightArm
   nameKo: 헤비 이온 건
   nameEn: Heavy Ion Gun
   requires:
@@ -66,7 +63,6 @@
     EG13: 1
     EG14: 1
 - id: M3S_R
-  slot: rightArm
   nameKo: 초진동 블레이드(우)
   nameEn: Vibroblade(R)
   requires:
@@ -81,7 +77,6 @@
     DD12: 1
     SD28: 1
 - id: M4_R+G
-  slot: rightArm
   nameKo: 초진동 블레이드(우)+유탄 포드
   nameEn: Vibroblade(R)+Grenade Pod
   requires:
@@ -97,7 +92,6 @@
     DD12: 1
     SD28: 1
 - id: M15BO
-  slot: rightArm
   nameKo: "카타나"
   nameEn: "Katana"
   requires:
@@ -115,7 +109,6 @@
     SD12: 1
     SD13: 1
 - id: R6
-  slot: rightArm
   nameKo: SMG
   nameEn: SMG
   requires:
@@ -132,7 +125,6 @@
     DB6: 1
     SD18: 1
 - id: R6SD
-  slot: rightArm
   nameKo: SMG
   nameEn: SMG
   requires:
@@ -151,7 +143,6 @@
     EE8: 1
     EE9: 2
 - id: R7
-  slot: rightArm
   nameKo: 자동 라이플
   nameEn: Automatic Rifle
   requires:
@@ -167,7 +158,6 @@
     SD21: 1
     SD13: 1
 - id: R7MG
-  slot: rightArm
   nameKo: LMG
   nameEn: LMG
   requires:
@@ -184,7 +174,6 @@
     SD11: 1
     SD12: 1
 - id: R9B
-  slot: rightArm
   nameKo: 전술 라이플
   nameEn: Tactical Rifle
   requires:
@@ -202,7 +191,6 @@
     ED5: 1
     ED4: 1
 - id: R33
-  slot: rightArm
   nameKo: 저격 라이플
   nameEn: Sniper Rifle
   requires:
@@ -225,7 +213,6 @@
     SD11: 1
     SD12: 1
 - id: RH21+M3_R
-  slot: rightArm
   nameKo: 피스톨+초진동 블레이드(우)
   nameEn: Pistol+Vibroblade(우)
   requires:
@@ -245,7 +232,6 @@
     DD6: 1
     DD12: 1
 - id: S100+R6SS
-  slot: rightArm
   nameKo: 실드+SMG
   nameEn: Shield+SMG
   requires:
